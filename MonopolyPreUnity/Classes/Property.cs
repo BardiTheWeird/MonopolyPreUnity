@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MonopolyPreUnity.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Interfaces
+namespace MonopolyPreUnity.Classes
 {
-    class Property : ITileComponent
+    abstract class Property : ITileComponent
     {
         string _name;
         public string Name { get => _name; }
@@ -27,16 +28,13 @@ namespace MonopolyPreUnity.Interfaces
             _isMortgaged = false;
         }
 
-        public void ChargeRent(IPlayer player)
-        {
-
-        }
+        abstract public void ChargeRent(IPlayer player);
 
         public void OnPlayerLanded(IPlayer player)
         {
             if(Owner == null)
             {
-
+                
             }
             else if (!Owner.Equals(player))
             {
@@ -45,6 +43,7 @@ namespace MonopolyPreUnity.Interfaces
             else
             {
                 // do nothing
+                // maybe send a message like "it's your own property, dumbass!"
             }
         }
     }
