@@ -6,5 +6,6 @@ namespace MonopolyPreUnity.Interfaces
 {
     interface ITileComponent
     {
+        public void OnPlayerLanded(IPlayer player) { }
     }
 }
