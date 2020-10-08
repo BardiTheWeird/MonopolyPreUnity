@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Interfaces;
+﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
