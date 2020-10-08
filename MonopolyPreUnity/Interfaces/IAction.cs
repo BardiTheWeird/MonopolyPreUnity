@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Interfaces
 {
-    class IAction
+    interface IAction
     {
     }
 }
