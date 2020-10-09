@@ -14,8 +14,8 @@ namespace MonopolyPreUnity.Classes
         uint _basePrice;
         public uint BasePrice { get => _basePrice; }
 
-        IPlayer _owner;
-        public IPlayer Owner { get; set; }
+        Player _owner;
+        public Player Owner { get; set; }
         bool _isMortgaged;
         public bool IsMortgaged { get; set; }
 
@@ -28,9 +28,9 @@ namespace MonopolyPreUnity.Classes
             _isMortgaged = false;
         }
 
-        abstract public void ChargeRent(IPlayer player);
+        abstract public void ChargeRent(Player player);
 
-        public void OnPlayerLanded(IPlayer player)
+        public void OnPlayerLanded(Player player)
         {
             if(Owner == null)
             {
