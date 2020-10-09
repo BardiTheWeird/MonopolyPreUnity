@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Utitlity
 {
-    public enum RequestType
+    public enum MonopolyCommand
     {
         TurnMakeMove,
         TurnManageProperty,
@@ -22,5 +22,22 @@ namespace MonopolyPreUnity.Utitlity
         TradeChoosePlayer,
         TradeCreateDeal,
         TradeValidate
+    }
+
+    public enum MonopolyRequest
+    {
+        TurnActionChoice,
+
+        PropertyManagePropertyChoice,
+        PropertyManageActionChoice,
+
+        MoveJailChoice,
+
+        TileLandedPropertyChoice,
+        AuctionBidChoice,
+
+        TradePlayerChoice,
+        TradeDealChoice,
+        TradeValidationChoice
     }
 }
