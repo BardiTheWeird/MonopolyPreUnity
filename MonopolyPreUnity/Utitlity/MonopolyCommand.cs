@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Utitlity
 {
-    public enum RequestType
+    public enum MonopolyCommand
     {
         TurnMakeMove,
         TurnManageProperty,

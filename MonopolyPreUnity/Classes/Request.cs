@@ -8,11 +8,11 @@ namespace MonopolyPreUnity.Classes
 {
     class Request<TChoices, TExpectedInput>
     {
-        public RequestType RequestType { get; }
+        public MonopolyCommand RequestType { get; }
         public TChoices Choices { get; }
         public TExpectedInput Input { get; set; }
 
-        public Request(int receiverId, RequestType requestType, TChoices choices)
+        public Request(int receiverId, MonopolyCommand requestType, TChoices choices)
         {
             RequestType = requestType;
             Choices = choices;
