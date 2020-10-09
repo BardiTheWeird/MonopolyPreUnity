@@ -7,38 +7,33 @@ namespace MonopolyPreUnity.Classes
 {
     abstract class Property : ITileComponent
     {
-        string _name;
-        public string Name { get => _name; }
-        string _set; // a string for now
-        public string Set { get => _set; }
-        uint _basePrice;
-        public uint BasePrice { get => _basePrice; }
+        public string Name { get; }
+        public string Set { get; }
+        public int BasePrice { get; }
 
-        Player _owner;
-        public Player Owner { get; set; }
-        bool _isMortgaged;
+        public int? OwnerId { get; set; }
         public bool IsMortgaged { get; set; }
 
-        public Property(string name, string set, uint basePrice)
+        public Property(string name, string set, int basePrice)
         {
-            _name = name;
-            _basePrice = basePrice; 
-            _set = set;
-            _owner = null;
-            _isMortgaged = false;
+            Name = name;
+            BasePrice = basePrice; 
+            Set = set;
+            OwnerId = null;
+            IsMortgaged = false;
         }
 
-        abstract public void ChargeRent(Player player);
+        abstract public void ChargeRent(int playerId);
 
-        public void OnPlayerLanded(Player player)
+        public void OnPlayerLanded(int playerId)
         {
-            if(Owner == null)
+            if(OwnerId == null)
             {
-                
+                // buying stuff
             }
-            else if (!Owner.Equals(player))
+            else if (OwnerId != playerId)
             {
-                ChargeRent(player);
+                ChargeRent(playerId);
             }
             else
             {

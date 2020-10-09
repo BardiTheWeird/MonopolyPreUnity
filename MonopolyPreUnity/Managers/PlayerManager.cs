@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Interfaces;
+﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,10 +9,9 @@ namespace MonopolyPreUnity.Managers
     class PlayerManager
     {
         // ID to IPlayer and IUserScenario
-        Dictionary<int, (IPlayer, IUserScenario)> _playerDict;
-        Dictionary<int, (IPlayer, IUserScenario)> PlayerDict { get; set; }
+        Dictionary<int, (Player, IUserScenario)> PlayerDict { get; }
 
-        public IPlayer GetPlayer(int playerId)
+        public Player GetPlayer(int playerId)
         {
             if (PlayerDict.ContainsKey(playerId))
                 return PlayerDict[playerId].Item1;

@@ -7,18 +7,16 @@ namespace MonopolyPreUnity.Classes
 {
     class Tile
     {
-        string _name;
-        public string Name { get => _name; }
-        ITileComponent _tileComponent;
-        public ITileComponent TileComponent { get => _tileComponent; }
+        public string Name { get; }
+        public ITileComponent TileComponent { get; }
 
-        public void OnPlayerLanded(Player player) =>
-            TileComponent.OnPlayerLanded(player);
+        public void OnPlayerLanded(int playerId) =>
+            TileComponent.OnPlayerLanded(playerId);
     
         public Tile(string name, ITileComponent tileComponent)
         {
-            _name = name;
-            _tileComponent = tileComponent;
+            Name = name;
+            TileComponent = tileComponent;
         }
     }
 }
