@@ -28,7 +28,9 @@ namespace MonopolyPreUnity.Managers
         public int GetPlayerCash(int playerId) =>
             GetPlayer(playerId).Cash;
 
-        public void ChargePlayer(int playerId, int amount)
+        // We have two methods for cash operatiobs for now.
+        // Might change later to one PlayerCashOperation() or smth.
+        public void PlayerCashCharge(int playerId, int amount)
         {
             var player = GetPlayer(playerId);
             if (player.Cash >= amount)
@@ -46,6 +48,11 @@ namespace MonopolyPreUnity.Managers
                     throw new NotImplementedException();
                 }
             }
+        }
+
+        public void PlayerCashGive(int playerId, int amount)
+        {
+            GetPlayer(playerId).Cash += amount;
         }
 
         bool IsBankrupt(Player player)

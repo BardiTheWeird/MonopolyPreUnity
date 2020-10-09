@@ -64,7 +64,7 @@ namespace MonopolyPreUnity.Classes
 
                 if (command == MonopolyCommand.TileLandedPropertyBuy)
                 {
-                    _playerManager.ChargePlayer(playerId, BasePrice);
+                    _playerManager.PlayerCashCharge(playerId, BasePrice);
                     _propertyTransferManager.TransferProperty(this, playerId);
                 }
             }
