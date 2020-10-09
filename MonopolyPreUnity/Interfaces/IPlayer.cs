@@ -7,7 +7,7 @@ namespace MonopolyPreUnity.Interfaces
 {
     interface IPlayer
     {
-        public int ID { get; }
+        public int Id { get; }
         public string DisplayName { get; }
         public List<Property> Properties { get; set; }
         public int Cash { get; set; }
