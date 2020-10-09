@@ -23,4 +23,21 @@ namespace MonopolyPreUnity.Utitlity
         TradeCreateDeal,
         TradeValidate
     }
+
+    public enum MonopolyRequest
+    {
+        TurnActionChoice,
+
+        PropertyManagePropertyChoice,
+        PropertyManageActionChoice,
+
+        MoveJailChoice,
+
+        TileLandedPropertyChoice,
+        AuctionBidChoice,
+
+        TradePlayerChoice,
+        TradeDealChoice,
+        TradeValidationChoice
+    }
 }

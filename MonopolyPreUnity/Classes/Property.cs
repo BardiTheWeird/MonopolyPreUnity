@@ -39,13 +39,18 @@ namespace MonopolyPreUnity.Classes
         {
             if (OwnerId == null)
             {
-                /*var command = MonopolyCommand.TileLandedPropertyAuction;
-                if (_playerManager.GetPlayer(playerId).Cash >= BasePrice)
+                var command = MonopolyCommand.TileLandedPropertyAuction;
+                if (_playerManager.GetPlayerCash(playerId) >= BasePrice)
                 {
-                    var request = new Request(playerId,
-                        MonopolyCommand.)
-                    command = _requestManager.SendRequest(playerId, );
-                }*/
+                    var request = new Request<List<MonopolyCommand>, MonopolyCommand>(
+                        MonopolyRequest.TileLandedPropertyChoice,
+                        new List<MonopolyCommand>()
+                        {
+                            MonopolyCommand.TileLandedPropertyBuy,
+                            MonopolyCommand.TileLandedPropertyAuction
+                        });
+                    command = _requestManager.SendRequest(playerId, request);
+                }
             }
             else if (OwnerId != playerId)
             {
