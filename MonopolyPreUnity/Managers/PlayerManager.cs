@@ -28,7 +28,7 @@ namespace MonopolyPreUnity.Managers
         public int GetPlayerCash(int playerId) =>
             GetPlayer(playerId).Cash;
 
-        public void ChargeMoney(int playerId, int amount)
+        public void ChargePlayer(int playerId, int amount)
         {
             var player = GetPlayer(playerId);
             if (player.Cash >= amount)

@@ -14,6 +14,8 @@ namespace MonopolyPreUnity.Classes
         #region Dependencies
         private readonly RequestManager _requestManager;
         private readonly PlayerManager _playerManager;
+        private readonly PropertyTransferManager _propertyTransferManager;
+        private readonly AuctionManager _auctionManager;
         #endregion
 
         #region Properties
@@ -24,14 +26,22 @@ namespace MonopolyPreUnity.Classes
         public bool IsMortgaged { get; set; } = false;
         #endregion
 
-        protected Property(string name, string set, int basePrice, RequestManager requestManager, PlayerManager playerManager)
+        #region Constructor
+        protected Property(string name, string set, int basePrice, 
+            RequestManager requestManager, 
+            PlayerManager playerManager,
+            PropertyTransferManager propertyTransferManager,
+            AuctionManager auctionManager)
         {
             Name = name;
             Set = set;
             BasePrice = basePrice;
             _requestManager = requestManager;
             _playerManager = playerManager;
+            _propertyTransferManager = propertyTransferManager;
+            _auctionManager = auctionManager;
         }
+        #endregion
 
         abstract public void ChargeRent(int playerId);
 
@@ -50,6 +60,12 @@ namespace MonopolyPreUnity.Classes
                             MonopolyCommand.TileLandedPropertyAuction
                         });
                     command = _requestManager.SendRequest(playerId, request);
+                }
+
+                if (command == MonopolyCommand.TileLandedPropertyBuy)
+                {
+                    _playerManager.ChargePlayer(playerId, BasePrice);
+                    _propertyTransferManager.TransferProperty(this, playerId);
                 }
             }
             else if (OwnerId != playerId)
