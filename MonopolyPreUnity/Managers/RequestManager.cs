@@ -11,7 +11,8 @@ namespace MonopolyPreUnity.Managers
 
         public TExpectedInput SendRequest<TChoices, TExpectedInput>(int receiverId, Request<TChoices, TExpectedInput> request)
         {
-            throw new NotImplementedException();
+            var userScenario = _playerManager.GetUserScenario(receiverId);
+            return userScenario.HandleRequest(request);
         }
     }
 }

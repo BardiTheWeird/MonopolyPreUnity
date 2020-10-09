@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MonopolyPreUnity.Classes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace MonopolyPreUnity.Interfaces
 {
-    class IUserScenario
+    interface IUserScenario
     {
+        public TExpectedInput HandleRequest<TChoices, TExpectedInput>(Request<TChoices, TExpectedInput> request);
     }
 }
