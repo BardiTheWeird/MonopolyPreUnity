@@ -12,7 +12,7 @@ namespace MonopolyPreUnity.Classes
         ITileComponent _tileComponent;
         public ITileComponent TileComponent { get => _tileComponent; }
 
-        public void OnPlayerLanded(IPlayer player) =>
+        public void OnPlayerLanded(Player player) =>
             TileComponent.OnPlayerLanded(player);
     
         public Tile(string name, ITileComponent tileComponent)
