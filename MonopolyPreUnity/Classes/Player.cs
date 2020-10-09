@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Interfaces
+namespace MonopolyPreUnity.Classes
 {
-    interface IPlayer
+    class Player
     {
         public int Id { get; }
         public string DisplayName { get; }
