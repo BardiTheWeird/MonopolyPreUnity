@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonopolyPreUnity.Classes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,24 +7,11 @@ namespace MonopolyPreUnity.Managers
 {
     class RequestManager
     {
-        public enum CommandID
+        PlayerManager _playerManager;
+
+        public TExpectedInput SendRequest<TChoices, TExpectedInput>(int receiverId, Request<TChoices, TExpectedInput> request)
         {
-            TurnMakeMove,
-            TurnManageProperty,
-            TurnMakeDeal,
-
-            PropertyChoose,
-            PropertyMortgage,
-            PropertyUnmortgage,
-            PropertyBuyHouse,
-            PropertySellHouse,
-
-            TileLandedPropertyBuy,
-            TileLandedPropertyAuction,
-
-            TradeChoosePlayer,
-            TradeCreateDeal,
-            TradeValidate
+            throw new NotImplementedException();
         }
     }
 }
