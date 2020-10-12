@@ -9,7 +9,7 @@ namespace MonopolyPreUnity.Managers
     {
         PlayerManager _playerManager;
 
-        public TExpectedInput SendRequest<TChoices, TExpectedInput>(int receiverId, Request<TChoices, TExpectedInput> request)
+        public TInput SendRequest<TInput>(int receiverId, Request<TInput> request)
         {
             var userScenario = _playerManager.GetUserScenario(receiverId);
             return userScenario.HandleRequest(request);
