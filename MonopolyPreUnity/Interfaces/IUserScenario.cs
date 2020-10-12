@@ -7,6 +7,6 @@ namespace MonopolyPreUnity.Interfaces
 {
     interface IUserScenario
     {
-        public TExpectedInput HandleRequest<TChoices, TExpectedInput>(Request<TChoices, TExpectedInput> request);
+        public TInput HandleRequest<TInput>(Request<TInput> request);
     }
 }
