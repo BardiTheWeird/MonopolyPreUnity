@@ -9,10 +9,23 @@ namespace MonopolyPreUnity.Managers
     {
         private readonly Dictionary<int, ITile> tileDict;
 
+        /// <summary>
+        /// Get barebones ITile. Use for getting generic attributes like Name
+        /// </summary>
+        /// <param name="tileId"></param>
+        /// <returns></returns>
         public ITile GetTile(int tileId) =>
             tileDict[tileId];
 
-        public void OnPlayerLanded(int tileId, int playerId) =>
-            GetTile(tileId).OnPlayerLanded(playerId);
+        /// <summary>
+        /// Get an instance of class that implements ITile. Use for getting class-specific attributes
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tileId"></param>
+        /// <returns></returns>
+        public T GetTile<T>(int tileId) where T : ITile
+        {
+            return (T)tileDict[tileId];
+        }
     }
 }
