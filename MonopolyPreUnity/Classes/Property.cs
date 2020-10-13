@@ -21,14 +21,14 @@ namespace MonopolyPreUnity.Classes
         #region Properties
         public int Id { get; }
         public string Name { get; }
-        public string Set { get; }
+        public int setId { get; }
         public int BasePrice { get; }
         public int? OwnerId { get; set; } = null;
         public bool IsMortgaged { get; set; } = false;
         #endregion
 
         #region Constructor
-        protected Property(int id, string name, string set, int basePrice, 
+        protected Property(int id, string name, int setId, int basePrice, 
             RequestManager requestManager, 
             PlayerManager playerManager,
             PropertyTransferManager propertyTransferManager,
@@ -36,7 +36,7 @@ namespace MonopolyPreUnity.Classes
         {
             Id = id;
             Name = name;
-            Set = set;
+            this.setId = setId;
             BasePrice = basePrice;
             _requestManager = requestManager;
             _playerManager = playerManager;

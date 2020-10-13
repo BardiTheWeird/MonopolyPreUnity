@@ -8,7 +8,9 @@ namespace MonopolyPreUnity.Managers
     class TileManager
     {
         private readonly Dictionary<int, ITile> tileDict;
+        private readonly Dictionary<int, HashSet<int>> setDict;
 
+        #region GetTile
         /// <summary>
         /// Get barebones ITile. Use for getting generic attributes like Name
         /// </summary>
@@ -27,5 +29,9 @@ namespace MonopolyPreUnity.Managers
         {
             return (T)tileDict[tileId];
         }
+        #endregion
+
+        public HashSet<int> GetSet(int setId) =>
+            setDict[setId];
     }
 }
