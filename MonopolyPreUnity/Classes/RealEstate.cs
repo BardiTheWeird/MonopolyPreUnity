@@ -10,8 +10,8 @@ namespace MonopolyPreUnity.Classes
     
     class RealEstate : Property
     {
-        public const int _upgradePrice = 50;
-        public int UpgradePrice { get { return _upgradePrice; } }
+        public const int _housePrice = 50;
+        public int HousePrice { get { return _housePrice; } }
         public bool BuildAllowed { get; set; }
         public int NumberOfHouses { get; set; }
 
