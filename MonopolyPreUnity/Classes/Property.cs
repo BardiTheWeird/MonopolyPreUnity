@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Interfaces;
+﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Interfaces;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Utitlity;
 using System;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Classes
 {
-    abstract class Property : ITile
+    class Property : ITile
     {
         #region Dependencies
         private readonly RequestManager _requestManager;
@@ -25,14 +26,18 @@ namespace MonopolyPreUnity.Classes
         public int BasePrice { get; }
         public int? OwnerId { get; set; } = null;
         public bool IsMortgaged { get; set; } = false;
+        public PropertyDevelopmentComponent DevelopmentComponent { get; }
+        public IPropertyRentComponent RentComponent { get; }
         #endregion
 
         #region Constructor
-        protected Property(int id, string name, int setId, int basePrice, 
-            RequestManager requestManager, 
+        protected Property(int id, string name, int setId, int basePrice,
+            RequestManager requestManager,
             PlayerManager playerManager,
             PropertyTransferManager propertyTransferManager,
-            AuctionManager auctionManager)
+            AuctionManager auctionManager,
+            IPropertyRentComponent rentComponent,
+            PropertyDevelopmentComponent developmentComponent = null)
         {
             Id = id;
             Name = name;
@@ -42,10 +47,12 @@ namespace MonopolyPreUnity.Classes
             _playerManager = playerManager;
             _propertyTransferManager = propertyTransferManager;
             _auctionManager = auctionManager;
+            RentComponent = rentComponent;
+            DevelopmentComponent = developmentComponent;
         }
         #endregion
 
-        abstract public void ChargeRent(int playerId);
+        //public void ChargeRent(int playerId);
 
         public void OnPlayerLanded(int playerId)
         {
@@ -72,7 +79,8 @@ namespace MonopolyPreUnity.Classes
             }
             else if (OwnerId != playerId)
             {
-                ChargeRent(playerId);
+                var rent = RentComponent.GetRent();
+                _playerManager.PlayerCashCharge(playerId, rent);
             }
             else
             {
