@@ -52,7 +52,7 @@ namespace MonopolyPreUnity.Classes
                 var command = MonopolyCommand.TileLandedPropertyAuction;
                 if (_playerManager.GetPlayerCash(playerId) >= BasePrice)
                 {
-                    var request = new Request<List<MonopolyCommand>, MonopolyCommand>(
+                    var request = new Request<MonopolyCommand>(
                         MonopolyRequest.TileLandedPropertyChoice,
                         new List<MonopolyCommand>()
                         {

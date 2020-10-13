@@ -6,16 +6,26 @@ using System.Text;
 
 namespace MonopolyPreUnity.Classes
 {
-    class Request<TChoices, TExpectedInput>
+    class Request<TInput>
     {
+        #region Properties
         public MonopolyRequest RequestType { get; }
-        public TChoices Choices { get; }
-        public TExpectedInput Input { get; set; }
+        public List<TInput> Choices { get; }
+        public string Description { get; }
+        #endregion
 
-        public Request(MonopolyRequest requestType, TChoices choices)
+        #region Constructors
+        public Request(MonopolyRequest requestType, List<TInput> choices)
         {
             RequestType = requestType;
             Choices = choices;
         }
+
+        public Request(MonopolyRequest requestType)
+        {
+            RequestType = requestType;
+            Choices = null;
+        }
+        #endregion
     }
 }
