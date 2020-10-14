@@ -4,6 +4,7 @@ using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -33,28 +34,45 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
+
+        public bool SetOwned(int playerId, PropertyComponent propertyComponent)
+        {
+            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
+            var player = _playerManager.GetPlayer(playerId);
+                if (playerSet.IsSubsetOf(player.Properties))
+                {
+                    return true;
+                }
+            return false;
+        }
+
+
+        public int HouseDifference(HashSet<int> playerSet)
+        {
+            var max = playerSet.Max(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt);
+            var min= playerSet.Min(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt);
+            return max - min;
+        }
+
         public void GetAvailableActions(int playerId,PropertyComponent propertyComponent)
         {
             var AvailableActions= new List<MonopolyCommand>();
-            var set = _tileManager.GetSet(propertyComponent.setId);
-            foreach (int property in set)
-            {
-               var player = _playerManager.GetPlayer(playerId);
-                player.
-
-                if (property != )
-    }
+            var setOwned = SetOwned(playerId, propertyComponent);
+            var houseDifference = HouseDifference(_tileManager.GetPropertySet(propertyComponent.setId));
             if (propertyComponent.DevelopmentComponent != null) {
                 if (_playerManager.GetPlayerCash(playerId) > propertyComponent.DevelopmentComponent.HouseBuyPrice &&
-                    propertyComponent.DevelopmentComponent.HousesBuilt != _housesLimit)
-                     {
+                    propertyComponent.DevelopmentComponent.HousesBuilt != _housesLimit &&
+                    setOwned &&
+                    houseDifference<= 1)
+                {
                     AvailableActions.Add(MonopolyCommand.PropertyBuyHouse);
                 }
 
-               if (propertyComponent.DevelopmentComponent.HousesBuilt > 0)
-                {
+               if (propertyComponent.DevelopmentComponent.HousesBuilt > 0 &&
+                    houseDifference)
+               {
                     AvailableActions.Add(MonopolyCommand.PropertySellHouse);
-                }
+               }
             
                 
             }
