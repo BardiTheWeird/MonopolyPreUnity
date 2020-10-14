@@ -9,19 +9,20 @@ namespace MonopolyPreUnity.Classes
     {
         public int Id { get; }
         public string DisplayName { get; }
-        public List<PropertyComponent> Properties { get; }
+        public HashSet<int> Properties { get; }
         public int Cash { get; set; }
         public int JailCards { get; set; }
         public int? TurnsInPrison { get; set; }
 
-        public Player(int id, string displayName, int cash)
+        public Player(int id, string displayName, int cash, 
+            HashSet<int> properties, int jailCards, int? turnsInPrison)
         {
             Id = id;
             DisplayName = displayName;
-            Properties = new List<PropertyComponent>();
             Cash = cash;
-            JailCards = 0;
-            TurnsInPrison = null;
+            Properties = properties;
+            JailCards = jailCards;
+            TurnsInPrison = turnsInPrison;
         }
     }
 }
