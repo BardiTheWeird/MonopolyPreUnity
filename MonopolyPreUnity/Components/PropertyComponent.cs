@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Interfaces;
+﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Interfaces;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Utitlity;
 using System;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Classes
 {
-    abstract class Property : ITile
+    class PropertyComponent : ITileContentComponent
     {
         #region Dependencies
         private readonly RequestManager _requestManager;
@@ -19,33 +20,33 @@ namespace MonopolyPreUnity.Classes
         #endregion
 
         #region Properties
-        public int Id { get; }
-        public string Name { get; }
         public int setId { get; }
         public int BasePrice { get; }
         public int? OwnerId { get; set; } = null;
         public bool IsMortgaged { get; set; } = false;
+        public PropertyDevelopmentComponent DevelopmentComponent { get; }
+        public IPropertyRentComponent RentComponent { get; }
         #endregion
 
         #region Constructor
-        protected Property(int id, string name, int setId, int basePrice, 
-            RequestManager requestManager, 
+        protected PropertyComponent(int setId, int basePrice,
+            IPropertyRentComponent rentComponent,
+            PropertyDevelopmentComponent developmentComponent,
+            RequestManager requestManager,
             PlayerManager playerManager,
             PropertyTransferManager propertyTransferManager,
             AuctionManager auctionManager)
         {
-            Id = id;
-            Name = name;
             this.setId = setId;
             BasePrice = basePrice;
             _requestManager = requestManager;
             _playerManager = playerManager;
             _propertyTransferManager = propertyTransferManager;
             _auctionManager = auctionManager;
+            RentComponent = rentComponent;
+            DevelopmentComponent = developmentComponent;
         }
         #endregion
-
-        abstract public void ChargeRent(int playerId);
 
         public void OnPlayerLanded(int playerId)
         {
@@ -72,7 +73,8 @@ namespace MonopolyPreUnity.Classes
             }
             else if (OwnerId != playerId)
             {
-                ChargeRent(playerId);
+                var rent = RentComponent.GetRent();
+                _playerManager.PlayerCashCharge(playerId, rent);
             }
             else
             {

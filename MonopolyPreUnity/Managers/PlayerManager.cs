@@ -2,6 +2,7 @@
 using MonopolyPreUnity.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace MonopolyPreUnity.Managers
@@ -17,6 +18,9 @@ namespace MonopolyPreUnity.Managers
                 return playerDict[playerId].Item1;
             throw new KeyNotFoundException($"No such Player Id ({playerId}) in PlayerDict");
         }
+
+        public List<int> GetAllPlayerId() =>
+            new List<int>(playerDict.Keys);
 
         public IUserScenario GetUserScenario(int playerId)
         {

@@ -7,7 +7,7 @@ namespace MonopolyPreUnity.Managers
 {
     class PropertyTransferManager
     {
-        public void TransferProperty(Property property, int newOwnerId)
+        public void TransferProperty(PropertyComponent property, int newOwnerId)
         {
             throw new NotImplementedException();
         }

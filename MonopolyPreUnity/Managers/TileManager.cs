@@ -1,4 +1,6 @@
-﻿using MonopolyPreUnity.Interfaces;
+﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,31 +9,42 @@ namespace MonopolyPreUnity.Managers
 {
     class TileManager
     {
-        private readonly Dictionary<int, ITile> tileDict;
-        private readonly Dictionary<int, HashSet<int>> setDict;
+        private readonly Dictionary<int, Tile> tileDict;
+        private readonly Dictionary<int, HashSet<int>> propertySetDict;
 
         #region GetTile
         /// <summary>
-        /// Get barebones ITile. Use for getting generic attributes like Name
+        /// Get Tile. General Tile use, I guess?
         /// </summary>
         /// <param name="tileId"></param>
         /// <returns></returns>
-        public ITile GetTile(int tileId) =>
+        public Tile GetTile(int tileId) =>
             tileDict[tileId];
 
         /// <summary>
-        /// Get an instance of class that implements ITile. Use for getting class-specific attributes
+        /// Get an Identity component. For stuff like Id and Name
+        /// </summary>
+        /// <param name="tileId"></param>
+        /// <returns></returns>
+        public TileIdentityComponent GetTileIdentity(int tileId) =>
+            tileDict[tileId].IdentityComponent;
+
+        /// <summary>
+        /// Get a Content component of a Tile
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="tileId"></param>
         /// <returns></returns>
-        public T GetTile<T>(int tileId) where T : ITile
-        {
-            return (T)tileDict[tileId];
-        }
+        public T GetTileContent<T>(int tileId) where T : ITileContentComponent =>
+            (T)tileDict[tileId].ContentComponent;
         #endregion
 
-        public HashSet<int> GetSet(int setId) =>
-            setDict[setId];
+        /// <summary>
+        /// Get all the ids of properties in the given set
+        /// </summary>
+        /// <param name="setId"></param>
+        /// <returns></returns>
+        public HashSet<int> GetPropertySet(int setId) =>
+            propertySetDict[setId];
     }
 }

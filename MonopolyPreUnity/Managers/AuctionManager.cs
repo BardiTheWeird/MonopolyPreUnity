@@ -7,7 +7,7 @@ namespace MonopolyPreUnity.Managers
 {
     class AuctionManager
     {
-        public void StartAuction(Property property)
+        public void StartAuction(PropertyComponent property)
         {
             throw new NotImplementedException();
         }
