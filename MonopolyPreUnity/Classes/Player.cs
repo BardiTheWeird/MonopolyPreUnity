@@ -13,6 +13,7 @@ namespace MonopolyPreUnity.Classes
         public int Cash { get; set; }
         public int JailCards { get; set; }
         public int? TurnsInPrison { get; set; }
+        public int CurrentTileId { get; set; }
 
         public Player(int id, string displayName, int cash)
         {
@@ -22,6 +23,7 @@ namespace MonopolyPreUnity.Classes
             Cash = cash;
             JailCards = 0;
             TurnsInPrison = null;
+            CurrentTile = 0; // represents startTile
         }
     }
 }
