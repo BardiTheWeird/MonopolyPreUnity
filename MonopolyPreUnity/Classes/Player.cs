@@ -9,7 +9,7 @@ namespace MonopolyPreUnity.Classes
     {
         public int Id { get; }
         public string DisplayName { get; }
-        public List<Property> Properties { get; }
+        public List<PropertyComponent> Properties { get; }
         public int Cash { get; set; }
         public int JailCards { get; set; }
         public int? TurnsInPrison { get; set; }
@@ -18,7 +18,7 @@ namespace MonopolyPreUnity.Classes
         {
             Id = id;
             DisplayName = displayName;
-            Properties = new List<Property>();
+            Properties = new List<PropertyComponent>();
             Cash = cash;
             JailCards = 0;
             TurnsInPrison = null;

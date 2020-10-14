@@ -10,7 +10,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Classes
 {
-    class Property : ITile
+    class PropertyComponent : ITileContentComponent
     {
         #region Dependencies
         private readonly RequestManager _requestManager;
@@ -20,8 +20,6 @@ namespace MonopolyPreUnity.Classes
         #endregion
 
         #region Properties
-        public int Id { get; }
-        public string Name { get; }
         public int setId { get; }
         public int BasePrice { get; }
         public int? OwnerId { get; set; } = null;
@@ -31,16 +29,14 @@ namespace MonopolyPreUnity.Classes
         #endregion
 
         #region Constructor
-        protected Property(int id, string name, int setId, int basePrice,
+        protected PropertyComponent(int setId, int basePrice,
+            IPropertyRentComponent rentComponent,
+            PropertyDevelopmentComponent developmentComponent,
             RequestManager requestManager,
             PlayerManager playerManager,
             PropertyTransferManager propertyTransferManager,
-            AuctionManager auctionManager,
-            IPropertyRentComponent rentComponent,
-            PropertyDevelopmentComponent developmentComponent = null)
+            AuctionManager auctionManager)
         {
-            Id = id;
-            Name = name;
             this.setId = setId;
             BasePrice = basePrice;
             _requestManager = requestManager;
