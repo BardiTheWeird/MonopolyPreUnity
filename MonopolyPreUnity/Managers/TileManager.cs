@@ -3,6 +3,8 @@ using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace MonopolyPreUnity.Managers
@@ -46,5 +48,10 @@ namespace MonopolyPreUnity.Managers
         /// <returns></returns>
         public HashSet<int> GetPropertySet(int setId) =>
             propertySetDict[setId];
+
+        public int GetSpecialTileId<T>() where T : ITileContentComponent
+        {
+            throw new NotImplementedException();
+        }
     }
 }
