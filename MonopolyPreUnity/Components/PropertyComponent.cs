@@ -48,8 +48,6 @@ namespace MonopolyPreUnity.Classes
         }
         #endregion
 
-        //public void ChargeRent(int playerId);
-
         public void OnPlayerLanded(int playerId)
         {
             if (OwnerId == null)

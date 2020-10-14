@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Managers;
+using System;
 
 namespace MonopolyPreUnity
 {
@@ -9,7 +11,7 @@ namespace MonopolyPreUnity
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            
         }
     }
 }

@@ -60,10 +60,13 @@ namespace MonopolyPreUnity.Components
 
         public void Execute(int playerId)
         {
+            int sum = 0;
             foreach(int id in _playerManager.GetAllPlayerId().Where(x => x != playerId))
             {
                 _playerManager.PlayerCashCharge(playerId, AmountPerPlayer);
+                sum += AmountPerPlayer;
             }
+            _playerManager.PlayerCashGive(playerId, sum);
         }
 
         public GiftFromPlayersAction(int amountPerPlayer, string description, PlayerManager playerManager)
