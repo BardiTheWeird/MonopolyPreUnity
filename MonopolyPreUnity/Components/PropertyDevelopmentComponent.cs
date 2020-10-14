@@ -9,6 +9,5 @@ namespace MonopolyPreUnity.Components
         public int HousesBuilt { get; set; }
         public int HouseBuyPrice { get; }
         public int HouseSellPrice { get; }
-        public int HouseCap { get; }
     }
 }
