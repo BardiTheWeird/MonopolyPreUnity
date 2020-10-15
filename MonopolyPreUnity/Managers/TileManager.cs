@@ -50,5 +50,12 @@ namespace MonopolyPreUnity.Managers
 
         public int GetTileWithComponent<T>() =>
             tileDict.FirstOrDefault(x => x.Value.GetType() == typeof(T)).Key;
+
+
+        public List<int> GetAllTilesWithComponent<T>() =>
+            tileDict
+            .Where(x => x.Value.Components.Where(x => x.GetType() == typeof(T)).Count() > 0)
+            .Select(x => x.Key)
+            .ToList();
     }
 }
