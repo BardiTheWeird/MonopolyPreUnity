@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlTypes;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -15,7 +16,6 @@ namespace MonopolyPreUnity.Managers
     {
         private readonly Dictionary<int, Tile> tileDict;
         private readonly Dictionary<int, HashSet<int>> propertySetDict;
-        private readonly Dictionary<SpecialTile, int> specialTileDict;
 
         #region GetTile
         /// <summary>
@@ -45,15 +45,10 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
-        /// <summary>
-        /// Get all the ids of properties in the given set
-        /// </summary>
-        /// <param name="setId"></param>
-        /// <returns></returns>
         public HashSet<int> GetPropertySet(int setId) =>
             propertySetDict[setId];
 
-        public int GetSpecialTileId(SpecialTile specialTile) =>
-            specialTileDict[specialTile];
+        public int GetTileWithComponent<T>() =>
+            tileDict.FirstOrDefault(x => x.Value.GetType() == typeof(T)).Key;
     }
 }

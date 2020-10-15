@@ -14,12 +14,6 @@ namespace MonopolyPreUnity.Utitlity
         GetAnItem
     }
 
-    public enum SpecialTile
-    {
-        Go,
-        Jail
-    }
-
     public enum MonopolyCommand
     {
         TurnMakeMove,
