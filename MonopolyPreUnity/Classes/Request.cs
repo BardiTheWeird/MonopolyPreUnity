@@ -15,16 +15,10 @@ namespace MonopolyPreUnity.Classes
         #endregion
 
         #region Constructors
-        public Request(MonopolyRequest requestType, List<TInput> choices)
+        public Request(MonopolyRequest requestType, List<TInput> choices = null)
         {
             RequestType = requestType;
             Choices = choices;
-        }
-
-        public Request(MonopolyRequest requestType)
-        {
-            RequestType = requestType;
-            Choices = null;
         }
         #endregion
     }

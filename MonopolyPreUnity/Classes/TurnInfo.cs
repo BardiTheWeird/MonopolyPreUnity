@@ -7,6 +7,12 @@ namespace MonopolyPreUnity.Classes
     class TurnInfo
     {
         public List<int> turnOrder { get; }
-        public int curTurnPlayer { get; }
+        public int curTurnPlayer { get; set; }
+
+        public TurnInfo(List<int> turnOrder, int curTurnPlayer)
+        {
+            this.turnOrder = turnOrder;
+            this.curTurnPlayer = curTurnPlayer;
+        }
     }
 }
