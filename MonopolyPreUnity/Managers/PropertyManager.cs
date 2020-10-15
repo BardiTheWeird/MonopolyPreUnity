@@ -19,6 +19,7 @@ namespace MonopolyPreUnity.Managers
         private const float _mortageComission = 0.1f;
         private const float _mortageFee = 0.5f;
         private const int _housesLimit = 5;
+        private const int _house = 1;
         #endregion
 
         #region Dependencies
@@ -26,7 +27,7 @@ namespace MonopolyPreUnity.Managers
         private readonly TileManager _tileManager;
         #endregion
 
-        #region constuctor
+        #region Constuctor
         public PropertyManager(PlayerManager playerManager, TileManager tileManager)
         {
             _playerManager = playerManager;
@@ -34,8 +35,8 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
-
-        public bool SetOwned(int playerId, PropertyComponent propertyComponent)
+        #region Subsidiary Methods
+        public bool IsSetOwned(int playerId, PropertyComponent propertyComponent)
         {
             var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
             var player = _playerManager.GetPlayer(playerId);
@@ -47,51 +48,63 @@ namespace MonopolyPreUnity.Managers
         }
 
 
-        public int HouseDifference(HashSet<int> playerSet)
+        public bool BuildOnPropertyAllowed(int playerId,PropertyComponent propertyComponent)
         {
-            var max = playerSet.Max(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt);
-            var min= playerSet.Min(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt);
-            return max - min;
+            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);//набор зданий одного цвета
+            return (playerSet.Max(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) -
+                propertyComponent.DevelopmentComponent.HousesBuilt + _house <= 1 &&/*проверка на возможность достроить дом
+                 на определенном тайле не нарушив баланс разности с максимально развитым тайлом*/
+                propertyComponent.DevelopmentComponent.HousesBuilt + _house -
+                playerSet.Min(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) <= 1&&
+                /*аналогично для минимального тайла*/
+                _playerManager.GetPlayerCash(playerId) >
+                propertyComponent.DevelopmentComponent.HouseBuyPrice &&//достаток денег для постройки
+                    propertyComponent.DevelopmentComponent.HousesBuilt != _housesLimit &&//проверка максимальной развитости тайла
+                    IsSetOwned(playerId, propertyComponent))//проверка на наличие сета у игрока
+                    ;
         }
 
+        public bool SellOnPropertyAllowed(int playerId, PropertyComponent propertyComponent)
+        {
+            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
+            return (playerSet.Max(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) -
+                propertyComponent.DevelopmentComponent.HousesBuilt - _house <= 1 &&
+                propertyComponent.DevelopmentComponent.HousesBuilt - _house -
+                playerSet.Min(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) <= 1&&
+                IsSetOwned(playerId, propertyComponent));
+
+        }
+
+
+        #endregion
+
+        #region Available Actions
         public void GetAvailableActions(int playerId,PropertyComponent propertyComponent)
         {
             var AvailableActions= new List<MonopolyCommand>();
-            var setOwned = SetOwned(playerId, propertyComponent);
-            var houseDifference = HouseDifference(_tileManager.GetPropertySet(propertyComponent.setId));
             if (propertyComponent.DevelopmentComponent != null) {
-                if (_playerManager.GetPlayerCash(playerId) > propertyComponent.DevelopmentComponent.HouseBuyPrice &&
-                    propertyComponent.DevelopmentComponent.HousesBuilt != _housesLimit &&
-                    setOwned &&
-                    houseDifference<= 1)
-                {
+                if (BuildOnPropertyAllowed(playerId,propertyComponent))
                     AvailableActions.Add(MonopolyCommand.PropertyBuyHouse);
-                }
-
-               if (propertyComponent.DevelopmentComponent.HousesBuilt > 0 &&
-                    houseDifference)
-               {
+                if (SellOnPropertyAllowed(playerId,propertyComponent))
                     AvailableActions.Add(MonopolyCommand.PropertySellHouse);
-               }
             
                 
             }
-            if (propertyComponent.IsMortgaged == true && _playerManager.GetPlayerCash>)
-            {
-
-            }
-            
-            
-
-
+            if (propertyComponent.IsMortgaged == true &&
+                _playerManager.GetPlayerCash(playerId)>
+                propertyComponent.BasePrice*_mortageFee*_mortageComission)
+                AvailableActions.Add(MonopolyCommand.PropertyUnmortgage);
+            if (propertyComponent.IsMortgaged == false &&
+                propertyComponent.DevelopmentComponent.HousesBuilt == 0)
+                AvailableActions.Add(MonopolyCommand.PropertyMortgage);
         }
+        #endregion
 
+        #region Property Actions
         public void BuildHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
         {
             developmentComponent.HousesBuilt++;
-                _playerManager.PlayerCashCharge(playerId, developmentComponent.HouseBuyPrice);
-                if (developmentComponent.HousesBuilt == _housesLimit) developmentComponent.BuildAllowed = false;
-
+            _playerManager.PlayerCashCharge(playerId, developmentComponent.HouseBuyPrice);
 
         }
         
@@ -100,9 +113,9 @@ namespace MonopolyPreUnity.Managers
 
             developmentComponent.HousesBuilt--;
             _playerManager.PlayerCashGive(playerId, developmentComponent.HouseBuyPrice);
-            if (developmentComponent.HousesBuilt < _housesLimit) developmentComponent.BuildAllowed = true;
 
         }
+
         public void Mortage(int playerId, PropertyComponent propertyComponent)
         {
 
@@ -119,7 +132,7 @@ namespace MonopolyPreUnity.Managers
                 _playerManager.PlayerCashCharge(playerId, (int)(_mortageFee + _mortageComission) * propertyComponent.BasePrice);
 
         }
+        #endregion
 
-
-        }
+    }
 }
