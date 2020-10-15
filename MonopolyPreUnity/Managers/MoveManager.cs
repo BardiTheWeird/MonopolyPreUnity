@@ -29,7 +29,7 @@ namespace MonopolyPreUnity.Managers
             CanMove = DiceValues.Item1 == DiceValues.Item2;
 
             int tileId = _mapManager.MoveBySteps(playerId, DiceValues.Item1 + DiceValues.Item2);
-            _tileManager.GetTileContent<ITileContentComponent>(tileId).OnPlayerLanded(playerId);
+            _tileManager.Get<ITileContentComponent>(tileId).OnPlayerLanded(playerId);
             
         }
     }

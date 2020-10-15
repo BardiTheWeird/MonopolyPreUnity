@@ -36,6 +36,13 @@ namespace MonopolyPreUnity.Managers
             return default(T);
         }
 
+        public bool TileHasComponent <T>(int tileId) where T : ITileComponent
+        {
+            if (GetTileComponent<T>(tileId) == null)
+                return false;
+            return true;
+        }
+
         public bool GetTileComponent<T>(int tileId, out T component)
         {
             component = GetTileComponent<T>(tileId);

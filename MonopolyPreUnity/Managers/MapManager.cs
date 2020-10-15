@@ -53,8 +53,8 @@ namespace MonopolyPreUnity.Managers
             int tileStartIndex = mapIndex[tileStartId];
             int tileEndIndex = mapIndex[tileEndId];
 
-
-            if (tileEndId == _tileManager.GetSpecialTileId<GoComponent>())
+            GoComponent t;
+            if (_tileManager.GetTileComponent<GoComponent>(tileEndId, out t))
             {
                 return true;
             }
