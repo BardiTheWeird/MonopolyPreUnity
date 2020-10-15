@@ -8,6 +8,7 @@ namespace MonopolyPreUnity.Interfaces
     interface IUserScenario
     {
         anus
+            anal
         public TInput HandleRequest<TInput>(Request<TInput> request);
     }
 }
