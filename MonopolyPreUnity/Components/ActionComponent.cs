@@ -7,6 +7,6 @@ namespace MonopolyPreUnity.Components
 {
     class ActionComponent : ITileComponent
     {
-        public IMonopolyAction Action { get; }
+        public IAction Action { get; }
     }
 }

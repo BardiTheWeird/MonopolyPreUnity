@@ -4,6 +4,16 @@ using System.Text;
 
 namespace MonopolyPreUnity.Utitlity
 {
+    public enum MonopolyAction
+    {
+        ChangeBalance,
+        GiftFromPlayers,
+        TaxPerHouse,
+        GoToJail,
+        GoToTile,
+        GetAnItem
+    }
+
     public enum MonopolyCommand
     {
         TurnMakeMove,
