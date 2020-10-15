@@ -4,8 +4,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    interface ITileContentComponent
+    interface ITileComponent
     {
-        public void OnPlayerLanded(int playerId);
     }
 }

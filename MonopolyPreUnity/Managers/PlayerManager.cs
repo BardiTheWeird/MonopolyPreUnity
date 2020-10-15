@@ -40,8 +40,6 @@ namespace MonopolyPreUnity.Managers
                 PlayerCashGive(playerId, amount);
         }
 
-        // We have two methods for cash operatiobs for now.
-        // Might change later to one PlayerCashOperation() or smth.
         public void PlayerCashCharge(int playerId, int amount)
         {
             var player = GetPlayer(playerId);

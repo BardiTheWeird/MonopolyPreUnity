@@ -7,15 +7,11 @@ namespace MonopolyPreUnity.Classes
 {
     class Tile
     {
-        #region Components
-        public TileIdentityComponent IdentityComponent { get; }
-        public ITileContentComponent ContentComponent { get; }
-        #endregion
+        public List<ITileComponent> Components { get; }
 
-        public Tile(TileIdentityComponent identityComponent, ITileContentComponent contentComponent)
+        public Tile(List<ITileComponent> components)
         {
-            IdentityComponent = identityComponent;
-            ContentComponent = contentComponent;
+            Components = components;
         }
     }
 }
