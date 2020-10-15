@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,28 @@ namespace MonopolyPreUnity.Managers
 {
     class MoveManager
     {
-        LinkedList<Tile> Map { get; set; }
-        public Tile MoveTile(Tile tileStart, int dice)
+        #region dependencies
+        private readonly PlayerManager _playerManager;
+        private readonly TileManager _tileManager;
+        private readonly MapManager _mapManager;
+        #endregion
+
+        public bool CanMove { get; private set; }
+        public (int, int) DiceValues { get; private set; }
+
+        private void ThrowDice()
         {
-            throw new NotImplementedException();
+            DiceValues = Dice.Throw();
+        }
+
+        public void MakeAMove(int playerId)
+        {
+            this.ThrowDice();
+            CanMove = DiceValues.Item1 == DiceValues.Item2;
+
+            int tileId = _mapManager.MoveBySteps(playerId, DiceValues.Item1 + DiceValues.Item2);
+            _tileManager.GetTileContent<ITileContentComponent>(tileId).OnPlayerLanded(playerId);
+            
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class TileIdentityComponent
+    class TileIdentityComponent : ITileComponent
     {
         public int Id { get; }
         public string Name { get; }

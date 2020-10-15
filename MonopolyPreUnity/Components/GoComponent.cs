@@ -5,20 +5,13 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class GoComponent : ITileContentComponent
+    class GoComponent : ITileComponent
     {
-        private readonly PlayerManager _playerManager;
         public int MoneyRewarded { get; }
 
-        public void OnPlayerLanded(int playerId)
-        {
-            _playerManager.PlayerCashGive(playerId, MoneyRewarded);
-        }
-
-        public GoComponent(int moneyRewarded, PlayerManager playerManager)
+        public GoComponent(int moneyRewarded)
         {
             MoneyRewarded = moneyRewarded;
-            _playerManager = playerManager;
         }
     }
 }

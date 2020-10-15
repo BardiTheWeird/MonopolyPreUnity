@@ -1,8 +1,12 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Interfaces;
+using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data.SqlTypes;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace MonopolyPreUnity.Managers
@@ -11,6 +15,7 @@ namespace MonopolyPreUnity.Managers
     {
         private readonly Dictionary<int, Tile> tileDict;
         private readonly Dictionary<int, HashSet<int>> propertySetDict;
+        private readonly Dictionary<SpecialTile, int> specialTileDict;
 
         #region GetTile
         /// <summary>
@@ -21,22 +26,23 @@ namespace MonopolyPreUnity.Managers
         public Tile GetTile(int tileId) =>
             tileDict[tileId];
 
-        /// <summary>
-        /// Get an Identity component. For stuff like Id and Name
-        /// </summary>
-        /// <param name="tileId"></param>
-        /// <returns></returns>
-        public TileIdentityComponent GetTileIdentity(int tileId) =>
-            tileDict[tileId].IdentityComponent;
+        public T GetTileComponent<T>(int tileId)
+        {
+            T component;
+            if ((component = (T)tileDict[tileId].Components.Find(x => x.GetType() == typeof(T))) == null)
+            {
+                return component;
+            }
+            return default(T);
+        }
 
-        /// <summary>
-        /// Get a Content component of a Tile
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="tileId"></param>
-        /// <returns></returns>
-        public T GetTileContent<T>(int tileId) where T : ITileContentComponent =>
-            (T)tileDict[tileId].ContentComponent;
+        public bool GetTileComponent<T>(int tileId, out T component)
+        {
+            component = GetTileComponent<T>(tileId);
+            if (component == null)
+                return false;
+            return true;
+        }
         #endregion
 
         /// <summary>
@@ -46,5 +52,8 @@ namespace MonopolyPreUnity.Managers
         /// <returns></returns>
         public HashSet<int> GetPropertySet(int setId) =>
             propertySetDict[setId];
+
+        public int GetSpecialTileId(SpecialTile specialTile) =>
+            specialTileDict[specialTile];
     }
 }
