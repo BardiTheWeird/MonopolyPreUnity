@@ -40,52 +40,49 @@ namespace MonopolyPreUnity.Managers
         {
             var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
             var player = _playerManager.GetPlayer(playerId);
-                if (playerSet.IsSubsetOf(player.Properties))
-                {
-                    return true;
-                }
+            if (playerSet.IsSubsetOf(player.Properties))
+            {
+                return true;
+            }
             return false;
         }
 
 
-        public bool BuildOnPropertyAllowed(int playerId,PropertyComponent propertyComponent)
-        {
-            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);//набор зданий одного цвета
-            return (playerSet.Max(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) -
-                propertyComponent.DevelopmentComponent.HousesBuilt + _house <= 1 &&/*проверка на возможность достроить дом
+        public bool BuildOnPropertyAllowed(HashSet<int> playerSet, int playerId, PropertyComponent propertyComponent, PropertyDevelopmentComponent propertyDevelopmentComponent)
+            //набор зданий одного цвета
+            => (playerSet.Max(id => _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id).HousesBuilt) -
+                propertyDevelopmentComponent.HousesBuilt + _house <= 1 &&/*проверка на возможность достроить дом
                  на определенном тайле не нарушив баланс разности с максимально развитым тайлом*/
-                propertyComponent.DevelopmentComponent.HousesBuilt + _house -
-                playerSet.Min(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) <= 1&&
+                propertyDevelopmentComponent.HousesBuilt + _house -
+                playerSet.Min(id => _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id).HousesBuilt) <= 1 &&
                 /*аналогично для минимального тайла*/
                 _playerManager.GetPlayerCash(playerId) >
-                propertyComponent.DevelopmentComponent.HouseBuyPrice &&//достаток денег для постройки
-                    propertyComponent.DevelopmentComponent.HousesBuilt != _housesLimit &&//проверка максимальной развитости тайла
-                    IsSetOwned(playerId, propertyComponent))//проверка на наличие сета у игрока
-                    ;
-        }
+                propertyDevelopmentComponent.HouseBuyPrice &&//достаток денег для постройки
+                    propertyDevelopmentComponent.HousesBuilt != _housesLimit &&//проверка максимальной развитости тайла
+                    IsSetOwned(playerId, propertyComponent));//проверка на наличие сета у игрока
 
-        public bool SellOnPropertyAllowed(int playerId, PropertyComponent propertyComponent)
-        {
-            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
-            return (playerSet.Max(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) -
-                propertyComponent.DevelopmentComponent.HousesBuilt - _house <= 1 &&
-                propertyComponent.DevelopmentComponent.HousesBuilt - _house -
-                playerSet.Min(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) <= 1&&
-                IsSetOwned(playerId, propertyComponent));
+        public bool SellOnPropertyAllowed(HashSet<int> playerSet, int playerId, PropertyComponent propertyComponent, PropertyDevelopmentComponent propertyDevelopmentComponent)
 
-        }
+            => playerSet.Max(id => _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id).HousesBuilt) -
+                propertyDevelopmentComponent.HousesBuilt - _house <= 1 &&
+                propertyDevelopmentComponent.HousesBuilt - _house -
+                playerSet.Min(id => _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id).HousesBuilt) <= 1 &&
+                IsSetOwned(playerId, propertyComponent);
+
+    
 
 
         #endregion
 
         #region Available Actions
-        public void GetAvailableActions(int playerId,PropertyComponent propertyComponent)
+        public void GetAvailableActions(int playerId,PropertyComponent propertyComponent,PropertyDevelopmentComponent propertyDevelopmentComponent)
         {
+            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
             var AvailableActions= new List<MonopolyCommand>();
-            if (propertyComponent.DevelopmentComponent != null) {
-                if (BuildOnPropertyAllowed(playerId,propertyComponent))
+            if (propertyDevelopmentComponent != null) {
+                if (BuildOnPropertyAllowed(playerSet,playerId,propertyComponent,propertyDevelopmentComponent))
                     AvailableActions.Add(MonopolyCommand.PropertyBuyHouse);
-                if (SellOnPropertyAllowed(playerId,propertyComponent))
+                if (SellOnPropertyAllowed(playerSet,playerId,propertyComponent,propertyDevelopmentComponent))
                     AvailableActions.Add(MonopolyCommand.PropertySellHouse);
             
                 
@@ -95,7 +92,7 @@ namespace MonopolyPreUnity.Managers
                 propertyComponent.BasePrice*_mortageFee*_mortageComission)
                 AvailableActions.Add(MonopolyCommand.PropertyUnmortgage);
             if (propertyComponent.IsMortgaged == false &&
-                propertyComponent.DevelopmentComponent.HousesBuilt == 0)
+                propertyDevelopmentComponent.HousesBuilt == 0)
                 AvailableActions.Add(MonopolyCommand.PropertyMortgage);
         }
         #endregion
