@@ -1,98 +1,138 @@
 ﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 
 namespace MonopolyPreUnity.Managers
 {
-     
-    class NotAllowedExeption : Exception
-    {
-        public override string Message => "Ну нельзя чел че то тебе не хватает))";
-        public override string ToString()
-        {
-            return "ЧЕ НЕ ЯСНО НЕЛЬЗЯ";
-        }
-
-    }
 
     class PropertyManager
     {
+        #region Constants
         private const float _mortageComission = 0.1f;
         private const float _mortageFee = 0.5f;
         private const int _housesLimit = 5;
+        private const int _house = 1;
+        #endregion
 
-
-
+        #region Dependencies
         private readonly PlayerManager _playerManager;
         private readonly TileManager _tileManager;
+        #endregion
 
-        public PropertyManager()
+        #region Constuctor
+        public PropertyManager(PlayerManager playerManager, TileManager tileManager)
         {
-            throw new NotImplementedException();
+            _playerManager = playerManager;
+            _tileManager = tileManager;
         }
-        public void GetAvailableActions()
+        #endregion
+
+        #region Subsidiary Methods
+        public bool IsSetOwned(int playerId, PropertyComponent propertyComponent)
         {
-            throw new NotImplementedException();
+            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
+            var player = _playerManager.GetPlayer(playerId);
+                if (playerSet.IsSubsetOf(player.Properties))
+                {
+                    return true;
+                }
+            return false;
+        }
+
+
+        public bool BuildOnPropertyAllowed(int playerId,PropertyComponent propertyComponent)
+        {
+            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);//набор зданий одного цвета
+            return (playerSet.Max(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) -
+                propertyComponent.DevelopmentComponent.HousesBuilt + _house <= 1 &&/*проверка на возможность достроить дом
+                 на определенном тайле не нарушив баланс разности с максимально развитым тайлом*/
+                propertyComponent.DevelopmentComponent.HousesBuilt + _house -
+                playerSet.Min(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) <= 1&&
+                /*аналогично для минимального тайла*/
+                _playerManager.GetPlayerCash(playerId) >
+                propertyComponent.DevelopmentComponent.HouseBuyPrice &&//достаток денег для постройки
+                    propertyComponent.DevelopmentComponent.HousesBuilt != _housesLimit &&//проверка максимальной развитости тайла
+                    IsSetOwned(playerId, propertyComponent))//проверка на наличие сета у игрока
+                    ;
+        }
+
+        public bool SellOnPropertyAllowed(int playerId, PropertyComponent propertyComponent)
+        {
+            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
+            return (playerSet.Max(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) -
+                propertyComponent.DevelopmentComponent.HousesBuilt - _house <= 1 &&
+                propertyComponent.DevelopmentComponent.HousesBuilt - _house -
+                playerSet.Min(id => _tileManager.GetTileContent<PropertyComponent>(id).DevelopmentComponent.HousesBuilt) <= 1&&
+                IsSetOwned(playerId, propertyComponent));
 
         }
 
-        public void BuildHouse(int playerId,RealEstate realEstate)
-        {
-            if (_playerManager.GetPlayerCash(playerId) > realEstate.HousePrice &&
-                realEstate.BuildAllowed
-                //тут должно быть еще одно условие для проверки сэта но я не ебу как его реализовать пока что
-           
-                )
-            {
-                realEstate.NumberOfHouses++;
-                _playerManager.PlayerCashCharge(playerId, realEstate.HousePrice);
-                if (realEstate.NumberOfHouses == _housesLimit) realEstate.BuildAllowed = false;
 
+        #endregion
+
+        #region Available Actions
+        public void GetAvailableActions(int playerId,PropertyComponent propertyComponent)
+        {
+            var AvailableActions= new List<MonopolyCommand>();
+            if (propertyComponent.DevelopmentComponent != null) {
+                if (BuildOnPropertyAllowed(playerId,propertyComponent))
+                    AvailableActions.Add(MonopolyCommand.PropertyBuyHouse);
+                if (SellOnPropertyAllowed(playerId,propertyComponent))
+                    AvailableActions.Add(MonopolyCommand.PropertySellHouse);
+            
+                
             }
-            else throw new NotAllowedExeption();
+            if (propertyComponent.IsMortgaged == true &&
+                _playerManager.GetPlayerCash(playerId)>
+                propertyComponent.BasePrice*_mortageFee*_mortageComission)
+                AvailableActions.Add(MonopolyCommand.PropertyUnmortgage);
+            if (propertyComponent.IsMortgaged == false &&
+                propertyComponent.DevelopmentComponent.HousesBuilt == 0)
+                AvailableActions.Add(MonopolyCommand.PropertyMortgage);
+        }
+        #endregion
+
+        #region Property Actions
+        public void BuildHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
+        {
+            developmentComponent.HousesBuilt++;
+            _playerManager.PlayerCashCharge(playerId, developmentComponent.HouseBuyPrice);
+
         }
         
-        public void SellHouse(int playerId,RealEstate realEstate)
+        public void SellHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
         {
-            if (realEstate.NumberOfHouses > 0
-                //и тут условие для сета сука как это сделать хотя мб не надо
-                )
-            {
-                _playerManager.PlayerCashGive(playerId, realEstate.HousePrice);
-                realEstate.NumberOfHouses--;
-                if (realEstate.NumberOfHouses < _housesLimit) realEstate.BuildAllowed = true;
 
-            }
-            else throw new NotAllowedExeption();
-
+            developmentComponent.HousesBuilt--;
+            _playerManager.PlayerCashGive(playerId, developmentComponent.HouseBuyPrice);
 
         }
-        public void Mortage(int playerId, RealEstate realEstate)
+
+        public void Mortage(int playerId, PropertyComponent propertyComponent)
         {
-            if (realEstate.NumberOfHouses == 0)
-            {
-                _playerManager.PlayerCashGive(playerId, (int)(_mortageFee * realEstate.BasePrice));
-                realEstate.IsMortgaged = true;
-            }
-            else throw new NotAllowedExeption();
+
+                _playerManager.PlayerCashGive(playerId, (int)(_mortageFee * propertyComponent.BasePrice));
+                propertyComponent.IsMortgaged = true;
+
 
         }
         
-        public void UnMortage(int playerId,RealEstate realEstate)
+        public void UnMortage(int playerId, PropertyComponent propertyComponent)
         {
-            if (_playerManager.GetPlayerCash(playerId) > (int)(_mortageFee+_mortageComission)*realEstate.BasePrice)
-            {
-                realEstate.IsMortgaged = false;
-                _playerManager.PlayerCashCharge(playerId, (int)(_mortageFee + _mortageComission) * realEstate.BasePrice);
-            }
-            else throw new NotAllowedExeption();
 
+                propertyComponent.IsMortgaged = false;
+                _playerManager.PlayerCashCharge(playerId, (int)(_mortageFee + _mortageComission) * propertyComponent.BasePrice);
 
         }
+        #endregion
 
-
-            }
+    }
 }

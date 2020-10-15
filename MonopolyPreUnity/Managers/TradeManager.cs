@@ -7,7 +7,7 @@ namespace MonopolyPreUnity.Managers
     class TradeManager
     {
 
-        public void CreateTransfer()
+        public void CreateTransfer(int playerId1,int playerId2)
         {
             throw new NotImplementedException();
         }
