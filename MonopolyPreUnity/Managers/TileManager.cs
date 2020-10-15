@@ -26,17 +26,17 @@ namespace MonopolyPreUnity.Managers
         public Tile GetTile(int tileId) =>
             tileDict[tileId];
 
-        public T GetTileComponent<T>(int tileId)
+        public T GetTileComponent<T>(int tileId) where T : ITileComponent
         {
             T component;
             if ((component = (T)tileDict[tileId].Components.Find(x => x.GetType() == typeof(T))) == null)
             {
                 return component;
             }
-            return default(T);
+            return default;
         }
 
-        public bool GetTileComponent<T>(int tileId, out T component)
+        public bool GetTileComponent<T>(int tileId, out T component) where T : ITileComponent
         {
             component = GetTileComponent<T>(tileId);
             if (component == null)
@@ -48,13 +48,15 @@ namespace MonopolyPreUnity.Managers
         public HashSet<int> GetPropertySet(int setId) =>
             propertySetDict[setId];
 
-        public int GetTileWithComponent<T>() =>
+        public int GetTileWithComponent<T>() where T : ITileComponent =>
             tileDict.FirstOrDefault(x => x.Value.GetType() == typeof(T)).Key;
 
+        public bool ContainsComponent<T>(int tileId) where T : ITileComponent =>
+            tileDict[tileId].Components.FirstOrDefault(x => x.GetType() == typeof(T)) != null;
 
-        public List<int> GetAllTilesWithComponent<T>() =>
+        public List<int> GetAllTilesWithComponent<T>() where T : ITileComponent =>
             tileDict
-            .Where(x => x.Value.Components.Where(x => x.GetType() == typeof(T)).Count() > 0)
+            .Where(x => ContainsComponent<T>(x.Key))
             .Select(x => x.Key)
             .ToList();
     }
