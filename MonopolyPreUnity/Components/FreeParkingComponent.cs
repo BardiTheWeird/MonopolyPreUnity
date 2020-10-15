@@ -6,9 +6,5 @@ namespace MonopolyPreUnity.Components
 {
     class FreeParkingComponent : ITileComponent
     {
-        public void OnPlayerLanded(int playerId)
-        {
-            // Kinda do nothing
-        }
     }
 }

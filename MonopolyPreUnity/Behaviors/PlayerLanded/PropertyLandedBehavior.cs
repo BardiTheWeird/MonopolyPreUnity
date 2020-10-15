@@ -17,6 +17,7 @@ namespace MonopolyPreUnity.Behaviors
         private readonly AuctionManager _auctionManager;
         #endregion
 
+        #region Behavior
         public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId)
         {
             var property = (PropertyComponent)tileComponent;
@@ -57,5 +58,20 @@ namespace MonopolyPreUnity.Behaviors
                 // maybe send a message like "it's your own property, dumbass!"
             }
         }
+
+        #endregion
+
+        #region Constructor
+        public PropertyLandedBehavior(CollectRentBehavior collectRentBehavior, 
+            PlayerManager playerManager,
+            RequestManager requestManager,
+            AuctionManager auctionManager)
+        {
+            _collectRentBehavior = collectRentBehavior;
+            _playerManager = playerManager;
+            _requestManager = requestManager;
+            _auctionManager = auctionManager;
+        }
+        #endregion
     }
 }

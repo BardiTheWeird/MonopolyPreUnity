@@ -38,5 +38,11 @@ namespace MonopolyPreUnity.Behaviors
             else
                 throw new ArgumentException($"Tile with Id {tileId} has neither Development nor a Utility Rent component");
         }
+
+        public CollectRentBehavior(TileManager tileManager, PlayerManager playerManager)
+        {
+            _tileManager = tileManager;
+            _playerManager = playerManager;
+        }
     }
 }
