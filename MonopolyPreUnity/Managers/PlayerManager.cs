@@ -32,6 +32,14 @@ namespace MonopolyPreUnity.Managers
         public int GetPlayerCash(int playerId) =>
             GetPlayer(playerId).Cash;
 
+        public void ChangeBalance(int playerId, int amount)
+        {
+            if (amount < 0)
+                PlayerCashCharge(playerId, Math.Abs(amount));
+            else
+                PlayerCashGive(playerId, amount);
+        }
+
         // We have two methods for cash operatiobs for now.
         // Might change later to one PlayerCashOperation() or smth.
         public void PlayerCashCharge(int playerId, int amount)
