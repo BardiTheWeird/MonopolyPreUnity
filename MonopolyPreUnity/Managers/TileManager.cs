@@ -33,6 +33,14 @@ namespace MonopolyPreUnity.Managers
             }
             return default(T);
         }
+
+        public bool GetTileComponent<T>(int tileId, out T component)
+        {
+            component = GetTileComponent<T>(tileId);
+            if (component == null)
+                return false;
+            return true;
+        }
         #endregion
 
         /// <summary>

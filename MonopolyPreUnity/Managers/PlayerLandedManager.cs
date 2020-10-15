@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MonopolyPreUnity.Behaviors;
+using MonopolyPreUnity.Classes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,41 +8,25 @@ namespace MonopolyPreUnity.Managers
 {
     class PlayerLandedManager
     {
-        #region Property
-        public void OnPlayerLanded(int playerId)
-        {
-            if (OwnerId == null)
-            {
-                var command = MonopolyCommand.TileLandedPropertyAuction;
-                if (_playerManager.GetPlayerCash(playerId) >= BasePrice)
-                {
-                    var request = new Request<MonopolyCommand>(
-                        MonopolyRequest.TileLandedPropertyChoice,
-                        new List<MonopolyCommand>()
-                        {
-                            MonopolyCommand.TileLandedPropertyBuy,
-                            MonopolyCommand.TileLandedPropertyAuction
-                        });
-                    command = _requestManager.SendRequest(playerId, request);
-                }
+        #region Dependencies
+        private readonly TileManager _tileManager;
+        #endregion
 
-                if (command == MonopolyCommand.TileLandedPropertyBuy)
-                {
-                    _playerManager.PlayerCashCharge(playerId, BasePrice);
-                    _propertyTransferManager.TransferProperty(this, playerId);
-                }
-            }
-            else if (OwnerId != playerId)
+        Dictionary<Type, IPlayerLandedBehavior> _playerLandedBehaviorDict;
+
+        public void PlayerLanded(int playerId, int tileId)
+        {
+            foreach(var component in _tileManager.GetTile(tileId).Components)
             {
-                var rent = RentComponent.GetRent();
-                _playerManager.PlayerCashCharge(playerId, rent);
-            }
-            else
-            {
-                // do nothing
-                // maybe send a message like "it's your own property, dumbass!"
+                if (_playerLandedBehaviorDict.TryGetValue(component.GetType(), out var behavior))
+                    behavior.PlayerLanded(playerId, component, tileId);
             }
         }
-        #endregion
+
+        public PlayerLandedManager(Dictionary<Type, IPlayerLandedBehavior> playerLandedBehaviorDict, TileManager tileManager)
+        {
+            _playerLandedBehaviorDict = playerLandedBehaviorDict;
+            _tileManager = tileManager;
+        }
     }
 }
