@@ -13,6 +13,7 @@ namespace MonopolyPreUnity.Managers
         private readonly PlayerManager _playerManager;
         private readonly TileManager _tileManager;
         private readonly MapManager _mapManager;
+        private readonly PlayerLandedManager _playerLandedManager;
         #endregion
 
         public bool CanMove { get; private set; }
@@ -25,11 +26,11 @@ namespace MonopolyPreUnity.Managers
 
         public void MakeAMove(int playerId)
         {
-            this.ThrowDice();
+            ThrowDice();
             CanMove = DiceValues.Item1 == DiceValues.Item2;
 
             int tileId = _mapManager.MoveBySteps(playerId, DiceValues.Item1 + DiceValues.Item2);
-            _tileManager.Get<ITileContentComponent>(tileId).OnPlayerLanded(playerId);
+            _playerLandedManager.PlayerLanded(playerId, tileId);
             
         }
     }

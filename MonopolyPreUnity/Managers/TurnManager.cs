@@ -7,12 +7,26 @@ namespace MonopolyPreUnity.Managers
     class TurnManager
     {
         #region dependencies
+        public readonly PlayerManager _playerManager;
         #endregion
-        public List<int> TurnOrder { get; private set; }
-        public int CurrentPlayer { get; private set; }
-        TurnManager(List<int> turnOrderList)
+        public List<int> TurnOrderIdList { get; private set; }
+        public int CurrentPlayerId { get; private set; }
+        
+        public bool RemovePlayer(int playerId) =>
+            TurnOrderIdList.Remove(playerId);
+
+        public void DetermineTurnOrder()
         {
-            TurnOrder = turnOrderList; 
+            List<int> playerIdList = _playerManager.GetAllPlayerId();
+            
+            foreach(int playerId in playerIdList)
+            {
+                
+            }
+        }
+        public TurnManager(List<int> turnOrderList)
+        {
+            TurnOrderIdList = turnOrderList; 
         }
     }
 }
