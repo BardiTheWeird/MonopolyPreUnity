@@ -5,8 +5,8 @@ using System.Text;
 
 namespace MonopolyPreUnity.Interfaces
 {
-    interface IAction
+    interface IMonopolyAction
     {
-        public MonopolyAction ActionType { get; }
+        public MonopolyActionType ActionType { get; }
     }
 }

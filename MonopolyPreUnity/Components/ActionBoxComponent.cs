@@ -7,9 +7,9 @@ namespace MonopolyPreUnity.Components
 {
     class ActionBoxComponent : ITileComponent
     {
-        public List<IAction> ActionList { get; }
+        public List<IMonopolyAction> ActionList { get; }
 
-        public ActionBoxComponent(List<IAction> actions)
+        public ActionBoxComponent(List<IMonopolyAction> actions)
         {
             ActionList = actions;
         }

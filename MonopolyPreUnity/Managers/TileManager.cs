@@ -1,6 +1,7 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Interfaces;
+using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ namespace MonopolyPreUnity.Managers
     {
         private readonly Dictionary<int, Tile> tileDict;
         private readonly Dictionary<int, HashSet<int>> propertySetDict;
+        private readonly Dictionary<SpecialTile, int> specialTileDict;
 
         #region GetTile
         /// <summary>
@@ -51,9 +53,7 @@ namespace MonopolyPreUnity.Managers
         public HashSet<int> GetPropertySet(int setId) =>
             propertySetDict[setId];
 
-        public int GetSpecialTileId<T>()
-        {
-            throw new NotImplementedException();
-        }
+        public int GetSpecialTileId(SpecialTile specialTile) =>
+            specialTileDict[specialTile];
     }
 }

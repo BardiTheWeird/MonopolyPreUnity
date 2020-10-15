@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Utitlity
 {
-    public enum MonopolyAction
+    public enum MonopolyActionType
     {
         ChangeBalance,
         GiftFromPlayers,
@@ -12,6 +12,12 @@ namespace MonopolyPreUnity.Utitlity
         GoToJail,
         GoToTile,
         GetAnItem
+    }
+
+    public enum SpecialTile
+    {
+        Go,
+        Jail
     }
 
     public enum MonopolyCommand

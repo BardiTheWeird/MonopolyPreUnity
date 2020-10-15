@@ -13,7 +13,7 @@ namespace MonopolyPreUnity.Behaviors.PlayerLanded
         private readonly ActionManager _actionManager;
         #endregion
 
-        IAction ChooseAction(List<IAction> actionList)
+        IMonopolyAction ChooseAction(List<IMonopolyAction> actionList)
         {
             return actionList[new Random().Next(0, actionList.Count)];
         }

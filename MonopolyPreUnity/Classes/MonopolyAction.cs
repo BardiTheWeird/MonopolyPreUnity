@@ -6,35 +6,35 @@ using System.Text;
 
 namespace MonopolyPreUnity.Classes
 {
-    class Action : IAction
+    class MonopolyAction : IMonopolyAction
     {
-        public MonopolyAction ActionType { get; }
+        public MonopolyActionType ActionType { get; }
 
-        public Action(MonopolyAction actionType)
+        public MonopolyAction(MonopolyActionType actionType)
         {
             ActionType = actionType;
         }
     }
 
-    class Action<T> : IAction
+    class MonopolyAction<T> : IMonopolyAction
     {
-        public MonopolyAction ActionType { get; }
+        public MonopolyActionType ActionType { get; }
         public T Argument1 { get; }
 
-        public Action(MonopolyAction actionType, T argument1)
+        public MonopolyAction(MonopolyActionType actionType, T argument1)
         {
             ActionType = actionType;
             Argument1 = argument1;
         }
     }
 
-    class Action<T1, T2> : IAction
+    class MonopolyAction<T1, T2> : IMonopolyAction
     {
-        public MonopolyAction ActionType { get; }
+        public MonopolyActionType ActionType { get; }
         public T1 Argument1 { get; }
         public T2 Argument2 { get; }
 
-        public Action(MonopolyAction actionType, T1 argument1, T2 argument2)
+        public MonopolyAction(MonopolyActionType actionType, T1 argument1, T2 argument2)
         {
             ActionType = actionType;
             Argument1 = argument1;
