@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class JailComponent : ITileContentComponent
+    class JailComponent : ITileComponent
     {
         public void OnPlayerLanded(int playerId)
         {

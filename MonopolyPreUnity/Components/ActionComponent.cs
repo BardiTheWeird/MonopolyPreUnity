@@ -5,13 +5,8 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class ActionComponent : ITileContentComponent
+    class ActionComponent : ITileComponent
     {
         public IMonopolyAction Action { get; }
-
-        public void OnPlayerLanded(int playerId)
-        {
-            Action.Execute(playerId);
-        }
     }
 }
