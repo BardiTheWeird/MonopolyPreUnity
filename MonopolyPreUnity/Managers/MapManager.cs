@@ -30,6 +30,7 @@ namespace MonopolyPreUnity.Managers
         #region dependencies
         private readonly PlayerManager _playerManager;
         private readonly TileManager _tileManager;
+        private readonly PlayerLandedManager _playerLandedManager;
         #endregion
 
         public MapManager(PlayerManager playerManager, TileManager tileManager)
@@ -53,15 +54,14 @@ namespace MonopolyPreUnity.Managers
             int tileStartIndex = mapIndex[tileStartId];
             int tileEndIndex = mapIndex[tileEndId];
 
-
-            if (tileEndId == _tileManager.GetSpecialTileId<GoComponent>())
+            if (_tileManager.ContainsComponent<GoComponent>(tileEndId))
             {
                 return true;
             }
             else if (tileEndIndex < tileStartIndex)
             {
-                int startTileId = _tileManager.GetSpecialTileId<GoComponent>();
-                _tileManager.GetTileContent<GoComponent>(startTileId).OnPlayerLanded(playerId);
+                int GOTileId = _tileManager.GetTileWithComponent<GoComponent>();
+                _playerLandedManager.PlayerLanded(playerId, GOTileId);
 
                 return true;
             }
@@ -69,20 +69,21 @@ namespace MonopolyPreUnity.Managers
             return false;
         }
 
-        public int MoveBySteps(int playerId, int steps)
+        public int MoveBySteps(int playerId, int steps, bool giveGOCash=true)
         {   
             Player player = _playerManager.GetPlayer(playerId);
             int tileIndex = mapIndex[player.CurrentTileId];
 
             int newTileIndex = (tileIndex + steps) % map.Count;
             player.CurrentTileId = map[newTileIndex];
-
-            GOPassed(player.CurrentTileId, map[newTileIndex], playerId);
+            
+            if (giveGOCash)
+                GOPassed(player.CurrentTileId, map[newTileIndex], playerId);
             
             return map[newTileIndex];
         }
 
-        public void MoveToTile(int playerId, int tileId, bool giveGOCash)
+        public void MoveToTile(int playerId, int tileId, bool giveGOCash=true)
         {
             Player player = _playerManager.GetPlayer(playerId);
 
@@ -92,7 +93,7 @@ namespace MonopolyPreUnity.Managers
             player.CurrentTileId = tileId;
         }
 
-        public int MoveByFunc(int playerId, Func<Tile, bool> predicate)
+        public int MoveByFunc(int playerId, Func<Tile, bool> predicate, bool giveGOCash=true)
         {
             Player player = _playerManager.GetPlayer(playerId);
 
@@ -113,8 +114,9 @@ namespace MonopolyPreUnity.Managers
                 throw new TileNotFoundException("Woops, this is a nasty BUG. There is no such tile on the map.");
             }
             else
-            {
-                GOPassed(player.CurrentTileId, map[i], playerId);
+            {   
+                if(giveGOCash)
+                    GOPassed(player.CurrentTileId, map[i], playerId);
                 player.CurrentTileId = map[i];
             }
             return map[i];
