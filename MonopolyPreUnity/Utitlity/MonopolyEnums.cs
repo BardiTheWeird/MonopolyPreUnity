@@ -19,6 +19,7 @@ namespace MonopolyPreUnity.Utitlity
         TurnMakeMove,
         TurnManageProperty,
         TurnMakeDeal,
+        TurnEndTurn,
 
         PropertyChoose,
         PropertyMortgage,
@@ -36,7 +37,7 @@ namespace MonopolyPreUnity.Utitlity
 
     public enum MonopolyRequest
     {
-        TurnActionChoice,
+        TurnCommandChoice,
 
         PropertyManagePropertyChoice,
         PropertyManageActionChoice,

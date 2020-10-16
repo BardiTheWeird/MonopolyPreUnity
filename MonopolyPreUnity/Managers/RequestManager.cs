@@ -7,7 +7,7 @@ namespace MonopolyPreUnity.Managers
 {
     class RequestManager
     {
-        PlayerManager _playerManager;
+        private readonly PlayerManager _playerManager;
 
         public TInput SendRequest<TInput>(int receiverId, Request<TInput> request)
         {
