@@ -24,8 +24,8 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
-        private List<int> map;
-        private Dictionary<int, int> mapIndex;
+        private List<int> map; 
+        private Dictionary<int, int> mapIndex; // <tileId, tileIndex in MapIdSequence>
 
         #region dependencies
         private readonly PlayerManager _playerManager;
