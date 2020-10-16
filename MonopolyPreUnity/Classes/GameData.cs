@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
+using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Behaviors;
 using MonopolyPreUnity.Interfaces;
 using MonopolyPreUnity.Utitlity;
@@ -11,6 +12,10 @@ namespace MonopolyPreUnity.Classes
 {
     class GameData
     {
+        #region Dependencies
+        private readonly Serializer _serializationManager;
+        #endregion
+
         #region MapManager
         public List<int> MapIdSequence { get; private set; }
         public Dictionary<int, int> MapIndex { get; private set; } 
