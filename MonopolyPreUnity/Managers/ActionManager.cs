@@ -58,7 +58,7 @@ namespace MonopolyPreUnity.Managers
             var jailAction = action as MonopolyAction;
             var player = _playerManager.GetPlayer(playerId);
 
-            _mapManager.MoveToTile(playerId, _tileManager.GetSpecialTileId(SpecialTile.Jail), false);
+            _mapManager.MoveToTile(playerId, _tileManager.GetTileWithComponent<JailComponent>(), false);
             player.TurnsInPrison = 0;
         }
 
