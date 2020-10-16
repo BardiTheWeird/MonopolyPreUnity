@@ -1,43 +1,86 @@
 ﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace MonopolyPreUnity.Managers
 {
+
+    class NotEnoughMoney: Exception
+    {
+        public override string ToString()
+            => "Not enough money.Sorry=)";
+    }
     class TradeManager
     {
+        #region Variables
         private readonly int _initiatorPlayerId;
-        private readonly int _RecepientPlayerId;
-        private LinkedList <PropertyComponent> _initiatorOffer;
-        private LinkedList<PropertyComponent> _receiverOffer;
-        private int _initiatorCash = 0;
-        private int _receiverCash = 0;
+        private readonly int _recepientPlayerId;
+        private LinkedList <int> _initiatorOffer;
+        private LinkedList <int> _recepientOffer;
+        private int _initiatorAmount = 0;
+        private int _recepientAmount = 0;
+        #endregion
 
+        private readonly PlayerManager _playerManager;
 
-
+        #region Constructor
         public TradeManager(int initiatorPlayerId, int recepientPlayerId)
         {
             _initiatorPlayerId = initiatorPlayerId;
-            _RecepientPlayerId = recepientPlayerId;
+            _recepientPlayerId = recepientPlayerId;
+        }
+        #endregion
+
+        public void AddPropertyForInitiator(TileIdentityComponent tileIdentityComponent)=>
+            _initiatorOffer.AddLast(tileIdentityComponent.Id);
+
+        public void AddPropertyForRecepient(TileIdentityComponent tileIdentityComponent) =>
+            _recepientOffer.AddLast(tileIdentityComponent.Id);
+
+        public void RemovePropertyForInitiator(TileIdentityComponent tileIdentityComponent) =>
+            _initiatorOffer.Remove(tileIdentityComponent.Id);
+
+        public void RemovePropertyForRecepient(TileIdentityComponent tileIdentityComponent) =>
+            _initiatorOffer.Remove(tileIdentityComponent.Id);
+
+        public void SetInitiatorMoney(int amount)
+        {
+            if (_playerManager.GetPlayerCash(_initiatorPlayerId) > amount)
+                _initiatorAmount = amount;
+            else throw new NotEnoughMoney();
         }
 
-        public void AddPropertyForInitiator(PropertyComponent propertyComponent)
+        public void AddInitiatorMoney(int amount)
         {
-            _initiatorOffer.
+            if (_playerManager.GetPlayerCash(_initiatorPlayerId) > amount+_initiatorAmount)
+                _initiatorAmount += amount;
+            else throw new NotEnoughMoney();
         }
 
-        public void AddPropertyForIninitiator
-
-
-        public void ValidateTransfer()
+        public void SetRecepientMoney(int amount)
         {
-            throw new NotImplementedException();
+            if (_playerManager.GetPlayerCash(_recepientPlayerId) > amount)
+                _recepientAmount = amount;
+            else throw new NotEnoughMoney();
+        }
+            
+        public void AddRecepientMoney(int amount)
+        {
+            if (_playerManager.GetPlayerCash(_recepientPlayerId) > amount + _recepientAmount)
+                _recepientAmount += amount;
+            else throw new NotEnoughMoney();
         }
 
-        public void CompleteTransfer()
+
+        public void ExchangeItems()
         {
-            throw new NotImplementedException();
+            _playerManager.PlayerCashCharge(_initiatorPlayerId, _initiatorAmount);
+            _playerManager.PlayerCashGive(_recepientPlayerId, _initiatorAmount);
+            _playerManager.PlayerCashCharge(_recepientPlayerId, _initiatorAmount);
+            _playerManager.PlayerCashGive(_initiatorPlayerId, _initiatorAmount);
+
 
         }
     }
