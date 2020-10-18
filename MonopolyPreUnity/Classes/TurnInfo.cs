@@ -4,6 +4,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Classes
 {
+    [Serializable]
     class TurnInfo
     {
         public List<int> turnOrder { get; }

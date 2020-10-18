@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using System.Runtime.Serialization;
+
 namespace MonopolyPreUnity.Classes
 {
+    [Serializable]
     class Player
     {
         public int Id { get; }
