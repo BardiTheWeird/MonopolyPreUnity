@@ -145,12 +145,13 @@ namespace MonopolyPreUnity.Managers
                 if (!(_requestManager.SendRequest(playerId, request) is int propertyId))
                     return;
 
+                var property = _tileManager.GetTileComponent<PropertyComponent>(propertyId);
+                var development = _tileManager.GetTileComponent<PropertyDevelopmentComponent>(propertyId);
+
                 MonopolyCommand command;
                 do
                 {
-                    var availableActions = GetAvailableActions(playerId,
-                            _tileManager.GetTileComponent<PropertyComponent>(propertyId),
-                            _tileManager.GetTileComponent<PropertyDevelopmentComponent>(propertyId));
+                    var availableActions = GetAvailableActions(playerId, property, development);
                     availableActions.Add(MonopolyCommand.CancelAction);
 
                     command = _requestManager.SendRequest(playerId,
@@ -159,19 +160,19 @@ namespace MonopolyPreUnity.Managers
                     switch (command)
                     {
                         case MonopolyCommand.PropertyMortgage:
-
+                            Mortage(playerId, property);
                             break;
 
                         case MonopolyCommand.PropertyUnmortgage:
-
+                            UnMortage(playerId, property);
                             break;
 
                         case MonopolyCommand.PropertyBuyHouse:
-
+                            BuildHouse(playerId, development);
                             break;
 
                         case MonopolyCommand.PropertySellHouse:
-
+                            SellHouse(playerId, development);
                             break;
                     }
                 } while (command != MonopolyCommand.CancelAction);

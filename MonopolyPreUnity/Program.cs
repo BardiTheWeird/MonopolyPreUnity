@@ -4,6 +4,7 @@ using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Interfaces;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Modules;
+using MonopolyPreUnity.UserScenario;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,14 +69,25 @@ namespace MonopolyPreUnity
 
         private static IContainer CreateDiContainer()
         {
-            var containerBuilder = new ContainerBuilder();
+            var builder = new ContainerBuilder();
 
-            containerBuilder.RegisterInstance(CreateGameData());
+            var gameData = CreateMockData();
+            builder.RegisterInstance(gameData);
 
-            containerBuilder.RegisterModule<ManagersModule>();
-            containerBuilder.RegisterModule<BehaviorsModule>();
+            builder.RegisterModule<ManagersModule>();
+            builder.RegisterModule<BehaviorsModule>();
 
-            return containerBuilder.Build();
+            builder.RegisterType<HotSeatUserScenario>().AsSelf();
+
+            var returnVal = builder.Build();
+
+            // Mock scenarios
+            gameData.playerDict[1] = (gameData.playerDict[1].Item1, returnVal.Resolve<HotSeatUserScenario>());
+            ((HotSeatUserScenario)gameData.playerDict[1].Item2).SetIdName(1, gameData.playerDict[1].Item1.DisplayName);
+            gameData.playerDict[2] = (gameData.playerDict[2].Item1, returnVal.Resolve<HotSeatUserScenario>());
+            ((HotSeatUserScenario)gameData.playerDict[2].Item2).SetIdName(2, gameData.playerDict[2].Item1.DisplayName);
+
+            return returnVal;
         }
 
         static void Main(string[] args)

@@ -25,6 +25,7 @@ namespace MonopolyPreUnity.Classes
             Properties = properties;
             JailCards = jailCards;
             TurnsInPrison = turnsInPrison;
+            CanMove = true;
         }
     }
 }

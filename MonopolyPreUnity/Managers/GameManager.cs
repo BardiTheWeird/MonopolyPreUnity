@@ -77,6 +77,7 @@ namespace MonopolyPreUnity.Managers
                         break;
                 }
             } while (command != MonopolyCommand.TurnEndTurn);
+            player.CanMove = true;
         }
         #endregion
 

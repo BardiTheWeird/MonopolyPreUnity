@@ -16,6 +16,13 @@ namespace MonopolyPreUnity.UserScenario
         #region Dependencies
         public TileManager TileManager { get; private set; }
         #endregion
+
+        #region fields
+        private int _userId;
+        private string _userName;
+        #endregion
+
+        #region Request Handler misc
         private TInput ChooseFromList<TInput>(List<TInput> list, string message, Func<object, HotSeatUserScenario, string> inputToString)
         {
             Console.WriteLine(message);
@@ -27,11 +34,16 @@ namespace MonopolyPreUnity.UserScenario
             int choice;
             while (true)
             {
-                if (int.TryParse(Console.ReadLine(), out choice))
+                if (!int.TryParse(Console.ReadLine(), out choice))
+                {
+                    Console.WriteLine("Invalid input. Try again");
+                    continue;
+                }
+                if (1 <= choice && choice <= list.Count)
                     break;
-                Console.WriteLine("Invalid input. Try again");
+                Console.WriteLine("Choice out of range. Try again");
             }
-            return list[choice];
+            return list[choice - 1];
         }
 
         /*private TInput InputManually<TInput>(string message)
@@ -74,9 +86,13 @@ namespace MonopolyPreUnity.UserScenario
                 { MonopolyRequest.TradeDealChoice,              ("Make a trade deal", null) },
                 { MonopolyRequest.TradeValidationChoice,        ("Choose whether to accept this trade", CommandToString) }
             };
+        #endregion
 
+        #region Request Handler
         public TInput HandleRequest<TInput>(Request<TInput> request)
         {
+            Console.WriteLine($"Request for {_userName}:");
+
             TInput input = default;
             string message;
 
@@ -124,5 +140,19 @@ namespace MonopolyPreUnity.UserScenario
             }
             return input;
         }
+        #endregion
+
+        #region Constructor
+        public HotSeatUserScenario(TileManager tileManager)
+        {
+            TileManager = tileManager;
+        }
+
+        public void SetIdName(int id, string name)
+        {
+            _userId = id;
+            _userName = name;
+        }
+        #endregion
     }
 }
