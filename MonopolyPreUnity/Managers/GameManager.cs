@@ -43,30 +43,28 @@ namespace MonopolyPreUnity.Managers
             else
                 possibleCommands.Add(MonopolyCommand.TurnEndTurn);
 
-            var command = _requestManager.SendRequest(playerId, 
-                new Request<MonopolyCommand>(MonopolyRequest.TurnCommandChoice, possibleCommands));
-
-            switch (command)
+            MonopolyCommand command;
+            do
             {
-                case MonopolyCommand.TurnManageProperty:
-                    throw new NotImplementedException();
-                    break;
+                command = _requestManager.SendRequest(playerId,
+                    new Request<MonopolyCommand>(MonopolyRequest.TurnCommandChoice, possibleCommands));
 
-                case MonopolyCommand.TurnMakeDeal:
-                    throw new NotImplementedException();
-                    break;
+                switch (command)
+                {
+                    case MonopolyCommand.TurnManageProperty:
+                        _propertyManager.ManageProperty(playerId);
+                        break;
 
-                case MonopolyCommand.TurnMakeMove:
-                    _moveManager.MakeAMove(playerId);
-                    break;
+                    case MonopolyCommand.TurnMakeDeal:
+                        Console.WriteLine("You can't trade yet)");
+                        break;
 
-                case MonopolyCommand.TurnEndTurn:
-                    StartNextTurn();
-                    break;
-
-                default:
-                    break;
-            }
+                    case MonopolyCommand.TurnMakeMove:
+                        _moveManager.MakeAMove(playerId);
+                        break;
+                }
+            } while (command != MonopolyCommand.TurnEndTurn);
+            StartNextTurn();
         }
         #endregion
 

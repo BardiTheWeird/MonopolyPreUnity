@@ -32,7 +32,9 @@ namespace MonopolyPreUnity.Utitlity
 
         TradeChoosePlayer,
         TradeCreateDeal,
-        TradeValidate
+        TradeValidate,
+
+        CancelAction
     }
 
     public enum MonopolyRequest

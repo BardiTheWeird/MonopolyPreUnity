@@ -25,6 +25,7 @@ namespace MonopolyPreUnity.Managers
         #region Dependencies
         private readonly PlayerManager _playerManager;
         private readonly TileManager _tileManager;
+        private readonly RequestManager _requestManager;
         #endregion
 
         #region Constuctor
@@ -75,7 +76,7 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Available Actions
-        public void GetAvailableActions(int playerId,PropertyComponent propertyComponent,PropertyDevelopmentComponent propertyDevelopmentComponent)
+        public List<MonopolyCommand> GetAvailableActions(int playerId,PropertyComponent propertyComponent,PropertyDevelopmentComponent propertyDevelopmentComponent)
         {
             var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
             var AvailableActions= new List<MonopolyCommand>();
@@ -94,6 +95,8 @@ namespace MonopolyPreUnity.Managers
             if (propertyComponent.IsMortgaged == false &&
                 propertyDevelopmentComponent.HousesBuilt == 0)
                 AvailableActions.Add(MonopolyCommand.PropertyMortgage);
+
+            return AvailableActions;
         }
         #endregion
 
@@ -131,5 +134,49 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
+        #region Manage Property
+        public void ManageProperty(int playerId)
+        {
+            while (true)
+            {
+                var request = new Request<int?>(MonopolyRequest.PropertyManagePropertyChoice,
+                    _playerManager.GetPlayer(playerId).Properties.Select(x => (int?)x).ToList());
+
+                if (!(_requestManager.SendRequest(playerId, request) is int propertyId))
+                    return;
+
+                MonopolyCommand command;
+                do
+                {
+                    var availableActions = GetAvailableActions(playerId,
+                            _tileManager.GetTileComponent<PropertyComponent>(propertyId),
+                            _tileManager.GetTileComponent<PropertyDevelopmentComponent>(propertyId));
+                    availableActions.Add(MonopolyCommand.CancelAction);
+
+                    command = _requestManager.SendRequest(playerId,
+                        new Request<MonopolyCommand>(MonopolyRequest.PropertyManageActionChoice, availableActions));
+
+                    switch (command)
+                    {
+                        case MonopolyCommand.PropertyMortgage:
+
+                            break;
+
+                        case MonopolyCommand.PropertyUnmortgage:
+
+                            break;
+
+                        case MonopolyCommand.PropertyBuyHouse:
+
+                            break;
+
+                        case MonopolyCommand.PropertySellHouse:
+
+                            break;
+                    }
+                } while (command != MonopolyCommand.CancelAction);
+            }
+        }
+        #endregion
     }
 }
