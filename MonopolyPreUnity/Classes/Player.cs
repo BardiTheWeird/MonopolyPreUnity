@@ -17,7 +17,7 @@ namespace MonopolyPreUnity.Classes
         public bool CanMove { get; set; }
 
         public Player(int id, string displayName, int cash, 
-            HashSet<int> properties, int jailCards, int? turnsInPrison)
+            HashSet<int> properties, int jailCards, int? turnsInPrison, int curTileId)
         {
             Id = id;
             DisplayName = displayName;
@@ -26,6 +26,7 @@ namespace MonopolyPreUnity.Classes
             JailCards = jailCards;
             TurnsInPrison = turnsInPrison;
             CanMove = true;
+            CurrentTileId = curTileId;
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using MonopolyPreUnity.Behaviors;
+using MonopolyPreUnity.Behaviors.PlayerLanded;
 using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Interfaces;
@@ -51,8 +53,8 @@ namespace MonopolyPreUnity
 
             var playerDict = new Dictionary<int, (Player, IUserScenario)>
             {
-                { 1, (new Player(1, "John", 500, new HashSet<int>(), 0, null), null) },
-                { 2, (new Player(2, "Jake", 500, new HashSet<int>(), 0, null), null) },
+                { 1, (new Player(1, "John", 500, new HashSet<int>(), 0, null, 1), null) },
+                { 2, (new Player(2, "Jake", 500, new HashSet<int>(), 0, null, 1), null) },
             };
 
             var turnInfo = new TurnInfo(new List<int> { 1, 2 }, 0);
@@ -79,15 +81,25 @@ namespace MonopolyPreUnity
 
             builder.RegisterType<HotSeatUserScenario>().AsSelf();
 
-            var returnVal = builder.Build();
+            var container = builder.Build();
+
+            var playerLandedBehaviorDict = new Dictionary<Type, IPlayerLandedBehavior>
+            {
+                { typeof(ActionComponent), container.Resolve<ActionTileBehavior>() },
+                { typeof(ActionBoxComponent), container.Resolve<ActionBoxBehavior>() },
+                { typeof(PropertyComponent), container.Resolve<PropertyLandedBehavior>() },
+                { typeof(UtilityRentComponent), container.Resolve<CollectRentBehavior>() }
+            };
+
+            container.Resolve<PlayerLandedManager>().SetDict(playerLandedBehaviorDict);
 
             // Mock scenarios
-            gameData.playerDict[1] = (gameData.playerDict[1].Item1, returnVal.Resolve<HotSeatUserScenario>());
+            gameData.playerDict[1] = (gameData.playerDict[1].Item1, container.Resolve<HotSeatUserScenario>());
             ((HotSeatUserScenario)gameData.playerDict[1].Item2).SetIdName(1, gameData.playerDict[1].Item1.DisplayName);
-            gameData.playerDict[2] = (gameData.playerDict[2].Item1, returnVal.Resolve<HotSeatUserScenario>());
+            gameData.playerDict[2] = (gameData.playerDict[2].Item1, container.Resolve<HotSeatUserScenario>());
             ((HotSeatUserScenario)gameData.playerDict[2].Item2).SetIdName(2, gameData.playerDict[2].Item1.DisplayName);
 
-            return returnVal;
+            return container;
         }
 
         static void Main(string[] args)

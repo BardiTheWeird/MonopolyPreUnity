@@ -12,7 +12,10 @@ namespace MonopolyPreUnity.Managers
         private readonly TileManager _tileManager;
         #endregion
 
-        private readonly Dictionary<Type, IPlayerLandedBehavior> _playerLandedBehaviorDict;
+        private Dictionary<Type, IPlayerLandedBehavior> _playerLandedBehaviorDict;
+
+        public void SetDict(Dictionary<Type, IPlayerLandedBehavior> dict) =>
+            _playerLandedBehaviorDict = dict;
 
         public void PlayerLanded(int playerId, int tileId)
         {

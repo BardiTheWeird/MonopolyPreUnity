@@ -22,9 +22,8 @@ namespace MonopolyPreUnity.Managers
 
         public void MakeAMove(int playerId)
         {
-            Logger.Log(playerId, $"throws the dice");
             _diceValues.Throw();
-            Logger.Log($"Player {playerId} throws the dice");
+            Logger.Log(playerId, $"throws the dice and gets {_diceValues.Die1} and {_diceValues.Die2}");
             var currentPlayer =_playerManager.GetPlayer(playerId);
             currentPlayer.CanMove = _diceValues.Die1 == _diceValues.Die2;
 
