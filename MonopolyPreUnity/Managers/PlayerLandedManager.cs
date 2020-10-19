@@ -12,14 +12,20 @@ namespace MonopolyPreUnity.Managers
         private readonly TileManager _tileManager;
         #endregion
 
-        private readonly Dictionary<Type, IPlayerLandedBehavior> _playerLandedBehaviorDict;
+        private Dictionary<Type, IPlayerLandedBehavior> _playerLandedBehaviorDict;
+
+        public void SetDict(Dictionary<Type, IPlayerLandedBehavior> dict) =>
+            _playerLandedBehaviorDict = dict;
 
         public void PlayerLanded(int playerId, int tileId)
         {
             foreach(var component in _tileManager.GetTile(tileId).Components)
             {
                 if (_playerLandedBehaviorDict.TryGetValue(component.GetType(), out var behavior))
+                {
+                    Logger.Log(playerId, $"landed on a tile with {component.GetType()}");
                     behavior.PlayerLanded(playerId, component, tileId);
+                }
             }
         }
 

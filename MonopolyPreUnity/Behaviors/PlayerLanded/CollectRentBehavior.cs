@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Behaviors
 {
-    class CollectRentBehavior
+    class CollectRentBehavior : IPlayerLandedBehavior
     {
         #region Dependencies
         private readonly TileManager _tileManager;
@@ -37,6 +37,11 @@ namespace MonopolyPreUnity.Behaviors
             }
             else
                 throw new ArgumentException($"Tile with Id {tileId} has neither Development nor a Utility Rent component");
+        }
+
+        public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId)
+        {
+            throw new NotImplementedException();
         }
 
         public CollectRentBehavior(TileManager tileManager, PlayerManager playerManager)

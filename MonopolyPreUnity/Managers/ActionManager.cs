@@ -18,7 +18,8 @@ namespace MonopolyPreUnity.Managers
         private readonly MapManager _mapManager;
         #endregion
 
-        Dictionary<MonopolyActionType, Action<int, IMonopolyAction>> _actionDict;
+        // hopefully someday with behaviors instead of this unholy shite
+        // Dictionary<MonopolyActionType, Action<int, IMonopolyAction>> _actionDict;
 
         #region Actions
         void ChangeBalanceAction(int playerId, IMonopolyAction action)
@@ -75,7 +76,52 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
-        public void ExecuteAction(int playerId, IMonopolyAction action) =>
-            _actionDict[action.ActionType](playerId, action);
+        #region ExecuteAction
+
+        // hopefully someday
+        /*public void ExecuteAction(int playerId, IMonopolyAction action) =>
+            _actionDict[action.ActionType](playerId, action);*/
+
+        // Will go fucking away. There will be something akin to what PlayerLanded Behaviors have
+        public void ExecuteAction(int playerId, IMonopolyAction action)
+        {
+            Logger.Log($"actionType = {action.ActionType:g}");
+            switch (action.ActionType)
+            {
+                case MonopolyActionType.ChangeBalance:
+                    ChangeBalanceAction(playerId, action);
+                    break;
+
+                case MonopolyActionType.GiftFromPlayers:
+                    GiftFromPlayersAction(playerId, action);
+                    break;
+
+                case MonopolyActionType.TaxPerHouse:
+                    TaxPerHouseAction(playerId, action);
+                    break;
+
+                case MonopolyActionType.GoToJail:
+                    GoToJailAction(playerId, action);
+                    break;
+
+                case MonopolyActionType.GoToTile:
+                    GoToTileAction(playerId, action);
+                    break;
+
+                case MonopolyActionType.GetAnItem:
+                    GetAnItemAction(playerId, action);
+                    break;
+            }
+        }
+        #endregion
+
+        #region Constructor
+        public ActionManager(PlayerManager playerManager, TileManager tileManager, MapManager mapManager)
+        {
+            _playerManager = playerManager;
+            _tileManager = tileManager;
+            _mapManager = mapManager;
+        }
+        #endregion
     }
 }

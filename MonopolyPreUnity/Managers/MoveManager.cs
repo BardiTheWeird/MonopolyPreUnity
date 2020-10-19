@@ -23,10 +23,13 @@ namespace MonopolyPreUnity.Managers
         public void MakeAMove(int playerId)
         {
             _diceValues.Throw();
+            Logger.Log(playerId, $"throws the dice and gets {_diceValues.Die1} and {_diceValues.Die2}");
             var currentPlayer =_playerManager.GetPlayer(playerId);
-            currentPlayer.CanMove = _diceValues.Die1 == _diceValues.Die2;
+            if (currentPlayer.CanMove = _diceValues.Die1 == _diceValues.Die2)
+                Logger.Log(playerId, "threw doubles and can move again");            
 
             int tileId = _mapManager.MoveBySteps(playerId, _diceValues.Sum);
+            Logger.Log(playerId, $"landed on tile {tileId}");
             _playerLandedManager.PlayerLanded(playerId, tileId);
         }
 

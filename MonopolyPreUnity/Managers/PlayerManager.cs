@@ -51,11 +51,13 @@ namespace MonopolyPreUnity.Managers
             if (player.Cash >= amount)
             {
                 player.Cash -= amount;
+                Logger.Log(playerId, $"paid {amount}$. {player.Cash}$ left");
             }
             else
             {
                 if (IsBankrupt(player))
                 {
+                    Logger.Log(playerId, "is bankrupt");
                     throw new NotImplementedException();
                 }
                 else
@@ -67,7 +69,9 @@ namespace MonopolyPreUnity.Managers
 
         public void PlayerCashGive(int playerId, int amount)
         {
-            GetPlayer(playerId).Cash += amount;
+            var player = GetPlayer(playerId);
+            player.Cash += amount;
+            Logger.Log(playerId, $"received {amount}$. {player.Cash}$ left");
         }
         #endregion
 
