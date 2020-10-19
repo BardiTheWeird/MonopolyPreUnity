@@ -22,7 +22,10 @@ namespace MonopolyPreUnity.Managers
             foreach(var component in _tileManager.GetTile(tileId).Components)
             {
                 if (_playerLandedBehaviorDict.TryGetValue(component.GetType(), out var behavior))
+                {
+                    Logger.Log(playerId, $"landed on a tile with {component.GetType()}");
                     behavior.PlayerLanded(playerId, component, tileId);
+                }
             }
         }
 

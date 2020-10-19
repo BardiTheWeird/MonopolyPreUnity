@@ -22,9 +22,10 @@ namespace MonopolyPreUnity.Managers
         #region StartGame
         public void StartGame()
         {
-            Console.WriteLine("Hooray! The game has started!");
+            Logger.Log("Hooray! The game has started!");
             while (true)
             {
+                Logger.Log("");
                 CommandDecision(_turnInfo.turnOrder[_turnInfo.curTurnPlayer]);
                 NextTurn();
             }
@@ -34,6 +35,8 @@ namespace MonopolyPreUnity.Managers
         #region Methods
         void NextTurn()
         {
+            Logger.Log("Next turn has commenced");
+
             _turnInfo.curTurnPlayer++;
             if (_turnInfo.curTurnPlayer >= _turnInfo.turnOrder.Count)
                 _turnInfo.curTurnPlayer = 0;
