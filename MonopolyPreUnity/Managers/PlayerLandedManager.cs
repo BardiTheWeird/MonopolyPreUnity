@@ -12,7 +12,7 @@ namespace MonopolyPreUnity.Managers
         private readonly TileManager _tileManager;
         #endregion
 
-        Dictionary<Type, IPlayerLandedBehavior> _playerLandedBehaviorDict;
+        private readonly Dictionary<Type, IPlayerLandedBehavior> _playerLandedBehaviorDict;
 
         public void PlayerLanded(int playerId, int tileId)
         {
@@ -23,10 +23,11 @@ namespace MonopolyPreUnity.Managers
             }
         }
 
-        public PlayerLandedManager(Dictionary<Type, IPlayerLandedBehavior> playerLandedBehaviorDict, TileManager tileManager)
+        #region Constructor
+        public PlayerLandedManager(TileManager tileManager)
         {
-            _playerLandedBehaviorDict = playerLandedBehaviorDict;
             _tileManager = tileManager;
         }
+        #endregion
     }
 }
