@@ -81,7 +81,7 @@ namespace MonopolyPreUnity.Managers
         #region Constructor
         public PlayerManager(GameData gameData)
         {
-            _playerDict = gameData.playerDict;
+            _playerDict = gameData.PlayerDict;
         }
         #endregion
     }
