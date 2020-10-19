@@ -15,6 +15,7 @@ namespace MonopolyPreUnity.Behaviors
         private readonly PlayerManager _playerManager;
         private readonly RequestManager _requestManager;
         private readonly AuctionManager _auctionManager;
+        private readonly PropertyTransferManager _propertyTransferManager;
         #endregion
 
         #region Behavior
@@ -40,8 +41,7 @@ namespace MonopolyPreUnity.Behaviors
                 if (command == MonopolyCommand.TileLandedPropertyBuy)
                 {
                     _playerManager.PlayerCashCharge(playerId, property.BasePrice);
-                    property.OwnerId = playerId;
-                    // send a message like "confirmed"?
+                    _propertyTransferManager.TransferProperty(tileId, playerId);
                 }
                 else
                 {
@@ -65,12 +65,14 @@ namespace MonopolyPreUnity.Behaviors
         public PropertyLandedBehavior(CollectRentBehavior collectRentBehavior, 
             PlayerManager playerManager,
             RequestManager requestManager,
-            AuctionManager auctionManager)
+            AuctionManager auctionManager,
+            PropertyTransferManager propertyTransferManager)
         {
             _collectRentBehavior = collectRentBehavior;
             _playerManager = playerManager;
             _requestManager = requestManager;
             _auctionManager = auctionManager;
+            _propertyTransferManager = propertyTransferManager;
         }
         #endregion
     }

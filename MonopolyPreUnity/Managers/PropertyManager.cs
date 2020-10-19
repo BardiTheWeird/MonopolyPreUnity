@@ -29,10 +29,11 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Constuctor
-        public PropertyManager(PlayerManager playerManager, TileManager tileManager)
+        public PropertyManager(PlayerManager playerManager, TileManager tileManager, RequestManager requestManager)
         {
             _playerManager = playerManager;
             _tileManager = tileManager;
+            _requestManager = requestManager;
         }
         #endregion
 
@@ -105,32 +106,24 @@ namespace MonopolyPreUnity.Managers
         {
             developmentComponent.HousesBuilt++;
             _playerManager.PlayerCashCharge(playerId, developmentComponent.HouseBuyPrice);
-
         }
         
         public void SellHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
         {
-
             developmentComponent.HousesBuilt--;
             _playerManager.PlayerCashGive(playerId, developmentComponent.HouseBuyPrice);
-
         }
 
         public void Mortage(int playerId, PropertyComponent propertyComponent)
         {
-
-                _playerManager.PlayerCashGive(playerId, (int)(_mortageFee * propertyComponent.BasePrice));
-                propertyComponent.IsMortgaged = true;
-
-
+            _playerManager.PlayerCashGive(playerId, (int)(_mortageFee * propertyComponent.BasePrice));
+            propertyComponent.IsMortgaged = true;
         }
         
         public void UnMortage(int playerId, PropertyComponent propertyComponent)
         {
-
-                propertyComponent.IsMortgaged = false;
-                _playerManager.PlayerCashCharge(playerId, (int)(_mortageFee + _mortageComission) * propertyComponent.BasePrice);
-
+            propertyComponent.IsMortgaged = false;
+            _playerManager.PlayerCashCharge(playerId, (int)((_mortageFee + _mortageComission) * propertyComponent.BasePrice));
         }
         #endregion
 

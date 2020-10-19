@@ -34,15 +34,27 @@ namespace MonopolyPreUnity
 
             var tileDict = new Dictionary<int, Tile>
             {
-                { 1, new Tile(new List<ITileComponent>{ new GoComponent(200) }) },
+                { 1, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), new GoComponent(200) }) },
+
                 { 2, new Tile(new List<ITileComponent>
-                    { new ActionComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, -100)) }) },
-                { 3, new Tile(new List<ITileComponent>{ new PropertyComponent(1, 100), new PropertyDevelopmentComponent(80) }) },
-                { 4, new Tile(new List<ITileComponent>{ new PropertyComponent(1, 120), new PropertyDevelopmentComponent(80) }) },
+                    { new TileIdentityComponent(1, "Go"),
+                    new ActionComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, -100)) }) },
+
+                { 3, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), 
+                    new PropertyComponent(1, 100), new PropertyDevelopmentComponent(80) }) },
+
+                { 4, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), 
+                    new PropertyComponent(1, 120), new PropertyDevelopmentComponent(80) }) },
+
                 { 5, new Tile(new List<ITileComponent>
-                    { new ActionComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, 100)) }) },
-                { 6, new Tile(new List<ITileComponent>{ new PropertyComponent(2, 80), new PropertyDevelopmentComponent(50) }) },
-                { 7, new Tile(new List<ITileComponent>{ new PropertyComponent(2, 90), new PropertyDevelopmentComponent(50) }) }
+                    { new TileIdentityComponent(1, "Go"),
+                    new ActionComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, 100)) }) },
+
+                { 6, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"),
+                    new PropertyComponent(2, 80), new PropertyDevelopmentComponent(50) }) },
+
+                { 7, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), 
+                    new PropertyComponent(2, 90), new PropertyDevelopmentComponent(50) }) }
             };
 
             var propertySetDict = new Dictionary<int, HashSet<int>>

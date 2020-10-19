@@ -31,7 +31,7 @@ namespace MonopolyPreUnity.Managers
         public T GetTileComponent<T>(int tileId) where T : ITileComponent
         {
             T component;
-            if ((component = (T)_tileDict[tileId].Components.Find(x => x.GetType() == typeof(T))) == null)
+            if ((component = (T)_tileDict[tileId].Components.Find(x => x.GetType() == typeof(T))) != null)
             {
                 return component;
             }
