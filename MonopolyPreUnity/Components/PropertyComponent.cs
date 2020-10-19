@@ -17,6 +17,14 @@ namespace MonopolyPreUnity.Classes
         public int? OwnerId { get; set; } = null;
         public bool IsMortgaged { get; set; } = false;
 
+        public PropertyComponent(int setId, int basePrice)
+        {
+            this.setId = setId;
+            BasePrice = basePrice;
+            OwnerId = null;
+            IsMortgaged = false;
+        }
+
         public PropertyComponent(int setId, int basePrice, int? ownerId, bool isMortgaged)
         {
             this.setId = setId;
