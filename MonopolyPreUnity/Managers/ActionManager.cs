@@ -20,6 +20,7 @@ namespace MonopolyPreUnity.Managers
 
         Dictionary<MonopolyActionType, Action<int, IMonopolyAction>> _actionDict;
 
+        #region Actions
         void ChangeBalanceAction(int playerId, IMonopolyAction action)
         {
             var balanceAction = action as MonopolyAction<int>;
@@ -72,6 +73,7 @@ namespace MonopolyPreUnity.Managers
         {
             throw new NotImplementedException();
         }
+        #endregion
 
         public void ExecuteAction(int playerId, IMonopolyAction action) =>
             _actionDict[action.ActionType](playerId, action);
