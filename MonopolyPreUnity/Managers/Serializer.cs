@@ -23,12 +23,12 @@ namespace MonopolyPreUnity.Managers
 
         private void addSaveToSaves(string fileName)
         {
-            throw new NotImplementedException();
+            File.AppendAllText(savesFilePath + savesFileName, fileName + ",\n");
         }
 
         private void deleteSaveFromSaves()
         {
-            throw new NotImplementedException();
+            string rawData = File.ReadAllText(savesFilePath + savesFileName);
         }
         public void SaveGame()
         {
