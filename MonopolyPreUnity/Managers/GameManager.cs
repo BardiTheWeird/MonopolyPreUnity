@@ -38,7 +38,7 @@ namespace MonopolyPreUnity.Managers
             if (player.Properties.Count > 0)
                 possibleCommands.Add(MonopolyCommand.TurnManageProperty);
 
-            if (_moveManager.CanMove)
+            if (player.CanMove)
                 possibleCommands.Add(MonopolyCommand.TurnMakeMove);
             else
                 possibleCommands.Add(MonopolyCommand.TurnEndTurn);

@@ -27,7 +27,7 @@ namespace MonopolyPreUnity.Managers
         {
             ThrowDice();
             var currentPlayer =_playerManager.GetPlayer(playerId);
-            currentPlayer.CanMoveAgain = DiceValues.Item1 == DiceValues.Item2;
+            currentPlayer.CanMove = DiceValues.Item1 == DiceValues.Item2;
 
             int tileId = _mapManager.MoveBySteps(playerId, DiceValues.Item1 + DiceValues.Item2);
             _playerLandedManager.PlayerLanded(playerId, tileId);
