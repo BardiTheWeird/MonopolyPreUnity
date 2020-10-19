@@ -9,26 +9,31 @@ namespace MonopolyPreUnity.Managers
 {
     class PlayerManager
     {
+        #region fields
         // ID to IPlayer and IUserScenario
-        private readonly Dictionary<int, (Player, IUserScenario)> playerDict;
+        private readonly Dictionary<int, (Player, IUserScenario)> _playerDict;
+        #endregion
 
+        #region GetPlayer and their stuff methods
         public Player GetPlayer(int playerId)
         {
-            if (playerDict.ContainsKey(playerId))
-                return playerDict[playerId].Item1;
+            if (_playerDict.ContainsKey(playerId))
+                return _playerDict[playerId].Item1;
             throw new KeyNotFoundException($"No such Player Id ({playerId}) in PlayerDict");
         }
 
         public List<int> GetAllPlayerId() =>
-            new List<int>(playerDict.Keys);
+            new List<int>(_playerDict.Keys);
 
         public IUserScenario GetUserScenario(int playerId)
         {
-            if (playerDict.ContainsKey(playerId))
-                return playerDict[playerId].Item2;
+            if (_playerDict.ContainsKey(playerId))
+                return _playerDict[playerId].Item2;
             throw new KeyNotFoundException($"No such Player Id ({playerId}) in PlayerDict");
         }
+        #endregion
 
+        #region Cash Methods
         public int GetPlayerCash(int playerId) =>
             GetPlayer(playerId).Cash;
 
@@ -64,10 +69,20 @@ namespace MonopolyPreUnity.Managers
         {
             GetPlayer(playerId).Cash += amount;
         }
+        #endregion
 
+        #region Bankruptcy
         bool IsBankrupt(Player player)
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+        #region Constructor
+        public PlayerManager(GameData gameData)
+        {
+            _playerDict = gameData.playerDict;
+        }
+        #endregion
     }
 }

@@ -22,7 +22,8 @@ namespace MonopolyPreUnity.Classes
         #endregion
 
         #region MoveManager
-        public (int, int) DiceValues { get; private set; }
+        // public (int, int) DiceValues { get; private set; }
+        public Dice DiceValues { get; private set; }
         #endregion
 
         #region TileManager
@@ -52,6 +53,24 @@ namespace MonopolyPreUnity.Classes
         public GameData()
         {
 
+        }
+
+        // At least for testing initialization
+        public GameData(List<int> mapIdSequence, 
+            Dictionary<int, int> mapIndex, 
+            Dice diceValues, 
+            Dictionary<int, Tile> tileDict, 
+            Dictionary<int, HashSet<int>> propertySetDict, 
+            Dictionary<int, (Player, IUserScenario)> playerDict, 
+            TurnInfo turnInfo)
+        {
+            MapIdSequence = mapIdSequence;
+            MapIndex = mapIndex;
+            DiceValues = diceValues;
+            TileDict = tileDict;
+            PropertySetDict = propertySetDict;
+            this.playerDict = playerDict;
+            TurnInfo = turnInfo;
         }
     }
 }

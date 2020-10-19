@@ -19,33 +19,46 @@ namespace MonopolyPreUnity.Managers
         private readonly TurnInfo _turnInfo;
         #endregion
 
+        #region StartGame
+        public void StartGame()
+        {
+            Console.WriteLine("Hooray! The game has started!");
+            while (true)
+            {
+                CommandDecision(_turnInfo.turnOrder[_turnInfo.curTurnPlayer]);
+                NextTurn();
+            }
+        }
+        #endregion
+
         #region Methods
-        void StartNextTurn()
+        void NextTurn()
         {
             _turnInfo.curTurnPlayer++;
             if (_turnInfo.curTurnPlayer >= _turnInfo.turnOrder.Count)
                 _turnInfo.curTurnPlayer = 0;
 
-            CommandDecision(_turnInfo.turnOrder[_turnInfo.curTurnPlayer]);
+            //CommandDecision(_turnInfo.turnOrder[_turnInfo.curTurnPlayer]);
         }
 
         void CommandDecision(int playerId)
         {
             var player = _playerManager.GetPlayer(playerId);
-            var possibleCommands = new List<MonopolyCommand>();
-
-            possibleCommands.Add(MonopolyCommand.TurnMakeDeal);
-            if (player.Properties.Count > 0)
-                possibleCommands.Add(MonopolyCommand.TurnManageProperty);
-
-            if (player.CanMove)
-                possibleCommands.Add(MonopolyCommand.TurnMakeMove);
-            else
-                possibleCommands.Add(MonopolyCommand.TurnEndTurn);
 
             MonopolyCommand command;
             do
             {
+                var possibleCommands = new List<MonopolyCommand>();
+
+                possibleCommands.Add(MonopolyCommand.TurnMakeDeal);
+                if (player.Properties.Count > 0)
+                    possibleCommands.Add(MonopolyCommand.TurnManageProperty);
+
+                if (player.CanMove)
+                    possibleCommands.Add(MonopolyCommand.TurnMakeMove);
+                else
+                    possibleCommands.Add(MonopolyCommand.TurnEndTurn);
+
                 command = _requestManager.SendRequest(playerId,
                     new Request<MonopolyCommand>(MonopolyRequest.TurnCommandChoice, possibleCommands));
 
@@ -64,7 +77,6 @@ namespace MonopolyPreUnity.Managers
                         break;
                 }
             } while (command != MonopolyCommand.TurnEndTurn);
-            StartNextTurn();
         }
         #endregion
 
@@ -73,13 +85,13 @@ namespace MonopolyPreUnity.Managers
             MoveManager moveManager, 
             RequestManager requestManager, 
             PropertyManager propertyManager, 
-            TurnInfo turnInfo)
+            GameData gameData)
         {
             _playerManager = playerManager;
             _moveManager = moveManager;
             _requestManager = requestManager;
             _propertyManager = propertyManager;
-            _turnInfo = turnInfo;
+            _turnInfo = gameData.TurnInfo;
         }
         #endregion
     }

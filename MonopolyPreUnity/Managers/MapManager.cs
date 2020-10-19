@@ -33,12 +33,19 @@ namespace MonopolyPreUnity.Managers
         private readonly PlayerLandedManager _playerLandedManager;
         #endregion
 
-        public MapManager(PlayerManager playerManager, TileManager tileManager)
+        #region Constructor
+        public MapManager(PlayerManager playerManager, 
+            TileManager tileManager,
+            GameData gameData)
         {
             _playerManager = playerManager;
             _tileManager = tileManager;
+            map = gameData.MapIdSequence;
+            mapIndex = gameData.MapIndex;
         }
+        #endregion
 
+        #region Map methods
         private void BuildMap()
         {
             throw new NotImplementedException();
@@ -48,7 +55,9 @@ namespace MonopolyPreUnity.Managers
         {
             throw new NotImplementedException();
         }
+        #endregion
 
+        #region Misc Methods
         private bool GOPassed(int tileStartId, int tileEndId, int playerId)
         {
             int tileStartIndex = mapIndex[tileStartId];
@@ -68,7 +77,9 @@ namespace MonopolyPreUnity.Managers
             
             return false;
         }
+        #endregion
 
+        #region Move methods
         public int MoveBySteps(int playerId, int steps, bool giveGOCash=true)
         {   
             Player player = _playerManager.GetPlayer(playerId);
@@ -121,6 +132,6 @@ namespace MonopolyPreUnity.Managers
             }
             return map[i];
         }
-
+        #endregion
     }
 }
