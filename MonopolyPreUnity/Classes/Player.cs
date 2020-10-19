@@ -17,7 +17,7 @@ namespace MonopolyPreUnity.Classes
         public int JailCards { get; set; }
         public int? TurnsInPrison { get; set; }
         public int CurrentTileId { get; set; }
-        public bool CanMoveAgain { get; set; }
+        public bool CanMove { get; set; }
 
         public Player(int id, string displayName, int cash, 
             HashSet<int> properties, int jailCards, int? turnsInPrison)

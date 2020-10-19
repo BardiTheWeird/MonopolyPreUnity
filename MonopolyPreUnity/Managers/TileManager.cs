@@ -14,8 +14,10 @@ namespace MonopolyPreUnity.Managers
 {
     class TileManager
     {
-        private readonly Dictionary<int, Tile> tileDict;
-        private readonly Dictionary<int, HashSet<int>> propertySetDict;
+        #region fields
+        private readonly Dictionary<int, Tile> _tileDict;
+        private readonly Dictionary<int, HashSet<int>> _propertySetDict;
+        #endregion
 
         #region GetTile
         /// <summary>
@@ -24,12 +26,12 @@ namespace MonopolyPreUnity.Managers
         /// <param name="tileId"></param>
         /// <returns></returns>
         public Tile GetTile(int tileId) =>
-            tileDict[tileId];
+            _tileDict[tileId];
 
         public T GetTileComponent<T>(int tileId) where T : ITileComponent
         {
             T component;
-            if ((component = (T)tileDict[tileId].Components.Find(x => x.GetType() == typeof(T))) == null)
+            if ((component = (T)_tileDict[tileId].Components.Find(x => x.GetType() == typeof(T))) == null)
             {
                 return component;
             }
@@ -43,21 +45,31 @@ namespace MonopolyPreUnity.Managers
                 return false;
             return true;
         }
-        #endregion
-
-        public HashSet<int> GetPropertySet(int setId) =>
-            propertySetDict[setId];
 
         public int GetTileWithComponent<T>() where T : ITileComponent =>
-            tileDict.FirstOrDefault(x => x.Value.GetType() == typeof(T)).Key;
+            _tileDict.FirstOrDefault(x => x.Value.GetType() == typeof(T)).Key;
 
         public bool ContainsComponent<T>(int tileId) where T : ITileComponent =>
-            tileDict[tileId].Components.FirstOrDefault(x => x.GetType() == typeof(T)) != null;
+            _tileDict[tileId].Components.FirstOrDefault(x => x.GetType() == typeof(T)) != null;
 
         public List<int> GetAllTilesWithComponent<T>() where T : ITileComponent =>
-            tileDict
+            _tileDict
             .Where(x => ContainsComponent<T>(x.Key))
             .Select(x => x.Key)
             .ToList();
+        #endregion
+
+        #region GetPropertySet
+        public HashSet<int> GetPropertySet(int setId) =>
+            _propertySetDict[setId];
+        #endregion
+
+        #region Constructor
+        public TileManager(GameData gameData)
+        {
+            _tileDict = gameData.TileDict;
+            _propertySetDict = gameData.PropertySetDict;
+        }
+        #endregion
     }
 }

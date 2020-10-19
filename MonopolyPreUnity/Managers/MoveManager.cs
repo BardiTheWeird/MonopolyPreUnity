@@ -16,22 +16,33 @@ namespace MonopolyPreUnity.Managers
         private readonly PlayerLandedManager _playerLandedManager;
         #endregion
 
-        public (int, int) DiceValues { get; private set; }
-
-        private void ThrowDice()
-        {
-            DiceValues = Dice.Throw();
-        }
+        #region fields
+        private readonly Dice _diceValues;
+        #endregion
 
         public void MakeAMove(int playerId)
         {
-            ThrowDice();
+            _diceValues.Throw();
             var currentPlayer =_playerManager.GetPlayer(playerId);
-            currentPlayer.CanMoveAgain = DiceValues.Item1 == DiceValues.Item2;
+            currentPlayer.CanMove = _diceValues.Die1 == _diceValues.Die2;
 
-            int tileId = _mapManager.MoveBySteps(playerId, DiceValues.Item1 + DiceValues.Item2);
+            int tileId = _mapManager.MoveBySteps(playerId, _diceValues.Sum);
             _playerLandedManager.PlayerLanded(playerId, tileId);
-            
         }
+
+        #region Constructor
+        public MoveManager(PlayerManager playerManager, 
+            TileManager tileManager, 
+            MapManager mapManager, 
+            PlayerLandedManager playerLandedManager,
+            GameData gameData)
+        {
+            _playerManager = playerManager;
+            _tileManager = tileManager;
+            _mapManager = mapManager;
+            _playerLandedManager = playerLandedManager;
+            _diceValues = gameData.DiceValues;
+        }
+        #endregion
     }
 }

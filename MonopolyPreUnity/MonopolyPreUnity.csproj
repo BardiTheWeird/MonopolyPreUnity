@@ -9,4 +9,8 @@
     <Folder Include="Behaviors\Action\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.0.0" />
+  </ItemGroup>
+
 </Project>
