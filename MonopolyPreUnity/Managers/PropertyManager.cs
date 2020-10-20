@@ -38,6 +38,12 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Subsidiary Methods
+        /// <summary>
+        /// if statement separated to corresponding method
+        /// </summary>
+        /// <param name="playerId">player</param>
+        /// <param name="propertyComponent">property to check for set</param>
+        /// <returns></returns>
         public bool IsSetOwned(int playerId, PropertyComponent propertyComponent)
         {
             var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
@@ -49,7 +55,15 @@ namespace MonopolyPreUnity.Managers
             return false;
         }
 
-
+        /// <summary>
+        /// If statement separated to corresponding method to check allowed of build on property
+        /// </summary>
+        /// <param name="playerSet">set of properties</param>
+        /// <param name="playerId">player(owner)</param>
+        /// <param name="propertyComponent">specific property</param>
+        /// <param name="propertyDevelopmentComponent">specific real estate</param>
+        /// <returns></returns>
+        
         public bool BuildOnPropertyAllowed(HashSet<int> playerSet, int playerId, PropertyComponent propertyComponent, PropertyDevelopmentComponent propertyDevelopmentComponent)
             //набор зданий одного цвета
             => (playerSet.Max(id => _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id).HousesBuilt) -
@@ -77,6 +91,16 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Available Actions
+
+        /// <summary>
+        /// GetAllActions available for player
+        /// </summary>
+        /// <param name="playerId">player to deal with</param>
+        /// <param name="propertyComponent">property</param>
+        /// <param name="propertyDevelopmentComponent">real estate</param>
+        /// <returns></returns>
+        /// 
+        
         public List<MonopolyCommand> GetAvailableActions(int playerId,PropertyComponent propertyComponent,PropertyDevelopmentComponent propertyDevelopmentComponent)
         {
             var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
@@ -102,11 +126,24 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Property Actions
+
+        /// <summary>
+        /// build house on property
+        /// </summary>
+        /// <param name="playerId">Player to deal with</param>
+        /// <param name="developmentComponent">Real estate to deal with</param>
+        
         public void BuildHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
         {
             developmentComponent.HousesBuilt++;
             _playerManager.PlayerCashCharge(playerId, developmentComponent.HouseBuyPrice);
         }
+
+        /// <summary>
+        /// sell house on property
+        /// </summary>
+        /// <param name="playerId">Player to deal with</param>
+        /// <param name="developmentComponent">Real estate to deal with</param>
         
         public void SellHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
         {
@@ -114,11 +151,23 @@ namespace MonopolyPreUnity.Managers
             _playerManager.PlayerCashGive(playerId, developmentComponent.HouseBuyPrice);
         }
 
+        /// <summary>
+        /// mortage property
+        /// </summary>
+        /// <param name="playerId">Player to deal with</param>
+        /// <param name="developmentComponent">Real estate to deal with</param>
+        
         public void Mortage(int playerId, PropertyComponent propertyComponent)
         {
             _playerManager.PlayerCashGive(playerId, (int)(_mortageFee * propertyComponent.BasePrice));
             propertyComponent.IsMortgaged = true;
         }
+
+        /// <summary>
+        /// unmortage property
+        /// </summary>
+        /// <param name="playerId">Player to deal with</param>
+        /// <param name="developmentComponent">Real estate to deal with</param>
         
         public void UnMortage(int playerId, PropertyComponent propertyComponent)
         {
@@ -128,6 +177,10 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Manage Property
+        /// <summary>
+        /// Main method to handle requests, commands and choose actions
+        /// </summary>
+        /// <param name="playerId">Used to get specific user</param>
         public void ManageProperty(int playerId)
         {
             while (true)
