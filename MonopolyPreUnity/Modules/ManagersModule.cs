@@ -12,7 +12,8 @@ namespace MonopolyPreUnity.Modules
         {
             builder.RegisterType<GameManager>().AsSelf().SingleInstance();
 
-            builder.RegisterType<PlayerManager>().AsSelf().SingleInstance();
+            builder.RegisterType<PlayerManager>().AsSelf().SingleInstance()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
             builder.RegisterType<MoveManager>().AsSelf().SingleInstance();
             builder.RegisterType<RequestManager>().AsSelf().SingleInstance();
             builder.RegisterType<PropertyManager>().AsSelf().SingleInstance();

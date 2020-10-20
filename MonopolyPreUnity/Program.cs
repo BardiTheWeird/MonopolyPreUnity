@@ -65,8 +65,8 @@ namespace MonopolyPreUnity
 
             var playerDict = new Dictionary<int, (Player, IUserScenario)>
             {
-                { 1, (new Player(1, "John", 500, new HashSet<int>(), 0, null, 1), null) },
-                { 2, (new Player(2, "Jake", 500, new HashSet<int>(), 0, null, 1), null) },
+                { 1, (new Player(1, "John", 200, new HashSet<int>(), 0, null, 1), null) },
+                { 2, (new Player(2, "Jake", 200, new HashSet<int>(), 0, null, 1), null) },
             };
 
             var turnInfo = new TurnInfo(new List<int> { 1, 2 }, 0);
@@ -118,13 +118,16 @@ namespace MonopolyPreUnity
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Startup error", e);
+                Console.WriteLine($"Startup error:\n" + e);
 
                 Environment.Exit(-1);
                 return;
             }
 
             var gameManager = container.Resolve<GameManager>();
+            var playerManager = container.Resolve<PlayerManager>();
+            if (playerManager._propertyManager == null)
+                Console.WriteLine("Oh shit");
             gameManager.StartGame();
         }
     }

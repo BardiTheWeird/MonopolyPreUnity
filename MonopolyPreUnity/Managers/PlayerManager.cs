@@ -12,7 +12,7 @@ namespace MonopolyPreUnity.Managers
     {
         #region Dependencies
         private readonly TileManager _tileManager;
-        private readonly PropertyManager _propertyManager;
+        public PropertyManager _propertyManager { get; set; }
         #endregion
 
 
@@ -144,11 +144,17 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Constructor
-        public PlayerManager(GameData gameData,TileManager tileManager,PropertyManager propertyManager)
+        //public PlayerManager(GameData gameData,TileManager tileManager,PropertyManager propertyManager)
+        //{
+        //    _playerDict = gameData.PlayerDict;
+        //    _tileManager = tileManager;
+        //    _propertyManager = propertyManager;
+        //}
+
+        public PlayerManager(GameData gameData, TileManager tileManager)
         {
             _playerDict = gameData.PlayerDict;
             _tileManager = tileManager;
-            _propertyManager = propertyManager;
         }
         #endregion
     }
