@@ -19,7 +19,7 @@ namespace MonopolyPreUnity.Managers
         /// </summary>
         /// <param name="player"></param>
         /// <returns>true, if player got out of jail</returns>
-        public bool InJailMove(Player player)
+        public (bool, MonopolyCommand) InJailMove(Player player)
         {
             // possibly 1
             if(player.TurnsInPrison == 0)
@@ -52,14 +52,14 @@ namespace MonopolyPreUnity.Managers
                     _playerManager.PlayerCashCharge(player.Id, 50);
                     player.TurnsInPrison = null;
 
-                    return true;
+                    return (true, MonopolyCommand.JailPayMoney);
                 }
                 else if(command == MonopolyCommand.JailUseCard)
                 {
                     player.JailCards -= 1;
                     player.TurnsInPrison = null;
 
-                    return true;
+                    return (true, MonopolyCommand.JailUseCard);
                 }
             }
             else if(player.TurnsInPrison == 1 || player.TurnsInPrison == 2)
@@ -69,7 +69,7 @@ namespace MonopolyPreUnity.Managers
                 if(_dice.Die1 == _dice.Die2)
                 {
                     player.TurnsInPrison = null;
-                    return true;
+                    return (true, MonopolyCommand.JailUseDice);
                 }
             }
 
@@ -78,11 +78,11 @@ namespace MonopolyPreUnity.Managers
                 // TODO: fix hardcode
                 _playerManager.PlayerCashCharge(player.Id, 50);
                 player.TurnsInPrison = null;
-                return true;
+                return (true, MonopolyCommand.JailPayMoney);
             }
 
             player.TurnsInPrison++;
-            return false;
+            return (false, MonopolyCommand.StayInJail);
         }
     }
 }

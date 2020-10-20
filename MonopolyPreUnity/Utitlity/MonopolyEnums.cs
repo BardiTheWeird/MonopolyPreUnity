@@ -37,6 +37,7 @@ namespace MonopolyPreUnity.Utitlity
         JailPayMoney,
         JailUseCard,
         JailUseDice,
+        StayInJail,
 
         CancelAction
     }
