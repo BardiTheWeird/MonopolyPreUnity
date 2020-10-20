@@ -39,6 +39,11 @@ namespace MonopolyPreUnity.UserScenario
                     Console.WriteLine("Invalid input. Try again");
                     continue;
                 }
+
+                if ("Choose a property to manage" == message && !(1 <= choice && choice <= list.Count))
+                {
+                    return default;
+                }
                 if (1 <= choice && choice <= list.Count)
                     break;
                 Console.WriteLine("Choice out of range. Try again");
