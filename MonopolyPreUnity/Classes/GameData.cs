@@ -20,10 +20,6 @@ namespace MonopolyPreUnity.Classes
     [Serializable]
     class GameData
     {
-        #region Dependencies
-        [NonSerialized]
-        private readonly Serializer _serializationManager;
-        #endregion
 
         #region MapManager
         public List<int> MapIdSequence { get; private set; }
@@ -31,7 +27,6 @@ namespace MonopolyPreUnity.Classes
         #endregion
 
         #region MoveManager
-        // public (int, int) DiceValues { get; private set; }
         public Dice DiceValues { get; private set; }
         #endregion
 
@@ -42,21 +37,8 @@ namespace MonopolyPreUnity.Classes
         public Dictionary<int, HashSet<int>> PropertySetDict { get; private set; }
         #endregion
 
-        #region PlayerLandedManager
-        public Dictionary<Type, IPlayerLandedBehavior> PlayerLandedBehaviorDict { get { return _playerLandedBehaviorDict; }
-            private set { _playerLandedBehaviorDict = value; } }
-        [NonSerialized]
-        private Dictionary<Type, IPlayerLandedBehavior> _playerLandedBehaviorDict;
-        #endregion
-
         #region PlayerManager
         public Dictionary<int, (Player, IUserScenario)> PlayerDict { get; private set; } // IuserScenario problem
-        #endregion
-
-        #region ActionManager
-        public Dictionary<MonopolyActionType, Action<int, IMonopolyAction>> ActionDict { get { return _actionDict; } private set { _actionDict = value; } }
-        [NonSerialized]
-        private Dictionary<MonopolyActionType, Action<int, IMonopolyAction>> _actionDict;
         #endregion
 
         #region GameManager
