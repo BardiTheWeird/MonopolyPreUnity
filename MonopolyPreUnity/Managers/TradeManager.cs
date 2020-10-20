@@ -26,10 +26,11 @@ namespace MonopolyPreUnity.Managers
         private readonly PlayerManager _playerManager;
 
         #region Constructor
-        public TradeManager(int initiatorPlayerId, int recepientPlayerId)
+        public TradeManager(int initiatorPlayerId, int recepientPlayerId,PlayerManager playerManager)
         {
             _initiatorPlayerId = initiatorPlayerId;
             _recepientPlayerId = recepientPlayerId;
+            _playerManager = playerManager;
         }
         #endregion
 
@@ -83,5 +84,7 @@ namespace MonopolyPreUnity.Managers
 
 
         }
+
+
     }
 }
