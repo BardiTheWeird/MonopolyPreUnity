@@ -84,5 +84,14 @@ namespace MonopolyPreUnity.Managers
             player.TurnsInPrison++;
             return (false, MonopolyCommand.StayInJail);
         }
+
+        #region Constructor
+        public InJailManager(RequestManager requestManager, PlayerManager playerManager, GameData gameData)
+        {
+            _requestManager = requestManager;
+            _playerManager = playerManager;
+            _dice = gameData.DiceValues;
+        }
+        #endregion
     }
 }

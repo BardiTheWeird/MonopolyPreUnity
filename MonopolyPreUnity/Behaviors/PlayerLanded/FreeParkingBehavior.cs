@@ -10,7 +10,7 @@ namespace MonopolyPreUnity.Behaviors.PlayerLanded
     {
         public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId)
         {
-            Logger.Log("You`re on free parking. Try to relax and sleep for a while.(safety is not guaranteed)");
+            Logger.Log("You're on free parking. Try to relax and sleep for a while.(safety is not guaranteed)");
         }
     }
 }

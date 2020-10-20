@@ -17,6 +17,8 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<ActionBoxBehavior>().AsSelf().SingleInstance();
             builder.RegisterType<ActionTileBehavior>().AsSelf().SingleInstance();
             builder.RegisterType<PropertyLandedBehavior>().AsSelf().SingleInstance();
+            builder.RegisterType<FreeParkingBehavior>().AsSelf().SingleInstance();
+            builder.RegisterType<GOBehavior>().AsSelf().SingleInstance();
 
             // Rent
             builder.RegisterType<DevelopmentRentBehavior>().AsSelf().SingleInstance();

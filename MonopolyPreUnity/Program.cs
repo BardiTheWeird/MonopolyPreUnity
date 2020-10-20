@@ -38,27 +38,27 @@ namespace MonopolyPreUnity
                 { 1, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), new GoComponent(200) }) },
 
                 { 2, new Tile(new List<ITileComponent>
-                    { new TileIdentityComponent(1, "Go"),
+                    { new TileIdentityComponent(1, "Tax 100$"),
                     new ActionComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, -100)) }) },
 
-                { 3, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), 
+                { 3, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 1 Set 1"), 
                     new PropertyComponent(1, 100), 
                     new PropertyDevelopmentComponent(80,
                         new List<int>{ 10, 20, 50, 150, 450, 625, 750 }) }) },
 
-                { 4, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), 
+                { 4, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 2 Set 1"), 
                     new PropertyComponent(1, 120), new PropertyDevelopmentComponent(80,
                         new List<int>{ 10, 20, 50, 150, 450, 625, 750 }) }) },
 
                 { 5, new Tile(new List<ITileComponent>
-                    { new TileIdentityComponent(1, "Go"),
+                    { new TileIdentityComponent(1, "MoneyGiver 100$"),
                     new ActionComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, 100)) }) },
 
-                { 6, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"),
+                { 6, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 3 Set 2"),
                     new PropertyComponent(2, 80), new PropertyDevelopmentComponent(50,
                         new List<int>{ 5, 10, 30, 100, 300, 400, 550 }) }) },
 
-                { 7, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), 
+                { 7, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 4 Set 2"), 
                     new PropertyComponent(2, 90), new PropertyDevelopmentComponent(50,
                         new List<int>{ 5, 10, 30, 100, 300, 400, 550 }) }) }
             };
@@ -103,6 +103,8 @@ namespace MonopolyPreUnity
                 { typeof(ActionComponent), container.Resolve<ActionTileBehavior>() },
                 { typeof(ActionBoxComponent), container.Resolve<ActionBoxBehavior>() },
                 { typeof(PropertyComponent), container.Resolve<PropertyLandedBehavior>() },
+                { typeof(FreeParkingComponent), container.Resolve<FreeParkingBehavior>() },
+                { typeof(GoComponent), container.Resolve<GOBehavior>() },
             };
 
             var rentBehaviorDict = new Dictionary<Type, IRentBehavior>

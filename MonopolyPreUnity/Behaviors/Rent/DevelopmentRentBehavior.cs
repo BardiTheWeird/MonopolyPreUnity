@@ -25,5 +25,13 @@ namespace MonopolyPreUnity.Behaviors.Rent
             }
             return development.RentList[rentChoice];
         }
+
+        #region Constructor
+        public DevelopmentRentBehavior(PropertyManager propertyManager, TileManager tileManager)
+        {
+            _propertyManager = propertyManager;
+            _tileManager = tileManager;
+        }
+        #endregion
     }
 }
