@@ -11,7 +11,7 @@ namespace MonopolyPreUnity.Behaviors
     class PropertyLandedBehavior : IPlayerLandedBehavior
     {
         #region Dependencies
-        private readonly CollectRentBehavior _collectRentBehavior;
+        private readonly RentManager _rentManager;
         private readonly PlayerManager _playerManager;
         private readonly RequestManager _requestManager;
         private readonly AuctionManager _auctionManager;
@@ -50,25 +50,32 @@ namespace MonopolyPreUnity.Behaviors
             }
             else if (property.OwnerId != playerId)
             {
-                _collectRentBehavior.CollectRent(playerId, tileId);
+                Logger.Log(playerId, $"landed on property that belongs to Player {property.OwnerId}");
+                if (property.IsMortgaged == false)
+                {
+                    _rentManager.CollectRent(playerId, tileId, (int)property.OwnerId);
+                }
+                else
+                {
+                    Logger.Log("It is mortgaged");
+                }
             }
             else
             {
-                // do nothing
-                // maybe send a message like "it's your own property, dumbass!"
+                Logger.Log(playerId, $"lande on their own property");
             }
         }
 
         #endregion
 
         #region Constructor
-        public PropertyLandedBehavior(CollectRentBehavior collectRentBehavior, 
+        public PropertyLandedBehavior(RentManager rentManager,
             PlayerManager playerManager,
             RequestManager requestManager,
             AuctionManager auctionManager,
             PropertyTransferManager propertyTransferManager)
         {
-            _collectRentBehavior = collectRentBehavior;
+            _rentManager = rentManager;
             _playerManager = playerManager;
             _requestManager = requestManager;
             _auctionManager = auctionManager;
