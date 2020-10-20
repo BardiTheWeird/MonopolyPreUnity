@@ -36,12 +36,14 @@ namespace MonopolyPreUnity.Managers
         #region Constructor
         public MapManager(PlayerManager playerManager, 
             TileManager tileManager,
-            GameData gameData)
+            GameData gameData,
+            PlayerLandedManager playerLandedManager)
         {
             _playerManager = playerManager;
             _tileManager = tileManager;
             map = gameData.MapIdSequence;
             mapIndex = gameData.MapIndex;
+            _playerLandedManager = playerLandedManager;
         }
         #endregion
 
@@ -60,38 +62,41 @@ namespace MonopolyPreUnity.Managers
         #region Misc Methods
         private bool GOPassed(int tileStartId, int tileEndId, int playerId)
         {
-            int tileStartIndex = mapIndex[tileStartId];
-            int tileEndIndex = mapIndex[tileEndId];
+            return true;
+            //int tileStartIndex = mapIndex[tileStartId];
+            //int tileEndIndex = mapIndex[tileEndId];
 
-            if (_tileManager.ContainsComponent<GoComponent>(tileEndId))
-            {
-                return true;
-            }
-            else if (tileEndIndex < tileStartIndex)
-            {
-                int GOTileId = _tileManager.GetTileWithComponent<GoComponent>();
-                _playerLandedManager.PlayerLanded(playerId, GOTileId);
+            //if (_tileManager.ContainsComponent<GoComponent>(tileEndId))
+            //{
+            //    return true;
+            //}
+            //else if (tileEndIndex < tileStartIndex)
+            //{
+            //    int GOTileId = _tileManager.GetTileWithComponent<GoComponent>();
+            //    _playerLandedManager.PlayerLanded(playerId, GOTileId);
 
-                return true;
-            }
+            //    return true;
+            //}
             
-            return false;
+            //return false;
         }
         #endregion
 
         #region Move methods
         public int MoveBySteps(int playerId, int steps, bool giveGOCash=true)
-        {   
+        {
             Player player = _playerManager.GetPlayer(playerId);
             int tileIndex = mapIndex[player.CurrentTileId];
 
             int newTileIndex = (tileIndex + steps) % map.Count;
-            player.CurrentTileId = map[newTileIndex];
             
             if (giveGOCash)
+            {
                 GOPassed(player.CurrentTileId, map[newTileIndex], playerId);
-            
-            return map[newTileIndex];
+            }
+            player.CurrentTileId = map[newTileIndex];
+
+            return player.CurrentTileId;
         }
 
         public void MoveToTile(int playerId, int tileId, bool giveGOCash=true)
