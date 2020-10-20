@@ -63,20 +63,6 @@ namespace MonopolyPreUnity.Classes
         public TurnInfo TurnInfo { get; private set; }
         #endregion
 
-        // TradeManager?
-
-        public GameData(List<int> mapIdSequence, Dictionary<int, int> mapIndex, (int, int) diceValues, 
-            Dictionary<int, Tile> tileDict, Dictionary<int, HashSet<int>> propertySetDict, Dictionary<int, (Player, IUserScenario)> playerDict,
-            TurnInfo turnInfo)
-        {
-            MapIdSequence = mapIdSequence;
-            MapIndex = mapIndex;
-            DiceValues = diceValues;
-            TileDict = tileDict;
-            PropertySetDict = propertySetDict;
-            PlayerDict = playerDict;
-            TurnInfo = turnInfo;
-        }
 
         // At least for testing initialization
         public GameData(List<int> mapIdSequence, 
@@ -92,7 +78,7 @@ namespace MonopolyPreUnity.Classes
             DiceValues = diceValues;
             TileDict = tileDict;
             PropertySetDict = propertySetDict;
-            this.playerDict = playerDict;
+            PlayerDict = playerDict;
             TurnInfo = turnInfo;
         }
     }

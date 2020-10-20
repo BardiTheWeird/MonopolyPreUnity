@@ -76,11 +76,6 @@ namespace MonopolyPreUnity
         }
         #endregion
 
-        private static GameData CreateGameData()
-        {
-            return new GameData();
-        }
-
         private static IContainer CreateDiContainer()
         {
             var builder = new ContainerBuilder();
@@ -106,10 +101,10 @@ namespace MonopolyPreUnity
             container.Resolve<PlayerLandedManager>().SetDict(playerLandedBehaviorDict);
 
             // Mock scenarios
-            gameData.playerDict[1] = (gameData.playerDict[1].Item1, container.Resolve<HotSeatUserScenario>());
-            ((HotSeatUserScenario)gameData.playerDict[1].Item2).SetIdName(1, gameData.playerDict[1].Item1.DisplayName);
-            gameData.playerDict[2] = (gameData.playerDict[2].Item1, container.Resolve<HotSeatUserScenario>());
-            ((HotSeatUserScenario)gameData.playerDict[2].Item2).SetIdName(2, gameData.playerDict[2].Item1.DisplayName);
+            gameData.PlayerDict[1] = (gameData.PlayerDict[1].Item1, container.Resolve<HotSeatUserScenario>());
+            ((HotSeatUserScenario)gameData.PlayerDict[1].Item2).SetIdName(1, gameData.PlayerDict[1].Item1.DisplayName);
+            gameData.PlayerDict[2] = (gameData.PlayerDict[2].Item1, container.Resolve<HotSeatUserScenario>());
+            ((HotSeatUserScenario)gameData.PlayerDict[2].Item2).SetIdName(2, gameData.PlayerDict[2].Item1.DisplayName);
 
             return container;
         }
