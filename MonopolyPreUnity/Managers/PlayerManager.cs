@@ -2,6 +2,7 @@
 using MonopolyPreUnity.Interfaces;
 using System;
 using System.Collections.Generic;
+using MonopolyPreUnity.Components;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
@@ -11,6 +12,7 @@ namespace MonopolyPreUnity.Managers
     {
         #region Dependencies
         private readonly TileManager _tileManager;
+        private readonly PropertyManager _propertyManager;
         #endregion
 
 
@@ -38,6 +40,15 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
+        #region Destroy PLayer =)
+        void KickPlayer(int playerId)
+        {
+            Logger.Log(playerId, "ну этот додик с игры вылетел лол бомж гей");
+            _playerDict.Remove(playerId);
+        }
+        #endregion
+
+
         #region Cash Methods
         public int GetPlayerCash(int playerId) =>
             GetPlayer(playerId).Cash;
@@ -63,11 +74,8 @@ namespace MonopolyPreUnity.Managers
                 if (IsBankrupt(player))
                 {
                     Logger.Log(playerId, "is bankrupt");
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    throw new NotImplementedException();
+                    KickPlayer(playerId);
+                    
                 }
             }
         }
@@ -81,41 +89,66 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Bankruptcy
+
+        /// <summary>
+        /// Player complete bankrupt checker bool method
+        /// </summary>
+        /// <param name="player">player</param>
+        /// <returns></returns>
+        
         bool EnoughPropertyToPayOff(Player player)
         {
             var playerProperty = player.Properties;
             int sum = 0;
             foreach (int propertyId in playerProperty)
             {
-                if (_tileManager.GetTileComponent<PropertyComponent>(propertyId, out var component))
-                    sum += 0;
+                if (_tileManager.GetTileComponent<PropertyDevelopmentComponent>(propertyId, out var realEstate))
+                    sum += realEstate.HousesBuilt * realEstate.HouseSellPrice;
+
+                if ((_tileManager.GetTileComponent<PropertyComponent>(propertyId, out var property)))
+                    sum += (int)(property.BasePrice * _propertyManager.MortageFee);
             }
-
-
-            if (true)
-            return true;
+            if (sum + player.Cash > 0)
+                return true;
             return false;
 
         }
 
-
+        /// <summary>
+        /// Method allows to sell property in case of negative balance and returns false or returns true
+        /// and....
+        /// to be continued in PlayerCashCharge...
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        
         bool IsBankrupt(Player player)
         {
-            if (player.Cash <= 0)
+            if (!(EnoughPropertyToPayOff(player)))
             {
                 return true;
-                
 
             }
-            return false;
+            else
+            {
+                Logger.Log("Man you can still sell houses and mortage ur property to be in game!=)))");
+                do
+                {
+                    _propertyManager.ManageProperty(player.Id);
+                }
+                while (player.Cash < 0);
+                return false;
+            }
+      
         }
         #endregion
 
         #region Constructor
-        public PlayerManager(GameData gameData,TileManager tileManager)
+        public PlayerManager(GameData gameData,TileManager tileManager,PropertyManager propertyManager)
         {
             _playerDict = gameData.PlayerDict;
             _tileManager = tileManager;
+            _propertyManager = propertyManager;
         }
         #endregion
     }
