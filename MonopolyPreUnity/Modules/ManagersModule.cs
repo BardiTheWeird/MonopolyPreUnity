@@ -20,6 +20,7 @@ namespace MonopolyPreUnity.Modules
             //builder.RegisterType<TradeManager>().AsSelf().SingleInstance();
 
             builder.RegisterType<PlayerLandedManager>().AsSelf().SingleInstance();
+            builder.RegisterType<RentManager>().AsSelf().SingleInstance();
             builder.RegisterType<TileManager>().AsSelf().SingleInstance();
             builder.RegisterType<MapManager>().AsSelf().SingleInstance();
             builder.RegisterType<PropertyTransferManager>().AsSelf().SingleInstance();

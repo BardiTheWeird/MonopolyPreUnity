@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using MonopolyPreUnity.Behaviors;
 using MonopolyPreUnity.Behaviors.PlayerLanded;
+using MonopolyPreUnity.Behaviors.Rent;
 using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Interfaces;
@@ -41,20 +42,25 @@ namespace MonopolyPreUnity
                     new ActionComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, -100)) }) },
 
                 { 3, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), 
-                    new PropertyComponent(1, 100), new PropertyDevelopmentComponent(80) }) },
+                    new PropertyComponent(1, 100), 
+                    new PropertyDevelopmentComponent(80,
+                        new List<int>{ 10, 20, 50, 150, 450, 625, 750 }) }) },
 
                 { 4, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), 
-                    new PropertyComponent(1, 120), new PropertyDevelopmentComponent(80) }) },
+                    new PropertyComponent(1, 120), new PropertyDevelopmentComponent(80,
+                        new List<int>{ 10, 20, 50, 150, 450, 625, 750 }) }) },
 
                 { 5, new Tile(new List<ITileComponent>
                     { new TileIdentityComponent(1, "Go"),
                     new ActionComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, 100)) }) },
 
                 { 6, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"),
-                    new PropertyComponent(2, 80), new PropertyDevelopmentComponent(50) }) },
+                    new PropertyComponent(2, 80), new PropertyDevelopmentComponent(50,
+                        new List<int>{ 5, 10, 30, 100, 300, 400, 550 }) }) },
 
                 { 7, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), 
-                    new PropertyComponent(2, 90), new PropertyDevelopmentComponent(50) }) }
+                    new PropertyComponent(2, 90), new PropertyDevelopmentComponent(50,
+                        new List<int>{ 5, 10, 30, 100, 300, 400, 550 }) }) }
             };
 
             var propertySetDict = new Dictionary<int, HashSet<int>>
@@ -78,6 +84,7 @@ namespace MonopolyPreUnity
 
         private static IContainer CreateDiContainer()
         {
+            /// Registering
             var builder = new ContainerBuilder();
 
             var gameData = CreateMockData();
@@ -90,15 +97,21 @@ namespace MonopolyPreUnity
 
             var container = builder.Build();
 
+            /// Property injection
             var playerLandedBehaviorDict = new Dictionary<Type, IPlayerLandedBehavior>
             {
                 { typeof(ActionComponent), container.Resolve<ActionTileBehavior>() },
                 { typeof(ActionBoxComponent), container.Resolve<ActionBoxBehavior>() },
                 { typeof(PropertyComponent), container.Resolve<PropertyLandedBehavior>() },
-                { typeof(UtilityRentComponent), container.Resolve<CollectRentBehavior>() }
+            };
+
+            var rentBehaviorDict = new Dictionary<Type, IRentBehavior>
+            {
+                { typeof(PropertyDevelopmentComponent), container.Resolve<DevelopmentRentBehavior>() }
             };
 
             container.Resolve<PlayerLandedManager>().SetDict(playerLandedBehaviorDict);
+            container.Resolve<RentManager>().SetDict(rentBehaviorDict);
 
             // Mock scenarios
             gameData.PlayerDict[1] = (gameData.PlayerDict[1].Item1, container.Resolve<HotSeatUserScenario>());

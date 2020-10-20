@@ -10,21 +10,36 @@ namespace MonopolyPreUnity.Components
         public int HouseBuyPrice { get; }
         public int HouseSellPrice { get; }
         public int HouseCap { get; }
+        public List<int> RentList { get; }
 
-        public PropertyDevelopmentComponent(int houseBuyPrice)
-        {           
+        public PropertyDevelopmentComponent(
+            int houseBuyPrice,
+            List<int> rentList)
+        {
+            HousesBuilt = 0;
             HouseBuyPrice = houseBuyPrice;
             HouseSellPrice = HouseBuyPrice / 2;
-            HousesBuilt = 0;
             HouseCap = 5;
+            RentList = rentList;
+
+            if (RentList.Count != 2 + HouseCap)
+                throw new ArgumentException("RentList.Count isn't equal to 2 + HouseCap");
         }
 
-        public PropertyDevelopmentComponent(int houseBuyPrice, int houseSellPrice, int houseCap, int housesBuilt)
+        public PropertyDevelopmentComponent(int housesBuilt, 
+            int houseBuyPrice, 
+            int houseSellPrice, 
+            int houseCap, 
+            List<int> rentList)
         {
             HousesBuilt = housesBuilt;
             HouseBuyPrice = houseBuyPrice;
             HouseSellPrice = houseSellPrice;
             HouseCap = houseCap;
+            RentList = rentList;
+
+            if (RentList.Count != 2 + HouseCap)
+                throw new ArgumentException("RentList.Count isn't equal to 2 + HouseCap");
         }
     }
 }
