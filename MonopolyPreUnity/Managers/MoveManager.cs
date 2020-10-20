@@ -14,6 +14,7 @@ namespace MonopolyPreUnity.Managers
         private readonly TileManager _tileManager;
         private readonly MapManager _mapManager;
         private readonly PlayerLandedManager _playerLandedManager;
+        private readonly InJailManager _inJailManager;
         #endregion
 
         #region fields
@@ -22,15 +23,41 @@ namespace MonopolyPreUnity.Managers
 
         public void MakeAMove(int playerId)
         {
-            _diceValues.Throw();
-            Logger.Log(playerId, $"throws the dice and gets {_diceValues.Die1} and {_diceValues.Die2}");
-            var currentPlayer =_playerManager.GetPlayer(playerId);
-            if (currentPlayer.CanMove = _diceValues.Die1 == _diceValues.Die2)
-                Logger.Log(playerId, "threw doubles and can move again");            
+            var currentPlayer = _playerManager.GetPlayer(playerId);
+            if (currentPlayer.TurnsInPrison == null)
+            {
+                _diceValues.Throw();
 
-            int tileId = _mapManager.MoveBySteps(playerId, _diceValues.Sum);
-            Logger.Log(playerId, $"landed on tile {tileId}");
-            _playerLandedManager.PlayerLanded(playerId, tileId);
+                Logger.Log(playerId, $"throws the dice and gets {_diceValues.Die1} and {_diceValues.Die2}");
+
+
+                if (currentPlayer.CanMove = _diceValues.Die1 == _diceValues.Die2)
+                    Logger.Log(playerId, "threw doubles and can move again");
+
+                int tileId = _mapManager.MoveBySteps(playerId, _diceValues.Sum);
+
+                Logger.Log(playerId, $"landed on tile {tileId}");
+
+                _playerLandedManager.PlayerLanded(playerId, tileId);
+            }
+            else
+            {
+                var result = _inJailManager.InJailMove(currentPlayer);
+                
+                if(result.Item1 == true && result.Item2 == Utitlity.MonopolyCommand.JailUseDice)
+                {
+                    currentPlayer.CanMove = false;
+                    int tileId = _mapManager.MoveBySteps(playerId, _diceValues.Sum);
+
+                    Logger.Log(playerId, $"landed on tile {tileId}");
+
+                    _playerLandedManager.PlayerLanded(playerId, tileId);
+                }
+                else if(result.Item1)
+                {
+                    MakeAMove(playerId);
+                }
+            }
         }
 
         #region Constructor

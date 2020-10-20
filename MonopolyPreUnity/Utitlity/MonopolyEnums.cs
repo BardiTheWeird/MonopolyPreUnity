@@ -34,9 +34,14 @@ namespace MonopolyPreUnity.Utitlity
         TradeCreateDeal,
         TradeValidate,
 
+        JailPayMoney,
+        JailUseCard,
+        JailUseDice,
+        StayInJail,
+
         CancelAction
     }
-
+    
     public enum MonopolyRequest
     {
         TurnCommandChoice,
