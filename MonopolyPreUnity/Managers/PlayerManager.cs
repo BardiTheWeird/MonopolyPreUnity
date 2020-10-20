@@ -9,6 +9,11 @@ namespace MonopolyPreUnity.Managers
 {
     class PlayerManager
     {
+        #region Dependencies
+        private readonly TileManager _tileManager;
+        #endregion
+
+
         #region fields
         // ID to IPlayer and IUserScenario
         private readonly Dictionary<int, (Player, IUserScenario)> _playerDict;
@@ -76,16 +81,41 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Bankruptcy
+        bool EnoughPropertyToPayOff(Player player)
+        {
+            var playerProperty = player.Properties;
+            int sum = 0;
+            foreach (int propertyId in playerProperty)
+            {
+                if (_tileManager.GetTileComponent<PropertyComponent>(propertyId, out var component))
+                    sum += 0;
+            }
+
+
+            if (true)
+            return true;
+            return false;
+
+        }
+
+
         bool IsBankrupt(Player player)
         {
-            throw new NotImplementedException();
+            if (player.Cash <= 0)
+            {
+                return true;
+                
+
+            }
+            return false;
         }
         #endregion
 
         #region Constructor
-        public PlayerManager(GameData gameData)
+        public PlayerManager(GameData gameData,TileManager tileManager)
         {
             _playerDict = gameData.PlayerDict;
+            _tileManager = tileManager;
         }
         #endregion
     }
