@@ -16,8 +16,8 @@ namespace MonopolyPreUnity.Managers
     class PropertyManager
     {
         #region Constants
+        public float MortageFee {get;} = 0.5f;
         private const float _mortageComission = 0.1f;
-        private const float _mortageFee = 0.5f;
         private const int _housesLimit = 5;
         private const int _house = 1;
         #endregion
@@ -115,7 +115,7 @@ namespace MonopolyPreUnity.Managers
             }
             if (propertyComponent.IsMortgaged == true &&
                 _playerManager.GetPlayerCash(playerId)>
-                propertyComponent.BasePrice*_mortageFee*_mortageComission)
+                propertyComponent.BasePrice*MortageFee*_mortageComission)
                 AvailableActions.Add(MonopolyCommand.PropertyUnmortgage);
             if (propertyComponent.IsMortgaged == false &&
                 propertyDevelopmentComponent.HousesBuilt == 0)
@@ -136,7 +136,7 @@ namespace MonopolyPreUnity.Managers
         public void BuildHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
         {
             developmentComponent.HousesBuilt++;
-            _playerManager.PlayerCashCharge(playerId, developmentComponent.HouseBuyPrice);
+            _playerManager.ChangeBalance(playerId, -developmentComponent.HouseBuyPrice);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace MonopolyPreUnity.Managers
         public void SellHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
         {
             developmentComponent.HousesBuilt--;
-            _playerManager.PlayerCashGive(playerId, developmentComponent.HouseBuyPrice);
+            _playerManager.ChangeBalance(playerId, developmentComponent.HouseSellPrice);
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace MonopolyPreUnity.Managers
         
         public void Mortage(int playerId, PropertyComponent propertyComponent)
         {
-            _playerManager.PlayerCashGive(playerId, (int)(_mortageFee * propertyComponent.BasePrice));
+            _playerManager.PlayerCashGive(playerId, (int)(MortageFee * propertyComponent.BasePrice));
             propertyComponent.IsMortgaged = true;
         }
 
@@ -172,7 +172,7 @@ namespace MonopolyPreUnity.Managers
         public void UnMortage(int playerId, PropertyComponent propertyComponent)
         {
             propertyComponent.IsMortgaged = false;
-            _playerManager.PlayerCashCharge(playerId, (int)((_mortageFee + _mortageComission) * propertyComponent.BasePrice));
+            _playerManager.PlayerCashCharge(playerId, (int)((MortageFee + _mortageComission) * propertyComponent.BasePrice));
         }
         #endregion
 
