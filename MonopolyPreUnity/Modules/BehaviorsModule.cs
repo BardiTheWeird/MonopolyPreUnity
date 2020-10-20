@@ -20,6 +20,8 @@ namespace MonopolyPreUnity.Modules
 
             // Rent
             builder.RegisterType<DevelopmentRentBehavior>().AsSelf().SingleInstance();
+            builder.RegisterType<TrainStationRentBehavior>().AsSelf().SingleInstance();
+            builder.RegisterType<UtilityRentBehavior>().AsSelf().SingleInstance();
         }
     }
 }

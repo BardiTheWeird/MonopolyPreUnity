@@ -107,7 +107,9 @@ namespace MonopolyPreUnity
 
             var rentBehaviorDict = new Dictionary<Type, IRentBehavior>
             {
-                { typeof(PropertyDevelopmentComponent), container.Resolve<DevelopmentRentBehavior>() }
+                { typeof(PropertyDevelopmentComponent), container.Resolve<DevelopmentRentBehavior>() },
+                { typeof(TrainStationComponent), container.Resolve<TrainStationRentBehavior>() },
+                { typeof(UtilityComponent), container.Resolve<UtilityRentBehavior>() }
             };
 
             container.Resolve<PlayerLandedManager>().SetDict(playerLandedBehaviorDict);

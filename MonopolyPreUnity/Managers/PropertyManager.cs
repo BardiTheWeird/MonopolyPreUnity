@@ -38,6 +38,17 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Subsidiary Methods
+        public HashSet<int> OwnedPropertiesInSet(int playerId, int setId)
+        {
+            var propertySet = _tileManager.GetPropertySet(setId);
+            var ownerOwnedProperty = _playerManager.GetPlayer(playerId).Properties;
+
+            var ownedPropertyInSet = new HashSet<int>(propertySet);
+            ownedPropertyInSet.IntersectWith(ownerOwnedProperty);
+
+            return ownedPropertyInSet;
+        }
+
         /// <summary>
         /// if statement separated to corresponding method
         /// </summary>
