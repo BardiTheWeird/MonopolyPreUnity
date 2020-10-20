@@ -125,9 +125,6 @@ namespace MonopolyPreUnity
             }
 
             var gameManager = container.Resolve<GameManager>();
-            var playerManager = container.Resolve<PlayerManager>();
-            if (playerManager._propertyManager == null)
-                Console.WriteLine("Oh shit");
             gameManager.StartGame();
         }
     }
