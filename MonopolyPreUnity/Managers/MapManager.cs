@@ -99,7 +99,7 @@ namespace MonopolyPreUnity.Managers
             return player.CurrentTileId;
         }
 
-        public void MoveToTile(int playerId, int tileId, bool giveGOCash=true)
+        public int MoveToTile(int playerId, int tileId, bool giveGOCash=true)
         {
             Player player = _playerManager.GetPlayer(playerId);
 
@@ -107,6 +107,7 @@ namespace MonopolyPreUnity.Managers
                 GOPassed(player.CurrentTileId, tileId, playerId);
 
             player.CurrentTileId = tileId;
+            return player.CurrentTileId;
         }
 
         public int MoveByFunc(int playerId, Func<Tile, bool> predicate, bool giveGOCash=true)

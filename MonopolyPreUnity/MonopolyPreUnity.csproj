@@ -6,12 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Behaviors\Action\**" />
-    <EmbeddedResource Remove="Behaviors\Action\**" />
-    <None Remove="Behaviors\Action\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.0.0" />
   </ItemGroup>
 
