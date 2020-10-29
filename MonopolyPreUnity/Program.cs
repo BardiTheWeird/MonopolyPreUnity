@@ -39,7 +39,7 @@ namespace MonopolyPreUnity
 
                 { 2, new Tile(new List<ITileComponent>
                     { new TileIdentityComponent(1, "Tax 100$"),
-                    new ActionComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, -100)) }) },
+                    new ActionTileComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, -100)) }) },
 
                 { 3, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 1 Set 1"), 
                     new PropertyComponent(1, 100), 
@@ -52,7 +52,7 @@ namespace MonopolyPreUnity
 
                 { 5, new Tile(new List<ITileComponent>
                     { new TileIdentityComponent(1, "MoneyGiver 100$"),
-                    new ActionComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, 100)) }) },
+                    new ActionTileComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, 100)) }) },
 
                 { 6, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 3 Set 2"),
                     new PropertyComponent(2, 80), new PropertyDevelopmentComponent(50,
@@ -96,26 +96,6 @@ namespace MonopolyPreUnity
             builder.RegisterType<HotSeatUserScenario>().AsSelf();
 
             var container = builder.Build();
-
-            /// Property injection
-            var playerLandedBehaviorDict = new Dictionary<Type, IPlayerLandedBehavior>
-            {
-                { typeof(ActionComponent), container.Resolve<ActionTileBehavior>() },
-                { typeof(ActionBoxComponent), container.Resolve<ActionBoxBehavior>() },
-                { typeof(PropertyComponent), container.Resolve<PropertyLandedBehavior>() },
-                { typeof(FreeParkingComponent), container.Resolve<FreeParkingBehavior>() },
-                { typeof(GoComponent), container.Resolve<GOBehavior>() },
-            };
-
-            var rentBehaviorDict = new Dictionary<Type, IRentBehavior>
-            {
-                { typeof(PropertyDevelopmentComponent), container.Resolve<DevelopmentRentBehavior>() },
-                { typeof(TrainStationComponent), container.Resolve<TrainStationRentBehavior>() },
-                { typeof(UtilityComponent), container.Resolve<UtilityRentBehavior>() }
-            };
-
-            container.Resolve<PlayerLandedManager>().SetDict(playerLandedBehaviorDict);
-            container.Resolve<RentManager>().SetDict(rentBehaviorDict);
 
             // Mock scenarios
             gameData.PlayerDict[1] = (gameData.PlayerDict[1].Item1, container.Resolve<HotSeatUserScenario>());

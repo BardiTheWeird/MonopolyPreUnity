@@ -5,11 +5,11 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class ActionComponent : ITileComponent
+    class ActionTileComponent : ITileComponent
     {
         public IMonopolyAction Action { get; }
 
-        public ActionComponent(IMonopolyAction action)
+        public ActionTileComponent(IMonopolyAction action)
         {
             Action = action;
         }

@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Behaviors;
+﻿using Autofac.Features.Indexed;
+using MonopolyPreUnity.Behaviors;
 using MonopolyPreUnity.Classes;
 using System;
 using System.Collections.Generic;
@@ -12,16 +13,13 @@ namespace MonopolyPreUnity.Managers
         private readonly TileManager _tileManager;
         #endregion
 
-        private Dictionary<Type, IPlayerLandedBehavior> _playerLandedBehaviorDict;
-
-        public void SetDict(Dictionary<Type, IPlayerLandedBehavior> dict) =>
-            _playerLandedBehaviorDict = dict;
+        private readonly IIndex<Type, IPlayerLandedBehavior> _playerLandedBehaviorindex;
 
         public void PlayerLanded(int playerId, int tileId)
         {
             foreach(var component in _tileManager.GetTile(tileId).Components)
             {
-                if (_playerLandedBehaviorDict.TryGetValue(component.GetType(), out var behavior))
+                if (_playerLandedBehaviorindex.TryGetValue(component.GetType(), out var behavior))
                 {
                     Logger.Log(playerId, $"landed on a tile with {component.GetType()}");
                     behavior.PlayerLanded(playerId, component, tileId);
@@ -30,9 +28,10 @@ namespace MonopolyPreUnity.Managers
         }
 
         #region Constructor
-        public PlayerLandedManager(TileManager tileManager)
+        public PlayerLandedManager(TileManager tileManager, IIndex<Type, IPlayerLandedBehavior> index)
         {
             _tileManager = tileManager;
+            _playerLandedBehaviorindex = index;
         }
         #endregion
     }

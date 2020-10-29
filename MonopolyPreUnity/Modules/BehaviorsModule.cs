@@ -2,6 +2,8 @@
 using MonopolyPreUnity.Behaviors;
 using MonopolyPreUnity.Behaviors.PlayerLanded;
 using MonopolyPreUnity.Behaviors.Rent;
+using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Components;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -14,16 +16,16 @@ namespace MonopolyPreUnity.Modules
         protected override void Load(ContainerBuilder builder)
         {
             // PropertyLanded
-            builder.RegisterType<ActionBoxBehavior>().AsSelf().SingleInstance();
-            builder.RegisterType<ActionTileBehavior>().AsSelf().SingleInstance();
-            builder.RegisterType<PropertyLandedBehavior>().AsSelf().SingleInstance();
-            builder.RegisterType<FreeParkingBehavior>().AsSelf().SingleInstance();
-            builder.RegisterType<GOBehavior>().AsSelf().SingleInstance();
+            builder.RegisterType<ActionBoxBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(ActionBoxComponent));
+            builder.RegisterType<ActionTileBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(ActionTileComponent));
+            builder.RegisterType<PropertyLandedBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(PropertyComponent));
+            builder.RegisterType<FreeParkingBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(FreeParkingComponent));
+            builder.RegisterType<GOBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(GoComponent));
 
             // Rent
-            builder.RegisterType<DevelopmentRentBehavior>().AsSelf().SingleInstance();
-            builder.RegisterType<TrainStationRentBehavior>().AsSelf().SingleInstance();
-            builder.RegisterType<UtilityRentBehavior>().AsSelf().SingleInstance();
+            builder.RegisterType<DevelopmentRentBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(PropertyDevelopmentComponent));
+            builder.RegisterType<TrainStationRentBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(TrainStationComponent));
+            builder.RegisterType<UtilityRentBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(UtilityComponent));
         }
     }
 }

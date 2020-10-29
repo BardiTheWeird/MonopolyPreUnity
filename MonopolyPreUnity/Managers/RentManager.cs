@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Behaviors.Rent;
+﻿using Autofac.Features.Indexed;
+using MonopolyPreUnity.Behaviors.Rent;
 using MonopolyPreUnity.Classes;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,8 @@ namespace MonopolyPreUnity.Managers
         private readonly TileManager _tileManager;
         #endregion
 
-        #region Behavior Dictionary
-        private Dictionary<Type, IRentBehavior> _rentBehaviorDict;
-
-        public void SetDict(Dictionary<Type, IRentBehavior> dict) =>
-            _rentBehaviorDict = dict;
+        #region fields
+        private readonly IIndex<Type, IRentBehavior> _rentBehaviorIndex;
         #endregion
 
         #region Collect Rent
@@ -25,7 +23,7 @@ namespace MonopolyPreUnity.Managers
         {
             foreach (var component in _tileManager.GetTile(tileId).Components)
             {
-                if (_rentBehaviorDict.TryGetValue(component.GetType(), out var behavior))
+                if (_rentBehaviorIndex.TryGetValue(component.GetType(), out var behavior))
                 {
                     var rent = behavior.GetRent(renteeId, ownerId, component, tileId);
                     _playerManager.PlayerCashCharge(renteeId, rent, ownerId);
@@ -35,10 +33,11 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Constructor
-        public RentManager(PlayerManager playerManager, TileManager tileManager)
+        public RentManager(PlayerManager playerManager, TileManager tileManager, IIndex<Type, IRentBehavior> index)
         {
             _playerManager = playerManager;
             _tileManager = tileManager;
+            _rentBehaviorIndex = index;
         }
         #endregion
     }
