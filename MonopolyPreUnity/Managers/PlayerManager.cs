@@ -40,7 +40,7 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
-        #region Destroy PLayer =)
+        #region Destroy Player =)
         void KickPlayer(int playerId)
         {
             Logger.Log(playerId, "ну этот додик с игры вылетел лол бомж гей");

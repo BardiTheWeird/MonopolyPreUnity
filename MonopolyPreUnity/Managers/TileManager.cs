@@ -49,14 +49,19 @@ namespace MonopolyPreUnity.Managers
         public int GetTileWithComponent<T>() where T : ITileComponent =>
             _tileDict.FirstOrDefault(x => x.Value.GetType() == typeof(T)).Key;
 
-        public bool ContainsComponent<T>(int tileId) where T : ITileComponent =>
-            _tileDict[tileId].Components.FirstOrDefault(x => x.GetType() == typeof(T)) != null;
+        public bool ContainsComponent<T>(Tile tile) =>
+            tile.Components.FirstOrDefault(x => x.GetType() == typeof(T)) != null;
 
-        public List<int> GetAllTilesWithComponent<T>() where T : ITileComponent =>
-            _tileDict
+        public bool ContainsComponent<T>(int tileId) where T : ITileComponent =>
+            ContainsComponent<T>(_tileDict[tileId]);
+
+        public List<int> GetAllTilesWithComponent<T>() where T : ITileComponent 
+        {
+            return _tileDict
             .Where(x => ContainsComponent<T>(x.Key))
             .Select(x => x.Key)
             .ToList();
+        }
         #endregion
 
         #region GetPropertySet

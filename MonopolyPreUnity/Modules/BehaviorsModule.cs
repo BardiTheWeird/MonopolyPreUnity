@@ -1,5 +1,7 @@
 ﻿using Autofac;
+using MonopolyPreUnity.Actions;
 using MonopolyPreUnity.Behaviors;
+using MonopolyPreUnity.Behaviors.Action;
 using MonopolyPreUnity.Behaviors.PlayerLanded;
 using MonopolyPreUnity.Behaviors.Rent;
 using MonopolyPreUnity.Classes;
@@ -23,9 +25,18 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<GOBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(GoComponent));
 
             // Rent
-            builder.RegisterType<DevelopmentRentBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(PropertyDevelopmentComponent));
-            builder.RegisterType<TrainStationRentBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(TrainStationComponent));
-            builder.RegisterType<UtilityRentBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(UtilityComponent));
+            builder.RegisterType<DevelopmentRentBehavior>().AsSelf().SingleInstance().Keyed<IRentBehavior>(typeof(PropertyDevelopmentComponent));
+            builder.RegisterType<TrainStationRentBehavior>().AsSelf().SingleInstance().Keyed<IRentBehavior>(typeof(TrainStationComponent));
+            builder.RegisterType<UtilityRentBehavior>().AsSelf().SingleInstance().Keyed<IRentBehavior>(typeof(UtilityComponent));
+
+            // Action
+            builder.RegisterType<ChangeBalanceActionBehavior>().AsSelf().SingleInstance().Keyed<IActionBehavior>(typeof(ChangeBalanceAction));
+            builder.RegisterType<GiftFromPlayersActionBehavior>().AsSelf().SingleInstance().Keyed<IActionBehavior>(typeof(GiftFromPlayersAction));
+            builder.RegisterType<GoToJailActionBehavior>().AsSelf().SingleInstance().Keyed<IActionBehavior>(typeof(GoToJailAction));
+            builder.RegisterType<GoToTileComponentActionBehavior>().AsSelf().SingleInstance().Keyed<IActionBehavior>(typeof(GoToTileComponentAction));
+            builder.RegisterType<GoToTileIdActionBehavior>().AsSelf().SingleInstance().Keyed<IActionBehavior>(typeof(GoToTileIdAction));
+            builder.RegisterType<JailCardActionBehavior>().AsSelf().SingleInstance().Keyed<IActionBehavior>(typeof(JailCardAction));
+            builder.RegisterType<TaxPerHouseActionBehavior>().AsSelf().SingleInstance().Keyed<IActionBehavior>(typeof(TaxPerHouseAction));
         }
     }
 }

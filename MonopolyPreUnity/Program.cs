@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MonopolyPreUnity.Actions;
 using MonopolyPreUnity.Behaviors;
 using MonopolyPreUnity.Behaviors.PlayerLanded;
 using MonopolyPreUnity.Behaviors.Rent;
@@ -39,7 +40,7 @@ namespace MonopolyPreUnity
 
                 { 2, new Tile(new List<ITileComponent>
                     { new TileIdentityComponent(1, "Tax 100$"),
-                    new ActionTileComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, -100)) }) },
+                    new ActionTileComponent(new ChangeBalanceAction(-100)) }) },
 
                 { 3, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 1 Set 1"), 
                     new PropertyComponent(1, 100), 
@@ -52,7 +53,7 @@ namespace MonopolyPreUnity
 
                 { 5, new Tile(new List<ITileComponent>
                     { new TileIdentityComponent(1, "MoneyGiver 100$"),
-                    new ActionTileComponent(new MonopolyAction<int>(Utitlity.MonopolyActionType.ChangeBalance, 100)) }) },
+                    new ActionTileComponent(new ChangeBalanceAction(100)) }) },
 
                 { 6, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 3 Set 2"),
                     new PropertyComponent(2, 80), new PropertyDevelopmentComponent(50,
