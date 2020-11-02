@@ -1,9 +1,12 @@
-﻿using MonopolyPreUnity.Classes;
+﻿using MonopolyPreUnity.Behaviors.Rent;
+using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
 {
@@ -12,6 +15,8 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         #region Dependencies
         private readonly MoveManager _moveManager;
         private readonly ConsoleUI _consoleUI;
+        private readonly PropertyManager _propertyManager;
+        private readonly TileManager _tileManager;
         #endregion
 
         #region TurnChoice
@@ -53,6 +58,38 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
             while (true)
             {
                 // choose property to manage
+                if (!(_consoleUI.ChoosePropertyId(player.Properties) is int propId))
+                    return;
+
+                MonopolyCommand command;
+                var property = _tileManager.GetTileComponent<PropertyComponent>(propId);
+                var development = _tileManager.GetTileComponent<PropertyDevelopmentComponent>(propId);
+                do
+                {
+                    var availableActions = _propertyManager.GetAvailableActions(player.Id, property, development);
+                    availableActions.Add(MonopolyCommand.CancelAction);
+
+                    command = _consoleUI.ChooseCommand(availableActions);
+
+                    switch (command)
+                    {
+                        case MonopolyCommand.PropertyMortgage:
+                            _propertyManager.Mortage(player.Id, property);
+                            break;
+
+                        case MonopolyCommand.PropertyUnmortgage:
+                            _propertyManager.UnMortage(player.Id, property);
+                            break;
+
+                        case MonopolyCommand.PropertyBuyHouse:
+                            _propertyManager.BuildHouse(player.Id, development);
+                            break;
+
+                        case MonopolyCommand.PropertySellHouse:
+                            _propertyManager.SellHouse(player.Id, development);
+                            break;
+                    }
+                } while (command != MonopolyCommand.CancelAction);
             }
         }
         #endregion

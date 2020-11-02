@@ -31,21 +31,4 @@ namespace MonopolyPreUnity.Utitlity
 
         CancelAction
     }
-    
-    public enum MonopolyRequest
-    {
-        TurnCommandChoice,
-
-        PropertyManagePropertyChoice,
-        PropertyManageActionChoice,
-
-        MoveJailChoice,
-
-        TileLandedPropertyChoice,
-        AuctionBidChoice,
-
-        TradePlayerChoice,
-        TradeDealChoice,
-        TradeValidationChoice
-    }
 }

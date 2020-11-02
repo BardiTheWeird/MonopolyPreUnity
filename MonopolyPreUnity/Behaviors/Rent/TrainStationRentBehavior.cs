@@ -19,7 +19,7 @@ namespace MonopolyPreUnity.Behaviors.Rent
             var station = component as TrainStationComponent;
             var property = _tileManager.GetTileComponent<PropertyComponent>(tileId);
 
-            var ownedPropertyInSet = _propertyManager.OwnedPropertiesInSet(ownerId, property.setId);
+            var ownedPropertyInSet = _propertyManager.OwnedPropertiesInSet(ownerId, property.SetId);
 
             int rentValue = station.BaseRent * (int)(Math.Round(Math.Pow(2, ownedPropertyInSet.Count - 1)));
             return rentValue;

@@ -12,14 +12,14 @@ namespace MonopolyPreUnity.Classes
 {
     class PropertyComponent : ITileComponent
     {
-        public int setId { get; }
+        public int SetId { get; }
         public int BasePrice { get; }
         public int? OwnerId { get; set; } = null;
         public bool IsMortgaged { get; set; } = false;
 
         public PropertyComponent(int setId, int basePrice)
         {
-            this.setId = setId;
+            this.SetId = setId;
             BasePrice = basePrice;
             OwnerId = null;
             IsMortgaged = false;
@@ -27,7 +27,7 @@ namespace MonopolyPreUnity.Classes
 
         public PropertyComponent(int setId, int basePrice, int? ownerId, bool isMortgaged)
         {
-            this.setId = setId;
+            this.SetId = setId;
             BasePrice = basePrice;
             OwnerId = ownerId;
             IsMortgaged = isMortgaged;
