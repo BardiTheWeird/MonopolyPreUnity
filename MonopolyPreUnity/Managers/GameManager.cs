@@ -11,9 +11,7 @@ namespace MonopolyPreUnity.Managers
     {
         #region Dependencies
         private readonly PlayerManager _playerManager;
-        private readonly MoveManager _moveManager;
         private readonly RequestManager _requestManager;
-        private readonly PropertyManager _propertyManager;
         #endregion
 
         #region fields
@@ -47,58 +45,19 @@ namespace MonopolyPreUnity.Managers
             Logger.Log("Next turn has commenced");
         }
 
-        // kinda obsolete
-        void CommandDecision(int playerId)
+        public void EndPlayer(int playerId)
         {
-            var player = _playerManager.GetPlayer(playerId);
-
-            MonopolyCommand command;
-            do
-            {
-                var possibleCommands = new List<MonopolyCommand>();
-
-                possibleCommands.Add(MonopolyCommand.MakeDeal);
-                if (player.Properties.Count > 0)
-                    possibleCommands.Add(MonopolyCommand.ManageProperty);
-
-                if (player.CanMove)
-                    possibleCommands.Add(MonopolyCommand.MakeMove);
-                else
-                    possibleCommands.Add(MonopolyCommand.EndTurn);
-
-                command = _requestManager.SendRequest(playerId,
-                    new Request<MonopolyCommand>(MonopolyRequest.TurnCommandChoice, possibleCommands));
-
-                switch (command)
-                {
-                    case MonopolyCommand.ManageProperty:
-                        _propertyManager.ManageProperty(playerId);
-                        break;
-
-                    case MonopolyCommand.MakeDeal:
-                        Console.WriteLine("You can't trade yet)");
-                        break;
-
-                    case MonopolyCommand.MakeMove:
-                        _moveManager.MakeAMove(playerId);
-                        break;
-                }
-            } while (command != MonopolyCommand.EndTurn);
-            player.CanMove = true;
+            throw new NotImplementedException();
         }
         #endregion
 
         #region Constructor
         public GameManager(PlayerManager playerManager, 
-            MoveManager moveManager, 
-            RequestManager requestManager, 
-            PropertyManager propertyManager, 
+            RequestManager requestManager,
             GameData gameData)
         {
             _playerManager = playerManager;
-            _moveManager = moveManager;
             _requestManager = requestManager;
-            _propertyManager = propertyManager;
             _turnInfo = gameData.TurnInfo;
         }
         #endregion

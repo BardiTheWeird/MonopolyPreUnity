@@ -6,11 +6,11 @@ namespace MonopolyPreUnity.Requests
 {
     class BankruptcyRequest : IRequest
     {
-        public int DebtToBePaid { get; set; }
+        public int DebtAmount { get; set; }
 
-        public BankruptcyRequest(int debtToBePaid)
+        public BankruptcyRequest(int debtAmount)
         {
-            DebtToBePaid = debtToBePaid;
+            DebtAmount = debtAmount;
         }
     }
 }

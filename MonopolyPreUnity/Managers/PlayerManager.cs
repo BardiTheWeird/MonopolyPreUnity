@@ -6,6 +6,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using Autofac.Features.Indexed;
 using MonopolyPreUnity.RequestHandlers;
+using MonopolyPreUnity.Requests;
 
 namespace MonopolyPreUnity.Managers
 {
@@ -14,6 +15,8 @@ namespace MonopolyPreUnity.Managers
         #region Dependencies
         private readonly TileManager _tileManager;
         public PropertyManager _propertyManager { get; set; }
+        private readonly RequestManager _requestManager;
+        private readonly GameManager _gameManager;
         #endregion
 
 
@@ -42,10 +45,41 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Destroy Player =)
-        void KickPlayer(int playerId)
+        void KickPlayer(int playerId, int? chargerId)
         {
-            Logger.Log(playerId, "ну этот додик с игры вылетел лол бомж гей");
+            var player = GetPlayer(playerId);
+
+            // transfer property
+            if (chargerId is int transferId)
+            {
+                var chargerPlayer = GetPlayer(transferId);
+
+                // Cash and JailCards
+                chargerPlayer.Cash += player.Cash;
+                chargerPlayer.JailCards += player.JailCards;
+
+                // Property transfer
+                foreach (var propId in player.Properties)
+                    _propertyManager.TransferProperty(propId, transferId);
+            }
+            else
+            {
+                foreach (var propId in player.Properties)
+                {
+                    var prop = _tileManager.GetTileComponent<PropertyComponent>(propId);
+                    var dev = _tileManager.GetTileComponent<PropertyDevelopmentComponent>(propId);
+
+                    prop.OwnerId = null;
+                    prop.IsMortgaged = false;
+
+                    if (dev != null)
+                        dev.HousesBuilt = 0;
+                }
+            }
             _playerDict.Remove(playerId);
+            _gameManager.EndPlayer(playerId);
+
+            Logger.Log(playerId, "is no longer a part of the game");
         }
         #endregion
 
@@ -68,14 +102,15 @@ namespace MonopolyPreUnity.Managers
             {
                 player.Cash -= amount;
                 Logger.Log(playerId, $"paid {amount}$. {player.Cash}$ left");
+                if (chargerId != null)
+                    PlayerCashGive((int)chargerId, amount);
             }
             else
             {
-                if (IsBankrupt(player))
+                if (IsBankrupt(player, amount))
                 {
                     Logger.Log(playerId, "is bankrupt");
-                    KickPlayer(playerId);
-                    
+                    KickPlayer(playerId, chargerId);
                 }
             }
         }
@@ -95,7 +130,7 @@ namespace MonopolyPreUnity.Managers
         /// </summary>
         /// <param name="player">player</param>
         /// <returns></returns>   
-        bool EnoughPropertyToPayOff(Player player)
+        bool EnoughPropertyToPayOff(Player player, int debtAmount)
         {
             var playerProperty = player.Properties;
             int sum = 0;
@@ -104,13 +139,12 @@ namespace MonopolyPreUnity.Managers
                 if (_tileManager.GetTileComponent<PropertyDevelopmentComponent>(propertyId, out var realEstate))
                     sum += realEstate.HousesBuilt * realEstate.HouseSellPrice;
 
-                if ((_tileManager.GetTileComponent<PropertyComponent>(propertyId, out var property)))
+                if (_tileManager.GetTileComponent<PropertyComponent>(propertyId, out var property))
                     sum += (int)(property.BasePrice * _propertyManager.MortageFee);
             }
-            if (sum + player.Cash > 0)
+            if (sum + player.Cash > debtAmount)
                 return true;
             return false;
-
         }
 
         /// <summary>
@@ -120,9 +154,9 @@ namespace MonopolyPreUnity.Managers
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>      
-        bool IsBankrupt(Player player)
+        bool IsBankrupt(Player player, int debtAmount)
         {
-            if (!EnoughPropertyToPayOff(player))
+            if (!EnoughPropertyToPayOff(player, debtAmount))
             {
                 return true;
             }
@@ -131,20 +165,21 @@ namespace MonopolyPreUnity.Managers
                 Logger.Log("Man you can still sell houses and mortgage ur property to be in game!=)))");
                 do
                 {
-                    _propertyManager.ManageProperty(player.Id);
+                    _requestManager.SendRequest(player.Id, new BankruptcyRequest(debtAmount));
                 }
-                while (player.Cash < 0);
+                while (player.Cash < debtAmount);
                 return false;
             }
-      
         }
         #endregion
 
         #region Constructor
-        public PlayerManager(GameData gameData, TileManager tileManager)
+        public PlayerManager(GameData gameData, TileManager tileManager, RequestManager requestManager, GameManager gameManager)
         {
             _playerDict = gameData.PlayerDict;
             _tileManager = tileManager;
+            _requestManager = requestManager;
+            _gameManager = gameManager;
         }
         #endregion
     }
