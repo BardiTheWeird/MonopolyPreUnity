@@ -5,9 +5,9 @@ using MonopolyPreUnity.Behaviors.PlayerLanded;
 using MonopolyPreUnity.Behaviors.Rent;
 using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
-using MonopolyPreUnity.Interfaces;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Modules;
+using MonopolyPreUnity.RequestHandlers;
 using MonopolyPreUnity.UserScenario;
 using System;
 using System.Collections.Generic;
@@ -70,10 +70,10 @@ namespace MonopolyPreUnity
                 { 2, new HashSet<int> { 6, 7 } }
             };
 
-            var playerDict = new Dictionary<int, (Player, IUserScenario)>
+            var playerDict = new Dictionary<int, Player>
             {
-                { 1, (new Player(1, "John", 200, new HashSet<int>(), 0, null, 1), null) },
-                { 2, (new Player(2, "Jake", 200, new HashSet<int>(), 0, null, 1), null) },
+                { 1, new Player(1, "John", 200, new HashSet<int>(), 0, null, 1) },
+                { 2, new Player(2, "Jake", 200, new HashSet<int>(), 0, null, 1) },
             };
 
             var turnInfo = new TurnInfo(new List<int> { 1, 2 }, 0);
@@ -83,6 +83,15 @@ namespace MonopolyPreUnity
         }
         #endregion
 
+        private static void RegisterPlayerScenarios(ContainerBuilder builder, List<Player> players)
+        {
+            foreach (var player in players) 
+            {
+                builder.RegisterType<HotSeatUserScenario>().Keyed<IPlayerScenario>(player.Id)
+                    .WithParameter(new TypedParameter(typeof(Player), player));
+            }
+        }
+
         private static IContainer CreateDiContainer()
         {
             /// Registering
@@ -90,19 +99,13 @@ namespace MonopolyPreUnity
 
             var gameData = CreateMockData();
             builder.RegisterInstance(gameData);
+            RegisterPlayerScenarios(builder, gameData.PlayerDict.Values.ToList());
 
             builder.RegisterModule<ManagersModule>();
             builder.RegisterModule<BehaviorsModule>();
-
-            builder.RegisterType<HotSeatUserScenario>().AsSelf();
+            builder.RegisterModule<HotSeatModule>();
 
             var container = builder.Build();
-
-            // Mock scenarios
-            gameData.PlayerDict[1] = (gameData.PlayerDict[1].Item1, container.Resolve<HotSeatUserScenario>());
-            ((HotSeatUserScenario)gameData.PlayerDict[1].Item2).SetIdName(1, gameData.PlayerDict[1].Item1.DisplayName);
-            gameData.PlayerDict[2] = (gameData.PlayerDict[2].Item1, container.Resolve<HotSeatUserScenario>());
-            ((HotSeatUserScenario)gameData.PlayerDict[2].Item2).SetIdName(2, gameData.PlayerDict[2].Item1.DisplayName);
 
             return container;
         }

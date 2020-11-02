@@ -1,4 +1,7 @@
-﻿using MonopolyPreUnity.Classes;
+﻿using Autofac.Features.Indexed;
+using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.RequestHandlers;
+using MonopolyPreUnity.Requests;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,20 +10,17 @@ namespace MonopolyPreUnity.Managers
 {
     class RequestManager
     {
-        #region Dependencies
-        private readonly PlayerManager _playerManager;
+        #region fields
+        private readonly IIndex<int, IPlayerScenario> _scenarioIndex;
         #endregion
 
-        public TInput SendRequest<TInput>(int receiverId, Request<TInput> request)
-        {
-            var userScenario = _playerManager.GetUserScenario(receiverId);
-            return userScenario.HandleRequest(request);
-        }
+        public void SendRequest(int receiverId, IRequest request) =>
+            _scenarioIndex[receiverId].HandleRequest(request);
 
         #region Constructor
-        public RequestManager(PlayerManager playerManager)
+        public RequestManager(IIndex<int, IPlayerScenario> scenarioIndex)
         {
-            _playerManager = playerManager;
+            _scenarioIndex = scenarioIndex;
         }
         #endregion
     }

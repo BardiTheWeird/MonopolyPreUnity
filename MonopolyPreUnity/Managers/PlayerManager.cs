@@ -1,10 +1,11 @@
 ﻿using MonopolyPreUnity.Classes;
-using MonopolyPreUnity.Interfaces;
 using System;
 using System.Collections.Generic;
 using MonopolyPreUnity.Components;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using Autofac.Features.Indexed;
+using MonopolyPreUnity.RequestHandlers;
 
 namespace MonopolyPreUnity.Managers
 {
@@ -18,25 +19,25 @@ namespace MonopolyPreUnity.Managers
 
         #region fields
         // ID to IPlayer and IUserScenario
-        private readonly Dictionary<int, (Player, IUserScenario)> _playerDict;
+        private readonly Dictionary<int, Player> _playerDict;
         #endregion
 
         #region GetPlayer and their stuff methods
         public Player GetPlayer(int playerId)
         {
             if (_playerDict.ContainsKey(playerId))
-                return _playerDict[playerId].Item1;
-            throw new KeyNotFoundException($"No such Player Id ({playerId}) in PlayerDict");
+                return _playerDict[playerId];
+            throw new KeyNotFoundException($"No {playerId} Id in PlayerDict");
         }
 
         public List<int> GetAllPlayerId() =>
             new List<int>(_playerDict.Keys);
 
-        public IUserScenario GetUserScenario(int playerId)
+        public IPlayerScenario GetPlayerScenario(int playerId)
         {
             if (_playerDict.ContainsKey(playerId))
-                return _playerDict[playerId].Item2;
-            throw new KeyNotFoundException($"No such Player Id ({playerId}) in PlayerDict");
+                return _scenarioIndex[playerId];
+            throw new KeyNotFoundException($"No {playerId} Id in _scenarioIndex");
         }
         #endregion
 
@@ -144,13 +145,6 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Constructor
-        //public PlayerManager(GameData gameData,TileManager tileManager,PropertyManager propertyManager)
-        //{
-        //    _playerDict = gameData.PlayerDict;
-        //    _tileManager = tileManager;
-        //    _propertyManager = propertyManager;
-        //}
-
         public PlayerManager(GameData gameData, TileManager tileManager)
         {
             _playerDict = gameData.PlayerDict;

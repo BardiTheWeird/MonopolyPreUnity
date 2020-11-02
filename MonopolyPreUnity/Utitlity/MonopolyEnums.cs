@@ -6,10 +6,10 @@ namespace MonopolyPreUnity.Utitlity
 {
     public enum MonopolyCommand
     {
-        TurnMakeMove,
+        TurnMove,
         TurnManageProperty,
         TurnMakeDeal,
-        TurnEndTurn,
+        EndTurn,
 
         PropertyChoose,
         PropertyMortgage,

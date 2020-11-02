@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,9 @@ namespace MonopolyPreUnity.Managers
             while (true)
             {
                 Logger.Log("");
-                CommandDecision(_turnInfo.turnOrder[_turnInfo.curTurnPlayer]);
+                var curTurnPlayerId = _turnInfo.turnOrder[_turnInfo.curTurnPlayer];
+                _requestManager.SendRequest(curTurnPlayerId, new TurnRequest());
+
                 NextTurn();
             }
         }
@@ -35,15 +38,16 @@ namespace MonopolyPreUnity.Managers
         #region Methods
         void NextTurn()
         {
-            Logger.Log("Next turn has commenced");
+            _playerManager.GetPlayer(_turnInfo.turnOrder[_turnInfo.curTurnPlayer]).CanMove = true;
 
             _turnInfo.curTurnPlayer++;
             if (_turnInfo.curTurnPlayer >= _turnInfo.turnOrder.Count)
                 _turnInfo.curTurnPlayer = 0;
 
-            //CommandDecision(_turnInfo.turnOrder[_turnInfo.curTurnPlayer]);
+            Logger.Log("Next turn has commenced");
         }
 
+        // kinda obsolete
         void CommandDecision(int playerId)
         {
             var player = _playerManager.GetPlayer(playerId);
@@ -58,9 +62,9 @@ namespace MonopolyPreUnity.Managers
                     possibleCommands.Add(MonopolyCommand.TurnManageProperty);
 
                 if (player.CanMove)
-                    possibleCommands.Add(MonopolyCommand.TurnMakeMove);
+                    possibleCommands.Add(MonopolyCommand.TurnMove);
                 else
-                    possibleCommands.Add(MonopolyCommand.TurnEndTurn);
+                    possibleCommands.Add(MonopolyCommand.EndTurn);
 
                 command = _requestManager.SendRequest(playerId,
                     new Request<MonopolyCommand>(MonopolyRequest.TurnCommandChoice, possibleCommands));
@@ -75,11 +79,11 @@ namespace MonopolyPreUnity.Managers
                         Console.WriteLine("You can't trade yet)");
                         break;
 
-                    case MonopolyCommand.TurnMakeMove:
+                    case MonopolyCommand.TurnMove:
                         _moveManager.MakeAMove(playerId);
                         break;
                 }
-            } while (command != MonopolyCommand.TurnEndTurn);
+            } while (command != MonopolyCommand.EndTurn);
             player.CanMove = true;
         }
         #endregion

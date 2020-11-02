@@ -9,7 +9,6 @@ using System.Runtime.Serialization;
 
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Behaviors;
-using MonopolyPreUnity.Interfaces;
 using MonopolyPreUnity.Utitlity;
 
 
@@ -38,7 +37,7 @@ namespace MonopolyPreUnity.Classes
         #endregion
 
         #region PlayerManager
-        public Dictionary<int, (Player, IUserScenario)> PlayerDict { get; private set; } // IuserScenario problem
+        public Dictionary<int, Player> PlayerDict { get; private set; }
         #endregion
 
         #region GameManager
@@ -52,7 +51,7 @@ namespace MonopolyPreUnity.Classes
             Dice diceValues, 
             Dictionary<int, Tile> tileDict, 
             Dictionary<int, HashSet<int>> propertySetDict, 
-            Dictionary<int, (Player, IUserScenario)> playerDict, 
+            Dictionary<int, Player> playerDict, 
             TurnInfo turnInfo)
         {
             MapIdSequence = mapIdSequence;
