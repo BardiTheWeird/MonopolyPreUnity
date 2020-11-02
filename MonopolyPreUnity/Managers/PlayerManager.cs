@@ -49,7 +49,6 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
-
         #region Cash Methods
         public int GetPlayerCash(int playerId) =>
             GetPlayer(playerId).Cash;
@@ -95,8 +94,7 @@ namespace MonopolyPreUnity.Managers
         /// Player complete bankrupt checker bool method
         /// </summary>
         /// <param name="player">player</param>
-        /// <returns></returns>
-        
+        /// <returns></returns>   
         bool EnoughPropertyToPayOff(Player player)
         {
             var playerProperty = player.Properties;
@@ -121,18 +119,16 @@ namespace MonopolyPreUnity.Managers
         /// to be continued in PlayerCashCharge...
         /// </summary>
         /// <param name="player"></param>
-        /// <returns></returns>
-        
+        /// <returns></returns>      
         bool IsBankrupt(Player player)
         {
-            if (!(EnoughPropertyToPayOff(player)))
+            if (!EnoughPropertyToPayOff(player))
             {
                 return true;
-
             }
             else
             {
-                Logger.Log("Man you can still sell houses and mortage ur property to be in game!=)))");
+                Logger.Log("Man you can still sell houses and mortgage ur property to be in game!=)))");
                 do
                 {
                     _propertyManager.ManageProperty(player.Id);

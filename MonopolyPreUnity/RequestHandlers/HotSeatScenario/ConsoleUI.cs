@@ -18,8 +18,6 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         private readonly PlayerManager _playerManager;
         #endregion
 
-
-
         #region Input
         public T InputValue<T>() where T : IConvertible
         {
@@ -56,7 +54,10 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         #endregion
 
         #region Output
-        public void WriteCommands(List<MonopolyCommand> commands)
+        public void Print(string message) =>
+            Console.WriteLine(message);
+
+        public void PrintCommands(List<MonopolyCommand> commands)
         {
             for (int i = 0; i < commands.Count; i++)
             {
@@ -64,7 +65,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
             }
         }
 
-        public void WriteProperties(IEnumerable<int> propertyIds)
+        public void PrintProperties(IEnumerable<int> propertyIds)
         {
             propertyIds.OrderBy(x => x);
             foreach (var id in propertyIds)
@@ -76,13 +77,13 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         public MonopolyCommand ChooseCommand(List<MonopolyCommand> commands)
         {
             Console.WriteLine("Choose command:");
-            WriteCommands(commands);
+            PrintCommands(commands);
             return commands[InputValueIndex(commands)];
         }
 
         public int? ChoosePropertyId(IEnumerable<int> properties)
         {
-            WriteProperties(properties);
+            PrintProperties(properties);
 
             var cancelInt = Math.Min(-1, properties.Min() - 1);
             properties.Append(cancelInt);
@@ -146,7 +147,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
                 case UtilityComponent utility:
                     return "";
             }
-            throw new NotImplementedException($"Method isn't implemented for {typeof(T)} yet");
+            throw new NotImplementedException($"Method isn't implemented for {component.GetType()} yet");
         }
 
         public string GetPropString(PropertyComponent prop)

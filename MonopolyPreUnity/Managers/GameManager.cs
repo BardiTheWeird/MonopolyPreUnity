@@ -57,12 +57,12 @@ namespace MonopolyPreUnity.Managers
             {
                 var possibleCommands = new List<MonopolyCommand>();
 
-                possibleCommands.Add(MonopolyCommand.TurnMakeDeal);
+                possibleCommands.Add(MonopolyCommand.MakeDeal);
                 if (player.Properties.Count > 0)
-                    possibleCommands.Add(MonopolyCommand.TurnManageProperty);
+                    possibleCommands.Add(MonopolyCommand.ManageProperty);
 
                 if (player.CanMove)
-                    possibleCommands.Add(MonopolyCommand.TurnMove);
+                    possibleCommands.Add(MonopolyCommand.MakeMove);
                 else
                     possibleCommands.Add(MonopolyCommand.EndTurn);
 
@@ -71,15 +71,15 @@ namespace MonopolyPreUnity.Managers
 
                 switch (command)
                 {
-                    case MonopolyCommand.TurnManageProperty:
+                    case MonopolyCommand.ManageProperty:
                         _propertyManager.ManageProperty(playerId);
                         break;
 
-                    case MonopolyCommand.TurnMakeDeal:
+                    case MonopolyCommand.MakeDeal:
                         Console.WriteLine("You can't trade yet)");
                         break;
 
-                    case MonopolyCommand.TurnMove:
+                    case MonopolyCommand.MakeMove:
                         _moveManager.MakeAMove(playerId);
                         break;
                 }

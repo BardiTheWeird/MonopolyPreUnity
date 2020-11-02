@@ -25,20 +25,20 @@ namespace MonopolyPreUnity.Behaviors
 
             if (property.OwnerId == null)
             {
-                var command = MonopolyCommand.TileLandedPropertyAuction;
+                var command = MonopolyCommand.AuctionProperty;
                 if (_playerManager.GetPlayerCash(playerId) >= property.BasePrice)
                 {
                     var request = new Request<MonopolyCommand>(
                         MonopolyRequest.TileLandedPropertyChoice,
                         new List<MonopolyCommand>()
                         {
-                            MonopolyCommand.TileLandedPropertyBuy,
-                            MonopolyCommand.TileLandedPropertyAuction
+                            MonopolyCommand.BuyProperty,
+                            MonopolyCommand.AuctionProperty
                         });
                     command = _requestManager.SendRequest(playerId, request);
                 }
 
-                if (command == MonopolyCommand.TileLandedPropertyBuy)
+                if (command == MonopolyCommand.BuyProperty)
                 {
                     _playerManager.PlayerCashCharge(playerId, property.BasePrice);
                     _propertyTransferManager.TransferProperty(tileId, playerId);

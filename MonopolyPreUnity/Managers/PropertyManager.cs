@@ -37,6 +37,20 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
+        #region Transfer Property
+        public void TransferProperty(int propertyId, int newOwnerId)
+        {
+            var property = _tileManager.GetTileComponent<PropertyComponent>(propertyId);
+            if (property.OwnerId != null)
+            {
+                Logger.Log((int)property.OwnerId, $"is no longer the owner of property {propertyId}");
+            }
+            property.OwnerId = newOwnerId;
+            _playerManager.GetPlayer(newOwnerId).Properties.Add(propertyId);
+            Logger.Log(newOwnerId, $"is the the owner of property {propertyId}");
+        }
+        #endregion
+
         #region Subsidiary Methods
         public HashSet<int> OwnedPropertiesInSet(int playerId, int setId)
         {
@@ -118,19 +132,19 @@ namespace MonopolyPreUnity.Managers
             var AvailableActions= new List<MonopolyCommand>();
             if (propertyDevelopmentComponent != null) {
                 if (BuildOnPropertyAllowed(playerSet,playerId,propertyComponent,propertyDevelopmentComponent))
-                    AvailableActions.Add(MonopolyCommand.PropertyBuyHouse);
+                    AvailableActions.Add(MonopolyCommand.BuyHouse);
                 if (SellOnPropertyAllowed(playerSet,playerId,propertyComponent,propertyDevelopmentComponent))
-                    AvailableActions.Add(MonopolyCommand.PropertySellHouse);
+                    AvailableActions.Add(MonopolyCommand.SellHouse);
             
                 
             }
             if (propertyComponent.IsMortgaged == true &&
                 _playerManager.GetPlayerCash(playerId)>
                 propertyComponent.BasePrice*MortageFee*_mortageComission)
-                AvailableActions.Add(MonopolyCommand.PropertyUnmortgage);
+                AvailableActions.Add(MonopolyCommand.UnmortgageProperty);
             if (propertyComponent.IsMortgaged == false &&
                 propertyDevelopmentComponent.HousesBuilt == 0)
-                AvailableActions.Add(MonopolyCommand.PropertyMortgage);
+                AvailableActions.Add(MonopolyCommand.MortgageProperty);
 
             return AvailableActions;
         }

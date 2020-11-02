@@ -27,24 +27,24 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
             {
                 var commandList = new List<MonopolyCommand>
                 {
-                    MonopolyCommand.TurnManageProperty,
-                    MonopolyCommand.TurnMakeDeal
+                    MonopolyCommand.ManageProperty,
+                    MonopolyCommand.MakeDeal
                 };
 
                 if (player.CanMove)
-                    commandList.Add(MonopolyCommand.TurnMove);
+                    commandList.Add(MonopolyCommand.MakeMove);
                 else
                     commandList.Add(MonopolyCommand.EndTurn);
 
                 switch (curCommand = _consoleUI.ChooseCommand(commandList))
                 {
-                    case MonopolyCommand.TurnManageProperty:
+                    case MonopolyCommand.ManageProperty:
                         ManageProperty(player);
                         break;
-                    case MonopolyCommand.TurnMakeDeal:
+                    case MonopolyCommand.MakeDeal:
                         MakeDeal(player);
                         break;
-                    case MonopolyCommand.TurnMove:
+                    case MonopolyCommand.MakeMove:
                         _moveManager.MakeAMove(player.Id);
                         break;
                 }
@@ -73,19 +73,19 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
 
                     switch (command)
                     {
-                        case MonopolyCommand.PropertyMortgage:
+                        case MonopolyCommand.MortgageProperty:
                             _propertyManager.Mortage(player.Id, property);
                             break;
 
-                        case MonopolyCommand.PropertyUnmortgage:
+                        case MonopolyCommand.UnmortgageProperty:
                             _propertyManager.UnMortage(player.Id, property);
                             break;
 
-                        case MonopolyCommand.PropertyBuyHouse:
+                        case MonopolyCommand.BuyHouse:
                             _propertyManager.BuildHouse(player.Id, development);
                             break;
 
-                        case MonopolyCommand.PropertySellHouse:
+                        case MonopolyCommand.SellHouse:
                             _propertyManager.SellHouse(player.Id, development);
                             break;
                     }
@@ -107,10 +107,12 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         }
 
         #region ctor
-        public HotSeatTurnScenario(MoveManager moveManager, ConsoleUI consoleUI)
+        public HotSeatTurnScenario(MoveManager moveManager, ConsoleUI consoleUI, PropertyManager propertyManager, TileManager tileManager)
         {
             _moveManager = moveManager;
             _consoleUI = consoleUI;
+            _propertyManager = propertyManager;
+            _tileManager = tileManager;
         }
         #endregion
     }
