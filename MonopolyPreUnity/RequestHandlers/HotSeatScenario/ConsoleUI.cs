@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
 {
@@ -47,10 +48,10 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         }
 
         public T InputValue<T>(IEnumerable<T> possibleValues) where T : IConvertible =>
-            InputValue<T>(x => possibleValues.Contains(x), "Value not in range");
+            InputValue<T>(x => possibleValues.Contains(x), "Value not present");
 
         public int InputValueIndex<T>(IEnumerable<T> values) =>
-            InputValue<int>(x => 0 <= x && x < values.Count(), "Index out of range");
+            InputValue<int>(x => 1 <= x && x <= values.Count(), "Index out of range");
         #endregion
 
         #region Output
@@ -69,7 +70,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         {
             propertyIds.OrderBy(x => x);
             foreach (var id in propertyIds)
-                Console.WriteLine($"{id}, {GetPropertyTileString(id)}");
+                Console.WriteLine($"{id}: {GetPropertyTileString(id)}");
         }
         #endregion
 
@@ -78,17 +79,20 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         {
             Console.WriteLine("Choose command:");
             PrintCommands(commands);
-            return commands[InputValueIndex(commands)];
+            return commands[InputValueIndex(commands) - 1];
         }
 
         public int? ChoosePropertyId(IEnumerable<int> properties)
         {
+            Print("Choose a property:");
             PrintProperties(properties);
 
-            var cancelInt = Math.Min(-1, properties.Min() - 1);
-            properties.Append(cancelInt);
-            int? input = InputValue(properties);
+            var cancelInt = properties.Count() > 0 ? Math.Min(-1, properties.Min() - 1) : -1;
+            properties = properties.Concat(new[] { cancelInt });
 
+            Print($"Enter {cancelInt} to cancel");
+
+            int? input = InputValue(properties);
             return input == cancelInt ? null : input;
         }
         #endregion
@@ -127,7 +131,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         }
 
         public string Tabulize(string str) =>
-            "\t" + str.Select(x => x == '\n' ? "\t\n" : x.ToString());
+            "\t" + Regex.Replace(str, @"\n", "\n\t");
         #endregion
 
         #region TileComponent Strings
@@ -177,5 +181,15 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
             return outStr;
         }
         #endregion
+
+        #region ctor
+        public ConsoleUI(TileManager tileManager, PlayerManager playerManager)
+        {
+            _tileManager = tileManager;
+            _playerManager = playerManager;
+        }
+        #endregion
+
+
     }
 }

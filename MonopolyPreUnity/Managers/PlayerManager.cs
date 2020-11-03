@@ -16,7 +16,6 @@ namespace MonopolyPreUnity.Managers
         private readonly TileManager _tileManager;
         public PropertyManager _propertyManager { get; set; }
         private readonly RequestManager _requestManager;
-        private readonly GameManager _gameManager;
         #endregion
 
 
@@ -35,13 +34,6 @@ namespace MonopolyPreUnity.Managers
 
         public List<int> GetAllPlayerId() =>
             new List<int>(_playerDict.Keys);
-
-        public IPlayerScenario GetPlayerScenario(int playerId)
-        {
-            if (_playerDict.ContainsKey(playerId))
-                return _scenarioIndex[playerId];
-            throw new KeyNotFoundException($"No {playerId} Id in _scenarioIndex");
-        }
         #endregion
 
         #region Destroy Player =)
@@ -77,7 +69,7 @@ namespace MonopolyPreUnity.Managers
                 }
             }
             _playerDict.Remove(playerId);
-            _gameManager.EndPlayer(playerId);
+            //_gameManager.EndPlayer(playerId);
 
             Logger.Log(playerId, "is no longer a part of the game");
         }
@@ -174,12 +166,11 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Constructor
-        public PlayerManager(GameData gameData, TileManager tileManager, RequestManager requestManager, GameManager gameManager)
+        public PlayerManager(GameData gameData, TileManager tileManager, RequestManager requestManager)
         {
             _playerDict = gameData.PlayerDict;
             _tileManager = tileManager;
             _requestManager = requestManager;
-            _gameManager = gameManager;
         }
         #endregion
     }

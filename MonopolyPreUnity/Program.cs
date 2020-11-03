@@ -8,7 +8,7 @@ using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Modules;
 using MonopolyPreUnity.RequestHandlers;
-using MonopolyPreUnity.UserScenario;
+using MonopolyPreUnity.RequestHandlers.HotSeatScenario;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,7 +87,7 @@ namespace MonopolyPreUnity
         {
             foreach (var player in players) 
             {
-                builder.RegisterType<HotSeatUserScenario>().Keyed<IPlayerScenario>(player.Id)
+                builder.RegisterType<HotSeatScenario>().Keyed<IPlayerScenario>(player.Id)
                     .WithParameter(new TypedParameter(typeof(Player), player));
             }
         }
