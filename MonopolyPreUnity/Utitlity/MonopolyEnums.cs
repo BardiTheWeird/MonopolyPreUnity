@@ -6,23 +6,23 @@ namespace MonopolyPreUnity.Utitlity
 {
     public enum MonopolyCommand
     {
-        TurnMakeMove,
-        TurnManageProperty,
-        TurnMakeDeal,
-        TurnEndTurn,
+        MakeMove,
+        ManageProperty,
+        MakeDeal,
+        EndTurn,
 
-        PropertyChoose,
-        PropertyMortgage,
-        PropertyUnmortgage,
-        PropertyBuyHouse,
-        PropertySellHouse,
+        ChooseProperty,
+        MortgageProperty,
+        UnmortgageProperty,
+        BuyHouse,
+        SellHouse,
 
-        TileLandedPropertyBuy,
-        TileLandedPropertyAuction,
+        BuyProperty,
+        AuctionProperty,
 
-        TradeChoosePlayer,
-        TradeCreateDeal,
-        TradeValidate,
+        ChoosePlayer,
+        CreateTradeOffer,
+        ValidateTradeOffer,
 
         JailPayMoney,
         JailUseCard,
@@ -30,22 +30,5 @@ namespace MonopolyPreUnity.Utitlity
         StayInJail,
 
         CancelAction
-    }
-    
-    public enum MonopolyRequest
-    {
-        TurnCommandChoice,
-
-        PropertyManagePropertyChoice,
-        PropertyManageActionChoice,
-
-        MoveJailChoice,
-
-        TileLandedPropertyChoice,
-        AuctionBidChoice,
-
-        TradePlayerChoice,
-        TradeDealChoice,
-        TradeValidationChoice
     }
 }

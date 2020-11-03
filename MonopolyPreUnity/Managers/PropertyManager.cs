@@ -37,6 +37,20 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
+        #region Transfer Property
+        public void TransferProperty(int propertyId, int newOwnerId)
+        {
+            var property = _tileManager.GetTileComponent<PropertyComponent>(propertyId);
+            if (property.OwnerId != null)
+            {
+                Logger.Log((int)property.OwnerId, $"is no longer the owner of property {propertyId}");
+            }
+            property.OwnerId = newOwnerId;
+            _playerManager.GetPlayer(newOwnerId).Properties.Add(propertyId);
+            Logger.Log(newOwnerId, $"is the the owner of property {propertyId}");
+        }
+        #endregion
+
         #region Subsidiary Methods
         public HashSet<int> OwnedPropertiesInSet(int playerId, int setId)
         {
@@ -57,7 +71,7 @@ namespace MonopolyPreUnity.Managers
         /// <returns></returns>
         public bool IsSetOwned(int playerId, PropertyComponent propertyComponent)
         {
-            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
+            var playerSet = _tileManager.GetPropertySet(propertyComponent.SetId);
             var player = _playerManager.GetPlayer(playerId);
             if (playerSet.IsSubsetOf(player.Properties))
             {
@@ -114,23 +128,23 @@ namespace MonopolyPreUnity.Managers
         
         public List<MonopolyCommand> GetAvailableActions(int playerId,PropertyComponent propertyComponent,PropertyDevelopmentComponent propertyDevelopmentComponent)
         {
-            var playerSet = _tileManager.GetPropertySet(propertyComponent.setId);
+            var playerSet = _tileManager.GetPropertySet(propertyComponent.SetId);
             var AvailableActions= new List<MonopolyCommand>();
             if (propertyDevelopmentComponent != null) {
                 if (BuildOnPropertyAllowed(playerSet,playerId,propertyComponent,propertyDevelopmentComponent))
-                    AvailableActions.Add(MonopolyCommand.PropertyBuyHouse);
+                    AvailableActions.Add(MonopolyCommand.BuyHouse);
                 if (SellOnPropertyAllowed(playerSet,playerId,propertyComponent,propertyDevelopmentComponent))
-                    AvailableActions.Add(MonopolyCommand.PropertySellHouse);
+                    AvailableActions.Add(MonopolyCommand.SellHouse);
             
                 
             }
             if (propertyComponent.IsMortgaged == true &&
                 _playerManager.GetPlayerCash(playerId)>
                 propertyComponent.BasePrice*MortageFee*_mortageComission)
-                AvailableActions.Add(MonopolyCommand.PropertyUnmortgage);
+                AvailableActions.Add(MonopolyCommand.UnmortgageProperty);
             if (propertyComponent.IsMortgaged == false &&
                 propertyDevelopmentComponent.HousesBuilt == 0)
-                AvailableActions.Add(MonopolyCommand.PropertyMortgage);
+                AvailableActions.Add(MonopolyCommand.MortgageProperty);
 
             return AvailableActions;
         }
@@ -184,56 +198,6 @@ namespace MonopolyPreUnity.Managers
         {
             propertyComponent.IsMortgaged = false;
             _playerManager.PlayerCashCharge(playerId, (int)((MortageFee + _mortageComission) * propertyComponent.BasePrice));
-        }
-        #endregion
-
-        #region Manage Property
-        /// <summary>
-        /// Main method to handle requests, commands and choose actions
-        /// </summary>
-        /// <param name="playerId">Used to get specific user</param>
-        public void ManageProperty(int playerId)
-        {
-            while (true)
-            {
-                var request = new Request<int?>(MonopolyRequest.PropertyManagePropertyChoice,
-                    _playerManager.GetPlayer(playerId).Properties.Select(x => (int?)x).ToList());
-
-                if (!(_requestManager.SendRequest(playerId, request) is int propertyId))
-                    return;
-
-                var property = _tileManager.GetTileComponent<PropertyComponent>(propertyId);
-                var development = _tileManager.GetTileComponent<PropertyDevelopmentComponent>(propertyId);
-
-                MonopolyCommand command;
-                do
-                {
-                    var availableActions = GetAvailableActions(playerId, property, development);
-                    availableActions.Add(MonopolyCommand.CancelAction);
-
-                    command = _requestManager.SendRequest(playerId,
-                        new Request<MonopolyCommand>(MonopolyRequest.PropertyManageActionChoice, availableActions));
-
-                    switch (command)
-                    {
-                        case MonopolyCommand.PropertyMortgage:
-                            Mortage(playerId, property);
-                            break;
-
-                        case MonopolyCommand.PropertyUnmortgage:
-                            UnMortage(playerId, property);
-                            break;
-
-                        case MonopolyCommand.PropertyBuyHouse:
-                            BuildHouse(playerId, development);
-                            break;
-
-                        case MonopolyCommand.PropertySellHouse:
-                            SellHouse(playerId, development);
-                            break;
-                    }
-                } while (command != MonopolyCommand.CancelAction);
-            }
         }
         #endregion
     }

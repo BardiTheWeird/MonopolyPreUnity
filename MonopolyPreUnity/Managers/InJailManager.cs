@@ -22,67 +22,68 @@ namespace MonopolyPreUnity.Managers
         public (bool, MonopolyCommand) InJailMove(Player player)
         {
             // possibly 1
-            if(player.TurnsInPrison == 0)
-            {
-                Request<MonopolyCommand> request;
-                if (player.JailCards > 0)
-                {
-                    request = new Request<MonopolyCommand>(MonopolyRequest.MoveJailChoice,
-                        new List<MonopolyCommand>()
-                        {
-                        MonopolyCommand.JailPayMoney,
-                        MonopolyCommand.JailUseCard,
-                        MonopolyCommand.JailUseDice
-                        });
-                } else
-                {
-                    request = new Request<MonopolyCommand>(MonopolyRequest.MoveJailChoice,
-                        new List<MonopolyCommand>()
-                        {
-                        MonopolyCommand.JailPayMoney,
-                        MonopolyCommand.JailUseDice
-                        });
-                }
-                
-                var command =  _requestManager.SendRequest(player.Id, request);
-                
-                // TODO: fix hardcode
-                if(command == MonopolyCommand.JailPayMoney)
-                {
-                    _playerManager.PlayerCashCharge(player.Id, 50);
-                    player.TurnsInPrison = null;
+            //if(player.TurnsInPrison == 0)
+            //{
+            //    Request<MonopolyCommand> request;
+            //    if (player.JailCards > 0)
+            //    {
+            //        request = new Request<MonopolyCommand>(MonopolyRequest.MoveJailChoice,
+            //            new List<MonopolyCommand>()
+            //            {
+            //            MonopolyCommand.JailPayMoney,
+            //            MonopolyCommand.JailUseCard,
+            //            MonopolyCommand.JailUseDice
+            //            });
+            //    } else
+            //    {
+            //        request = new Request<MonopolyCommand>(MonopolyRequest.MoveJailChoice,
+            //            new List<MonopolyCommand>()
+            //            {
+            //            MonopolyCommand.JailPayMoney,
+            //            MonopolyCommand.JailUseDice
+            //            });
+            //    }
 
-                    return (true, MonopolyCommand.JailPayMoney);
-                }
-                else if(command == MonopolyCommand.JailUseCard)
-                {
-                    player.JailCards -= 1;
-                    player.TurnsInPrison = null;
+            //    var command =  _requestManager.SendRequest(player.Id, request);
 
-                    return (true, MonopolyCommand.JailUseCard);
-                }
-            }
-            else if(player.TurnsInPrison == 1 || player.TurnsInPrison == 2)
-            {
-                _dice.Throw();
+            //    // TODO: fix hardcode
+            //    if(command == MonopolyCommand.JailPayMoney)
+            //    {
+            //        _playerManager.PlayerCashCharge(player.Id, 50);
+            //        player.TurnsInPrison = null;
 
-                if(_dice.Die1 == _dice.Die2)
-                {
-                    player.TurnsInPrison = null;
-                    return (true, MonopolyCommand.JailUseDice);
-                }
-            }
+            //        return (true, MonopolyCommand.JailPayMoney);
+            //    }
+            //    else if(command == MonopolyCommand.JailUseCard)
+            //    {
+            //        player.JailCards -= 1;
+            //        player.TurnsInPrison = null;
 
-            else if(player.TurnsInPrison >= 3)
-            {
-                // TODO: fix hardcode
-                _playerManager.PlayerCashCharge(player.Id, 50);
-                player.TurnsInPrison = null;
-                return (true, MonopolyCommand.JailPayMoney);
-            }
+            //        return (true, MonopolyCommand.JailUseCard);
+            //    }
+            //}
+            //else if(player.TurnsInPrison == 1 || player.TurnsInPrison == 2)
+            //{
+            //    _dice.Throw();
 
-            player.TurnsInPrison++;
-            return (false, MonopolyCommand.StayInJail);
+            //    if(_dice.Die1 == _dice.Die2)
+            //    {
+            //        player.TurnsInPrison = null;
+            //        return (true, MonopolyCommand.JailUseDice);
+            //    }
+            //}
+
+            //else if(player.TurnsInPrison >= 3)
+            //{
+            //    // TODO: fix hardcode
+            //    _playerManager.PlayerCashCharge(player.Id, 50);
+            //    player.TurnsInPrison = null;
+            //    return (true, MonopolyCommand.JailPayMoney);
+            //}
+
+            //player.TurnsInPrison++;
+            //return (false, MonopolyCommand.StayInJail);
+            throw new NotImplementedException();
         }
 
         #region Constructor

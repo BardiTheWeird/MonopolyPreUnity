@@ -21,7 +21,7 @@ namespace MonopolyPreUnity.Behaviors.Rent
         public int GetRent(int renteeId, int ownerId, ITileComponent component, int tileId)
         {
             var property = _tileManager.GetTileComponent<PropertyComponent>(tileId);
-            var ownedPropertyInSet = _propertyManager.OwnedPropertiesInSet(ownerId, property.setId);
+            var ownedPropertyInSet = _propertyManager.OwnedPropertiesInSet(ownerId, property.SetId);
 
             return _dice.Sum * 5 * (int)Math.Round(Math.Pow(2, ownedPropertyInSet.Count - 1));
         }

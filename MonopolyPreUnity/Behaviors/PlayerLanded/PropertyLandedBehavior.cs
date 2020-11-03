@@ -1,6 +1,7 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Managers;
+using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,6 @@ namespace MonopolyPreUnity.Behaviors
         private readonly PlayerManager _playerManager;
         private readonly RequestManager _requestManager;
         private readonly AuctionManager _auctionManager;
-        private readonly PropertyTransferManager _propertyTransferManager;
         #endregion
 
         #region Behavior
@@ -25,28 +25,7 @@ namespace MonopolyPreUnity.Behaviors
 
             if (property.OwnerId == null)
             {
-                var command = MonopolyCommand.TileLandedPropertyAuction;
-                if (_playerManager.GetPlayerCash(playerId) >= property.BasePrice)
-                {
-                    var request = new Request<MonopolyCommand>(
-                        MonopolyRequest.TileLandedPropertyChoice,
-                        new List<MonopolyCommand>()
-                        {
-                            MonopolyCommand.TileLandedPropertyBuy,
-                            MonopolyCommand.TileLandedPropertyAuction
-                        });
-                    command = _requestManager.SendRequest(playerId, request);
-                }
-
-                if (command == MonopolyCommand.TileLandedPropertyBuy)
-                {
-                    _playerManager.PlayerCashCharge(playerId, property.BasePrice);
-                    _propertyTransferManager.TransferProperty(tileId, playerId);
-                }
-                else
-                {
-                    _auctionManager.StartAuction(tileId, property);
-                }
+                _requestManager.SendRequest(playerId, new BuyAuctionRequest(tileId));
             }
             else if (property.OwnerId != playerId)
             {
@@ -72,14 +51,12 @@ namespace MonopolyPreUnity.Behaviors
         public PropertyLandedBehavior(RentManager rentManager,
             PlayerManager playerManager,
             RequestManager requestManager,
-            AuctionManager auctionManager,
-            PropertyTransferManager propertyTransferManager)
+            AuctionManager auctionManager)
         {
             _rentManager = rentManager;
             _playerManager = playerManager;
             _requestManager = requestManager;
             _auctionManager = auctionManager;
-            _propertyTransferManager = propertyTransferManager;
         }
         #endregion
     }
