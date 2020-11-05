@@ -12,12 +12,12 @@ namespace MonopolyPreUnity.Classes
     {
         public int Id { get; }
         public string DisplayName { get; }
-        public HashSet<int> Properties { get; }
         public int Cash { get; set; }
         public int JailCards { get; set; }
         public int? TurnsInPrison { get; set; }
         public int CurrentTileId { get; set; }
         public bool CanMove { get; set; }
+        public HashSet<int> Properties { get; }
 
         public Player(int id, string displayName, int cash, 
             HashSet<int> properties, int jailCards, int? turnsInPrison, int curTileId)
@@ -30,6 +30,13 @@ namespace MonopolyPreUnity.Classes
             TurnsInPrison = turnsInPrison;
             CanMove = true;
             CurrentTileId = curTileId;
+        }
+
+        public Player(int id, string displayName, HashSet<int> props = null)
+        {
+            Id = id;
+            DisplayName = displayName;
+            Properties = props ?? new HashSet<int>();
         }
     }
 }

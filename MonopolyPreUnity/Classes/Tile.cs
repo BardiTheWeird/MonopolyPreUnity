@@ -19,5 +19,9 @@ namespace MonopolyPreUnity.Classes
         {
             Components = components;
         }
+
+        public Tile()
+        {
+        }
     }
 }

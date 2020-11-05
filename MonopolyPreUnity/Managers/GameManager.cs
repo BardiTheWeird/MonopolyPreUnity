@@ -25,7 +25,7 @@ namespace MonopolyPreUnity.Managers
             while (true)
             {
                 Logger.Log("");
-                var curTurnPlayerId = _turnInfo.turnOrder[_turnInfo.curTurnPlayer];
+                var curTurnPlayerId = _turnInfo.TurnOrder[_turnInfo.CurTurnPlayer];
                 _requestManager.SendRequest(curTurnPlayerId, new TurnRequest());
 
                 NextTurn();
@@ -36,11 +36,11 @@ namespace MonopolyPreUnity.Managers
         #region Methods
         void NextTurn()
         {
-            _playerManager.GetPlayer(_turnInfo.turnOrder[_turnInfo.curTurnPlayer]).CanMove = true;
+            _playerManager.GetPlayer(_turnInfo.TurnOrder[_turnInfo.CurTurnPlayer]).CanMove = true;
 
-            _turnInfo.curTurnPlayer++;
-            if (_turnInfo.curTurnPlayer >= _turnInfo.turnOrder.Count)
-                _turnInfo.curTurnPlayer = 0;
+            _turnInfo.CurTurnPlayer++;
+            if (_turnInfo.CurTurnPlayer >= _turnInfo.TurnOrder.Count)
+                _turnInfo.CurTurnPlayer = 0;
 
             Logger.Log("Next turn has commenced");
         }
