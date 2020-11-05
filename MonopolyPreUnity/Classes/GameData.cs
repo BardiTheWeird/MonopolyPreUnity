@@ -44,7 +44,7 @@ namespace MonopolyPreUnity.Classes
         public TurnInfo TurnInfo { get; private set; }
         #endregion
 
-
+        #region ctor
         // At least for testing initialization
         public GameData(List<int> mapIdSequence, 
             Dictionary<int, int> mapIndex, 
@@ -62,5 +62,17 @@ namespace MonopolyPreUnity.Classes
             PlayerDict = playerDict;
             TurnInfo = turnInfo;
         }
+
+        public GameData()
+        {
+            MapIdSequence = new List<int>();
+            MapIndex = new Dictionary<int, int>();
+            DiceValues = new Dice();
+            TileDict = new Dictionary<int, Tile>();
+            PropertySetDict = new Dictionary<int, HashSet<int>>();
+            PlayerDict = new Dictionary<int, Player>();
+            TurnInfo = new TurnInfo();
+        }
+        #endregion
     }
 }

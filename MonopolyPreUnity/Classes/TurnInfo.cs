@@ -7,14 +7,19 @@ namespace MonopolyPreUnity.Classes
     [Serializable]
     class TurnInfo
     {
-        public List<int> turnOrder { get; }
-        public int curTurnPlayer { get; set; }
-        public int curTurnPlayerId => turnOrder[curTurnPlayer];
+        public List<int> TurnOrder { get; }
+        public int CurTurnPlayer { get; set; }
+        public int CurTurnPlayerId => TurnOrder[CurTurnPlayer];
 
         public TurnInfo(List<int> turnOrder, int curTurnPlayer)
         {
-            this.turnOrder = turnOrder;
-            this.curTurnPlayer = curTurnPlayer;
+            this.TurnOrder = turnOrder;
+            this.CurTurnPlayer = curTurnPlayer;
+        }
+
+        public TurnInfo()
+        {
+            TurnOrder = new List<int>();
         }
     }
 }

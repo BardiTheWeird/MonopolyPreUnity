@@ -20,66 +20,26 @@ namespace MonopolyPreUnity
         #region MockData
         private static GameData CreateMockData()
         {
-            var mapIdSequence = Enumerable.Range(1, 7).ToList();
-            var mapIndex = new Dictionary<int, int>
-            {
-                { 1, 0 },
-                { 2, 1 },
-                { 3, 2 },
-                { 4, 3 },
-                { 5, 4 },
-                { 6, 5 },
-                { 7, 6 }
-            };
+            var mockData = new MockDataMaker();
 
-            var dice = new Dice();
+            var startTile = mockData.AddTile("Go", new GoComponent(200));
+            mockData.AddTile("Tax 100$", new ActionTileComponent(new ChangeBalanceAction(100)));
+            mockData.AddTile("Property 1 Set 1", new PropertyComponent(1, 100),
+                new PropertyDevelopmentComponent(80, new List<int> { 10, 20, 50, 150, 450, 625, 750 }));
+            mockData.AddTile("Property 2 Set 1", new PropertyComponent(1, 120),
+                new PropertyDevelopmentComponent(80, new List<int> { 10, 20, 50, 150, 450, 625, 750 }));
+            mockData.AddTile("MoneyGiver 100$", new ActionTileComponent(new ChangeBalanceAction(100)));
+            mockData.AddTile("Property 3 Set 2", new PropertyComponent(2, 80), new PropertyDevelopmentComponent(50,
+                        new List<int> { 5, 10, 30, 100, 300, 400, 550 }));
+            mockData.AddTile("Property 4 Set 2", new PropertyComponent(2, 90), new PropertyDevelopmentComponent(50,
+                        new List<int> { 5, 10, 30, 100, 300, 400, 550 }));
 
-            var tileDict = new Dictionary<int, Tile>
-            {
-                { 1, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Go"), new GoComponent(200) }) },
+            mockData.AddPlayer("John", cash: 200);
+            mockData.AddPlayer("Jake", cash: 200);
 
-                { 2, new Tile(new List<ITileComponent>
-                    { new TileIdentityComponent(1, "Tax 100$"),
-                    new ActionTileComponent(new ChangeBalanceAction(-100)) }) },
+            mockData.SetStartTile(startTile);
 
-                { 3, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 1 Set 1"), 
-                    new PropertyComponent(1, 100), 
-                    new PropertyDevelopmentComponent(80,
-                        new List<int>{ 10, 20, 50, 150, 450, 625, 750 }) }) },
-
-                { 4, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 2 Set 1"), 
-                    new PropertyComponent(1, 120), new PropertyDevelopmentComponent(80,
-                        new List<int>{ 10, 20, 50, 150, 450, 625, 750 }) }) },
-
-                { 5, new Tile(new List<ITileComponent>
-                    { new TileIdentityComponent(1, "MoneyGiver 100$"),
-                    new ActionTileComponent(new ChangeBalanceAction(100)) }) },
-
-                { 6, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 3 Set 2"),
-                    new PropertyComponent(2, 80), new PropertyDevelopmentComponent(50,
-                        new List<int>{ 5, 10, 30, 100, 300, 400, 550 }) }) },
-
-                { 7, new Tile(new List<ITileComponent>{ new TileIdentityComponent(1, "Property 4 Set 2"), 
-                    new PropertyComponent(2, 90), new PropertyDevelopmentComponent(50,
-                        new List<int>{ 5, 10, 30, 100, 300, 400, 550 }) }) }
-            };
-
-            var propertySetDict = new Dictionary<int, HashSet<int>>
-            {
-                { 1, new HashSet<int> { 3, 4 } },
-                { 2, new HashSet<int> { 6, 7 } }
-            };
-
-            var playerDict = new Dictionary<int, Player>
-            {
-                { 1, new Player(1, "John", 200, new HashSet<int>(), 0, null, 1) },
-                { 2, new Player(2, "Jake", 200, new HashSet<int>(), 0, null, 1) },
-            };
-
-            var turnInfo = new TurnInfo(new List<int> { 1, 2 }, 0);
-
-            var gameData = new GameData(mapIdSequence, mapIndex, dice, tileDict, propertySetDict, playerDict, turnInfo);
-            return gameData;
+            return mockData.GetGameData();
         }
         #endregion
 
