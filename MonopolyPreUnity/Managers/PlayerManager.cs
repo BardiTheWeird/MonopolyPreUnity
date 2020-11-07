@@ -33,6 +33,10 @@ namespace MonopolyPreUnity.Managers
         private readonly Dictionary<int, Player> _playerDict;
         #endregion
 
+        #region const
+        private readonly float _mortgageFee;
+        #endregion
+
         #region IsBankrupt event
         public event EventHandler<PlayerEventArgs> PlayerBankruptEvent;
 
@@ -116,8 +120,9 @@ namespace MonopolyPreUnity.Managers
                 {
                     player.IsBankrupt = true;
                     BankruptPlayerAssetsTransfer(playerId, chargerId);
-                    RaisePlayerBankruptEvent(playerId);
                     Logger.Log(playerId, "is bankrupt");
+
+                    RaisePlayerBankruptEvent(playerId);
                 }
             }
         }
@@ -147,7 +152,7 @@ namespace MonopolyPreUnity.Managers
                     sum += realEstate.HousesBuilt * realEstate.HouseSellPrice;
 
                 if (_tileManager.GetTileComponent<PropertyComponent>(propertyId, out var property))
-                    sum += (int)(property.BasePrice * _propertyManager.MortageFee);
+                    sum += (int)(property.BasePrice * _mortgageFee);
             }
             if (sum + player.Cash > debtAmount)
                 return true;
@@ -181,11 +186,12 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Constructor
-        public PlayerManager(GameData gameData, TileManager tileManager, RequestManager requestManager)
+        public PlayerManager(GameData gameData, TileManager tileManager, RequestManager requestManager, GameConfig gameConfig)
         {
             _playerDict = gameData.PlayerDict;
             _tileManager = tileManager;
             _requestManager = requestManager;
+            _mortgageFee = gameConfig.MortgageFee;
         }
         #endregion
     }

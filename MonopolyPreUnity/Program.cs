@@ -11,7 +11,9 @@ using MonopolyPreUnity.RequestHandlers;
 using MonopolyPreUnity.RequestHandlers.HotSeatScenario;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace MonopolyPreUnity
 {
@@ -52,13 +54,32 @@ namespace MonopolyPreUnity
             }
         }
 
+        private static GameConfig ReadGameConfig(string filePath)
+        {
+            var serializer = new XmlSerializer(typeof(GameConfig));
+            var textReader = new StreamReader(filePath);
+
+            return (GameConfig)serializer.Deserialize(textReader);
+        }
+
+        private static void WriteGameConfig(GameConfig config, string filePath)
+        {
+            var serializer = new XmlSerializer(typeof(GameConfig));
+            var textWriter = new StreamWriter(filePath);
+
+            serializer.Serialize(textWriter, config);
+        }
+
         private static IContainer CreateDiContainer()
         {
-            /// Registering
             var builder = new ContainerBuilder();
+
+            var gameConfig = ReadGameConfig(@"D:\ImmaCodder\Kursach\MonopolyPreUnity\MonopolyPreUnity\Resources\defaultGameConfig.xml");
+            builder.RegisterInstance(gameConfig);
 
             var gameData = CreateMockData();
             builder.RegisterInstance(gameData);
+
             RegisterPlayerScenarios(builder, gameData.PlayerDict.Values.ToList());
 
             builder.RegisterModule<ManagersModule>();
