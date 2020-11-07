@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Actions;
+using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Managers;
 using System;
@@ -13,21 +14,24 @@ namespace MonopolyPreUnity.Behaviors.Action
         private readonly PlayerManager _playerManager;
         private readonly MapManager _mapManager;
         private readonly TileManager _tileManager;
+        private readonly MapInfo _mapInfo;
         #endregion
 
         public void Execute(int playerId, IMonopolyAction action)
         {
-            int jailId = _tileManager.GetTileWithComponent<JailComponent>();
-            _mapManager.MoveToTile(playerId, jailId, false);
+            if (_mapInfo.JailId == null)
+                throw new Exception("No Jail present");
 
+            _mapManager.MoveToTile(playerId, (int)_mapInfo.JailId, false);
             _playerManager.GetPlayer(playerId).TurnsInPrison = 0;
         }
 
-        public GoToJailActionBehavior(PlayerManager playerManager, MapManager mapManager, TileManager tileManager)
+        public GoToJailActionBehavior(PlayerManager playerManager, MapManager mapManager, TileManager tileManager, MapInfo mapInfo)
         {
             _playerManager = playerManager;
             _mapManager = mapManager;
             _tileManager = tileManager;
+            _mapInfo = mapInfo;
         }
     }
 }
