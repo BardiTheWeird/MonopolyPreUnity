@@ -7,11 +7,5 @@ namespace MonopolyPreUnity.Components
 {
     class GoComponent : ITileComponent
     {
-        public int MoneyRewarded { get; }
-
-        public GoComponent(int moneyRewarded)
-        {
-            MoneyRewarded = moneyRewarded;
-        }
     }
 }

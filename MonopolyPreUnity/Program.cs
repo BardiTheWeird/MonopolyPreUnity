@@ -24,7 +24,7 @@ namespace MonopolyPreUnity
         {
             var mockData = new MockDataMaker();
 
-            var startTile = mockData.AddTile("Go", new GoComponent(200));
+            var startTile = mockData.AddTile("Go", new GoComponent());
             mockData.AddTile("Tax 100$", new ActionTileComponent(new ChangeBalanceAction(-100)));
             mockData.AddTile("Property 1 Set 1", new PropertyComponent(1, 100),
                 new PropertyDevelopmentComponent(80, new List<int> { 10, 20, 50, 150, 450, 625, 750 }));
@@ -74,7 +74,7 @@ namespace MonopolyPreUnity
         {
             var builder = new ContainerBuilder();
 
-            var gameConfig = ReadGameConfig(@"D:\ImmaCodder\Kursach\MonopolyPreUnity\MonopolyPreUnity\Resources\defaultGameConfig.xml");
+            var gameConfig = ReadGameConfig(@"..\..\..\Resources\defaultGameConfig.xml");
             builder.RegisterInstance(gameConfig);
 
             var gameData = CreateMockData();
