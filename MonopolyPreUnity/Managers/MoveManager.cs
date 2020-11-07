@@ -18,6 +18,7 @@ namespace MonopolyPreUnity.Managers
 
         #region fields
         private readonly Dice _diceValues;
+        private readonly int _maxDicePairThrows;
         #endregion
 
         public void MakeAMove(int playerId)
@@ -64,13 +65,15 @@ namespace MonopolyPreUnity.Managers
             TileManager tileManager, 
             MapManager mapManager, 
             PlayerLandedManager playerLandedManager,
-            GameData gameData)
+            GameData gameData,
+            GameConfig gameConfig)
         {
             _playerManager = playerManager;
             _tileManager = tileManager;
             _mapManager = mapManager;
             _playerLandedManager = playerLandedManager;
             _diceValues = gameData.DiceValues;
+            _maxDicePairThrows = gameConfig.MaxDicePairThrows;
         }
         #endregion
     }

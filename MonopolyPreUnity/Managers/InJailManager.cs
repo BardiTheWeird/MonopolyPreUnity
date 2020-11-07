@@ -14,6 +14,10 @@ namespace MonopolyPreUnity.Managers
         private readonly Dice _dice;
         #endregion
 
+        #region const
+        private readonly int _maxTurnsInJail;
+        #endregion
+
         /// <summary>
         /// 
         /// </summary>
@@ -87,11 +91,12 @@ namespace MonopolyPreUnity.Managers
         }
 
         #region Constructor
-        public InJailManager(RequestManager requestManager, PlayerManager playerManager, GameData gameData)
+        public InJailManager(RequestManager requestManager, PlayerManager playerManager, GameData gameData, GameConfig gameConfig)
         {
             _requestManager = requestManager;
             _playerManager = playerManager;
             _dice = gameData.DiceValues;
+            _maxTurnsInJail = gameConfig.MaxTurnsInJail;
         }
         #endregion
     }

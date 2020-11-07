@@ -67,7 +67,7 @@ namespace MonopolyPreUnity.Managers
             winner.IsWinner = true;
             isGameOver = true;
 
-            Logger.Log(winner.Id, "is the weiner, I guess");
+            Logger.Log(winner.Id, "is the winner, I guess");
         }
         #endregion
 

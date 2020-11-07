@@ -14,18 +14,21 @@ namespace MonopolyPreUnity.Behaviors.PlayerLanded
         private readonly PlayerManager _playerManager;
         #endregion
 
+        #region constants
+        private readonly int _moneyParLap;
+        #endregion
 
         public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId)
         {
-            var amount = (tileComponent as GoComponent).MoneyRewarded;
-            _playerManager.PlayerCashGive(playerId, amount);
-            Logger.Log($"Player recieved {amount} for passing the GO.");
+            _playerManager.PlayerCashGive(playerId, _moneyParLap);
+            Logger.Log($"Player recieved {_moneyParLap} for passing the GO.");
         }
 
         #region Constructor
-        public GOBehavior(PlayerManager playerManager)
+        public GOBehavior(PlayerManager playerManager, GameConfig gameConfig)
         {
             _playerManager = playerManager;
+            _moneyParLap = gameConfig.CashPerLap;
         }
         #endregion
     }
