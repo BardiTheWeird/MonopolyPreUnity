@@ -45,8 +45,25 @@ namespace MonopolyPreUnity.Managers
             return true;
         }
 
-        public int GetTileWithComponent<T>() where T : ITileComponent =>
-            _tileDict.FirstOrDefault(x => x.Value.GetType() == typeof(T)).Key;
+        public int? GetTileWithComponent<T>() where T : ITileComponent
+        {
+            var keyValuePair = _tileDict.FirstOrDefault(x => x.Value.GetType() == typeof(T));
+            if (keyValuePair.Value != null)
+                return keyValuePair.Key;
+            return null;
+        }
+
+        public bool GetTileWithComponent<T>(out int index) where T : ITileComponent
+        {
+            index = -1;
+            var nullable = GetTileWithComponent<T>();
+
+            if (nullable == null)
+                return false;
+
+            index = (int)nullable;
+            return true;
+        }
 
         public bool ContainsComponent<T>(Tile tile) =>
             tile.Components.FirstOrDefault(x => x.GetType() == typeof(T)) != null;

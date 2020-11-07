@@ -24,26 +24,34 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
+        #region fields
         private List<int> map; 
         private Dictionary<int, int> mapIndex; // <tileId, tileIndex in MapIdSequence>
+        #endregion
+
+        #region constants
+        private readonly int _cashPerLap;
+        #endregion
 
         #region dependencies
         private readonly PlayerManager _playerManager;
         private readonly TileManager _tileManager;
-        private readonly PlayerLandedManager _playerLandedManager;
+        private readonly MapInfo _mapInfo;
         #endregion
 
         #region Constructor
         public MapManager(PlayerManager playerManager, 
             TileManager tileManager,
             GameData gameData,
-            PlayerLandedManager playerLandedManager)
+            GameConfig config,
+            MapInfo mapInfo)
         {
             _playerManager = playerManager;
             _tileManager = tileManager;
             map = gameData.MapIdSequence;
             mapIndex = gameData.MapIndex;
-            _playerLandedManager = playerLandedManager;
+            _cashPerLap = config.CashPerLap;
+            _mapInfo = mapInfo;
         }
         #endregion
 
@@ -59,84 +67,63 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
-        #region Misc Methods
-        private bool GOPassed(int tileStartId, int tileEndId, int playerId)
+        #region GoPassed
+        // Full "laps" are handled in MoveBySteps
+        private bool GoPassed(int tileStartId, int tileEndId, int playerId)
         {
-            return true;
-            //int tileStartIndex = mapIndex[tileStartId];
-            //int tileEndIndex = mapIndex[tileEndId];
+            if (_mapInfo.GoId == null)
+                return false;
 
-            //if (_tileManager.ContainsComponent<GoComponent>(tileEndId))
-            //{
-            //    return true;
-            //}
-            //else if (tileEndIndex < tileStartIndex)
-            //{
-            //    int GOTileId = _tileManager.GetTileWithComponent<GoComponent>();
-            //    _playerLandedManager.PlayerLanded(playerId, GOTileId);
+            int goIndex = mapIndex[(int)_mapInfo.GoId];
+            int tileStartIndex = mapIndex[tileStartId];
+            int tileEndIndex = mapIndex[tileEndId];
 
-            //    return true;
-            //}
-            
-            //return false;
+            if (goIndex <= tileEndIndex
+                && (tileStartIndex <= goIndex || tileEndIndex < tileStartIndex))
+                return true;
+
+            return false;
+        }
+
+        private void OnGoPassed(int playerId)
+        {
+            Logger.Log(playerId, "passed GO Tile");
+            _playerManager.PlayerCashGive(playerId, _cashPerLap);
         }
         #endregion
 
         #region Move methods
-        public int MoveBySteps(int playerId, int steps, bool giveGOCash=true)
+        public int MoveToTile(int playerId, int tileId, bool giveGOCash = true, bool fullLap = false)
+        {
+            Player player = _playerManager.GetPlayer(playerId);
+
+            if (giveGOCash && (fullLap || GoPassed(player.CurrentTileId, tileId, playerId)))
+                OnGoPassed(playerId);
+
+            return player.CurrentTileId = tileId;
+        }
+
+        public int MoveBySteps(int playerId, int steps, bool giveGOCash = true)
         {
             Player player = _playerManager.GetPlayer(playerId);
             int tileIndex = mapIndex[player.CurrentTileId];
-
             int newTileIndex = (tileIndex + steps) % map.Count;
             
-            if (giveGOCash)
-            {
-                GOPassed(player.CurrentTileId, map[newTileIndex], playerId);
-            }
-            player.CurrentTileId = map[newTileIndex];
-
-            return player.CurrentTileId;
-        }
-
-        public int MoveToTile(int playerId, int tileId, bool giveGOCash=true)
-        {
-            Player player = _playerManager.GetPlayer(playerId);
-
-            if(giveGOCash)
-                GOPassed(player.CurrentTileId, tileId, playerId);
-
-            player.CurrentTileId = tileId;
-            return player.CurrentTileId;
+            return MoveToTile(playerId, map[newTileIndex], giveGOCash, steps >= map.Count);
         }
 
         public int MoveByFunc(int playerId, Func<Tile, bool> predicate, bool giveGOCash=true)
         {
             Player player = _playerManager.GetPlayer(playerId);
+            int currentTileIndex = mapIndex[player.CurrentTileId];
 
-            int currentTileIndex = mapIndex[player.CurrentTileId], i = currentTileIndex;
-            do
+            for (int i = (currentTileIndex + 1) % map.Count; i != currentTileIndex ; i = (i + 1) % map.Count)
             {
-                i %= map.Count;
                 if (predicate(_tileManager.GetTile(mapIndex[i])))
-                {
-                    break;
-                }
-                i++;
-
-            } while(i != currentTileIndex);
-
-            if (i == currentTileIndex)
-            {
-                throw new TileNotFoundException("Woops, this is a nasty BUG. There is no such tile on the map.");
+                    return MoveToTile(playerId, map[i], giveGOCash);
             }
-            else
-            {   
-                if(giveGOCash)
-                    GOPassed(player.CurrentTileId, map[i], playerId);
-                player.CurrentTileId = map[i];
-            }
-            return map[i];
+
+            throw new TileNotFoundException("No tile found for a given predicate.");
         }
         #endregion
     }

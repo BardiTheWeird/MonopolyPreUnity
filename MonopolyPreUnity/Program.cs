@@ -36,7 +36,7 @@ namespace MonopolyPreUnity
             mockData.AddTile("Property 4 Set 2", new PropertyComponent(2, 90), new PropertyDevelopmentComponent(50,
                         new List<int> { 5, 10, 30, 100, 300, 400, 550 }));
 
-            mockData.AddPlayer("John", cash: 0);
+            mockData.AddPlayer("John", cash: 200);
             mockData.AddPlayer("Jake", cash: 200);
 
             mockData.SetStartTile(startTile);
@@ -79,6 +79,8 @@ namespace MonopolyPreUnity
 
             var gameData = CreateMockData();
             builder.RegisterInstance(gameData);
+
+            builder.RegisterType<MapInfo>().AsSelf().SingleInstance();
 
             RegisterPlayerScenarios(builder, gameData.PlayerDict.Values.ToList());
 
