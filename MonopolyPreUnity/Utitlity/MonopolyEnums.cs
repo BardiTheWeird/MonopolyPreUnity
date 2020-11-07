@@ -10,6 +10,8 @@ namespace MonopolyPreUnity.Utitlity
         ManageProperty,
         MakeDeal,
         EndTurn,
+        FileBankruptcy,
+        EndGame,
 
         ChooseProperty,
         MortgageProperty,

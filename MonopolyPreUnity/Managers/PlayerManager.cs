@@ -10,6 +10,16 @@ using MonopolyPreUnity.Requests;
 
 namespace MonopolyPreUnity.Managers
 {
+    public class PlayerEventArgs : EventArgs
+    {
+        public int PlayerId { get; set; }
+
+        public PlayerEventArgs(int playerId)
+        {
+            PlayerId = playerId;
+        }
+    }
+
     class PlayerManager
     {
         #region Dependencies
@@ -18,10 +28,16 @@ namespace MonopolyPreUnity.Managers
         private readonly RequestManager _requestManager;
         #endregion
 
-
         #region fields
         // ID to IPlayer and IUserScenario
         private readonly Dictionary<int, Player> _playerDict;
+        #endregion
+
+        #region IsBankrupt event
+        public event EventHandler<PlayerEventArgs> PlayerBankruptEvent;
+
+        void RaisePlayerBankruptEvent(int playerId) =>
+            PlayerBankruptEvent?.Invoke(this, new PlayerEventArgs(playerId));
         #endregion
 
         #region GetPlayer and their stuff methods
@@ -37,7 +53,7 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Destroy Player =)
-        void KickPlayer(int playerId, int? chargerId)
+        void BankruptPlayerAssetsTransfer(int playerId, int? chargerId)
         {
             var player = GetPlayer(playerId);
 
@@ -69,9 +85,6 @@ namespace MonopolyPreUnity.Managers
                 }
             }
             _playerDict.Remove(playerId);
-            //_gameManager.EndPlayer(playerId);
-
-            Logger.Log(playerId, "is no longer a part of the game");
         }
         #endregion
 
@@ -101,8 +114,10 @@ namespace MonopolyPreUnity.Managers
             {
                 if (IsBankrupt(player, amount))
                 {
+                    player.IsBankrupt = true;
+                    BankruptPlayerAssetsTransfer(playerId, chargerId);
+                    RaisePlayerBankruptEvent(playerId);
                     Logger.Log(playerId, "is bankrupt");
-                    KickPlayer(playerId, chargerId);
                 }
             }
         }

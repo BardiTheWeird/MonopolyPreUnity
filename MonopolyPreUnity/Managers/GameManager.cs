@@ -16,13 +16,14 @@ namespace MonopolyPreUnity.Managers
 
         #region fields
         private readonly TurnInfo _turnInfo;
+        private bool isGameOver;
         #endregion
 
         #region StartGame
         public void StartGame()
         {
             Logger.Log("Hooray! The game has started!");
-            while (true)
+            while (!isGameOver)
             {
                 Logger.Log("");
                 var curTurnPlayerId = _turnInfo.TurnOrder[_turnInfo.CurTurnPlayer];
@@ -30,24 +31,43 @@ namespace MonopolyPreUnity.Managers
 
                 NextTurn();
             }
+            Logger.Log("The game is over!");
         }
         #endregion
 
         #region Methods
         void NextTurn()
         {
-            _playerManager.GetPlayer(_turnInfo.TurnOrder[_turnInfo.CurTurnPlayer]).CanMove = true;
+            _turnInfo.CurTurnPlayer = (_turnInfo.CurTurnPlayer + 1) % _turnInfo.TurnOrder.Count;
 
-            _turnInfo.CurTurnPlayer++;
-            if (_turnInfo.CurTurnPlayer >= _turnInfo.TurnOrder.Count)
-                _turnInfo.CurTurnPlayer = 0;
+            _playerManager.GetPlayer(_turnInfo.CurTurnPlayerId).CanMove = true;
 
             Logger.Log("Next turn has commenced");
         }
 
-        public void EndPlayer(int playerId)
+        void EndPlayer(object sender, PlayerEventArgs args)
         {
-            throw new NotImplementedException();
+            int curTurnOrderPosition = _turnInfo.TurnOrder.FindIndex(x => x == args.PlayerId);
+            _turnInfo.TurnOrder.RemoveAt(curTurnOrderPosition);
+
+            if (curTurnOrderPosition < _turnInfo.CurTurnPlayer || curTurnOrderPosition == _turnInfo.CurTurnPlayer)
+            {
+                _turnInfo.CurTurnPlayer--;
+                if (_turnInfo.CurTurnPlayer < 0)
+                    _turnInfo.CurTurnPlayer = _turnInfo.TurnOrder.Count - 1;
+            }
+
+            if (_turnInfo.TurnOrder.Count <= 1)
+                OnGameOver();
+        }
+
+        void OnGameOver()
+        {
+            var winner = _playerManager.GetPlayer(_turnInfo.CurTurnPlayerId);
+            winner.IsWinner = true;
+            isGameOver = true;
+
+            Logger.Log(winner.Id, "is the weiner, I guess");
         }
         #endregion
 
@@ -59,6 +79,8 @@ namespace MonopolyPreUnity.Managers
             _playerManager = playerManager;
             _requestManager = requestManager;
             _turnInfo = gameData.TurnInfo;
+
+            playerManager.PlayerBankruptEvent += EndPlayer;
         }
         #endregion
     }

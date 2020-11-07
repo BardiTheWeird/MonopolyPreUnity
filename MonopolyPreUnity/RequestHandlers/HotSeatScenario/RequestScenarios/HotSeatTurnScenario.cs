@@ -22,33 +22,48 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         #region TurnChoice
         public void TurnChoice(Player player)
         {
-            MonopolyCommand curCommand;
+            bool endTurn = false;
             do
             {
-                var commandList = new List<MonopolyCommand>
-                {
-                    MonopolyCommand.ManageProperty,
-                    MonopolyCommand.MakeDeal
-                };
+                var commandList = new List<MonopolyCommand>();
 
-                if (player.CanMove)
-                    commandList.Add(MonopolyCommand.MakeMove);
+                if (player.IsBankrupt)
+                    commandList.Add(MonopolyCommand.FileBankruptcy);
+                else if (player.IsWinner)
+                    commandList.Add(MonopolyCommand.EndGame);
                 else
-                    commandList.Add(MonopolyCommand.EndTurn);
+                {
+                    commandList.Add(MonopolyCommand.ManageProperty);
+                    commandList.Add(MonopolyCommand.MakeDeal);
 
-                switch (curCommand = _consoleUI.ChooseCommand(commandList))
+                    if (player.CanMove)
+                        commandList.Add(MonopolyCommand.MakeMove);
+                    else
+                        commandList.Add(MonopolyCommand.EndTurn);
+                }
+
+                var curCommand = _consoleUI.ChooseCommand(commandList);
+                switch (curCommand)
                 {
                     case MonopolyCommand.ManageProperty:
                         ManageProperty(player);
                         break;
+
                     case MonopolyCommand.MakeDeal:
                         MakeDeal(player);
                         break;
+
                     case MonopolyCommand.MakeMove:
                         _moveManager.MakeAMove(player.Id);
                         break;
+
+                    case MonopolyCommand.EndTurn:
+                    case MonopolyCommand.FileBankruptcy:
+                    case MonopolyCommand.EndGame:
+                        endTurn = true;
+                        break;
                 }
-            } while (curCommand != MonopolyCommand.EndTurn);
+            } while (!endTurn);
         }
         #endregion
 
