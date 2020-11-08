@@ -44,6 +44,10 @@ namespace MonopolyPreUnity.Classes
         public TurnInfo TurnInfo { get; private set; }
         #endregion
 
+        #region AuctionManager
+        public AuctionInfo AuctionInfo { get; private set; }
+        #endregion
+
         #region ctor
         // At least for testing initialization
         public GameData(List<int> mapIdSequence, 
@@ -52,7 +56,8 @@ namespace MonopolyPreUnity.Classes
             Dictionary<int, Tile> tileDict, 
             Dictionary<int, HashSet<int>> propertySetDict, 
             Dictionary<int, Player> playerDict, 
-            TurnInfo turnInfo)
+            TurnInfo turnInfo,
+            AuctionInfo auctionInfo)
         {
             MapIdSequence = mapIdSequence;
             MapIndex = mapIndex;
@@ -61,6 +66,8 @@ namespace MonopolyPreUnity.Classes
             PropertySetDict = propertySetDict;
             PlayerDict = playerDict;
             TurnInfo = turnInfo;
+            AuctionInfo = auctionInfo;
+            AuctionInfo = auctionInfo;
         }
 
         public GameData(GameConfig gameConfig)
@@ -72,6 +79,7 @@ namespace MonopolyPreUnity.Classes
             PropertySetDict = new Dictionary<int, HashSet<int>>();
             PlayerDict = new Dictionary<int, Player>();
             TurnInfo = new TurnInfo();
+            AuctionInfo = new AuctionInfo();
         }
         #endregion
     }
