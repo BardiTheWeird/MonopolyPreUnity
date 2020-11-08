@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,14 +11,15 @@ namespace MonopolyPreUnity.Managers
         #region Dependencies
         private readonly PropertyManager _propertyManager;
         private readonly PlayerManager _playerManager;
+        private readonly ConsoleUI _consoleUI;
         #endregion
 
         public void StartAuction(int tileId)
         {
-            Logger.Log("Auction is not yet implemented, so a random player gets this property for free (;");
+            _consoleUI.Print("Auction is not yet implemented, so a random player gets this property for free (;");
             var players = _playerManager.GetAllPlayerId();
             var luckyPlayer = players[new Random().Next(0, players.Count)];
-            Logger.Log(luckyPlayer, "is lucky today!");
+            _consoleUI.PrintFormatted($"|player:{luckyPlayer}| is lucky today");
 
             _propertyManager.TransferProperty(tileId, luckyPlayer);
         }
@@ -33,10 +35,13 @@ namespace MonopolyPreUnity.Managers
         }
 
         #region Constructor
-        public AuctionManager(PropertyManager propertyManager, PlayerManager playerManager)
+        public AuctionManager(PropertyManager propertyManager, 
+            PlayerManager playerManager,
+            ConsoleUI consoleUI)
         {
             _propertyManager = propertyManager;
             _playerManager = playerManager;
+            _consoleUI = consoleUI;
         }
         #endregion
     }

@@ -14,7 +14,6 @@ namespace MonopolyPreUnity.Behaviors.Action
 
         public void Execute(int playerId, IMonopolyAction action)
         {
-            var sum = 0;
             var amountPerPlayer = (action as GiftFromPlayersAction).Amount;
             foreach (var player in _playerManager.GetAllPlayerId())
                 _playerManager.PlayerCashCharge(playerId, amountPerPlayer, playerId);

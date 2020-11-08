@@ -2,6 +2,7 @@
 using MonopolyPreUnity.RequestHandlers.HotSeatScenario;
 using MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios;
 using MonopolyPreUnity.Requests;
+using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
 using System.Text;

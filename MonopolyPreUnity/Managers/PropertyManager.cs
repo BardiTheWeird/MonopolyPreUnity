@@ -1,5 +1,6 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.UI;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace MonopolyPreUnity.Managers
         private readonly float _mortgageComission;
         private const int _housesLimit = 5;
         private const int _house = 1;
+        private readonly ConsoleUI _consoleUI;
         #endregion
 
         #region Dependencies
@@ -29,11 +31,16 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Constuctor
-        public PropertyManager(PlayerManager playerManager, TileManager tileManager, RequestManager requestManager, GameConfig gameConfig)
+        public PropertyManager(PlayerManager playerManager, 
+            TileManager tileManager, 
+            RequestManager requestManager, 
+            GameConfig gameConfig,
+            ConsoleUI consoleUI)
         {
             _playerManager = playerManager;
             _tileManager = tileManager;
             _requestManager = requestManager;
+            _consoleUI = consoleUI;
 
             _mortgageFee = gameConfig.MortgageFee;
             _mortgageComission = gameConfig.MortgageCommission;
@@ -46,11 +53,12 @@ namespace MonopolyPreUnity.Managers
             var property = _tileManager.GetTileComponent<PropertyComponent>(propertyId);
             if (property.OwnerId != null)
             {
-                Logger.Log((int)property.OwnerId, $"is no longer the owner of property {propertyId}");
+                _consoleUI.PrintFormatted($"|player:{(int)property.OwnerId}| is no longer the owner of |tile:{propertyId}|");
             }
             property.OwnerId = newOwnerId;
             _playerManager.GetPlayer(newOwnerId).Properties.Add(propertyId);
-            Logger.Log(newOwnerId, $"is the the owner of property {propertyId}");
+
+            _consoleUI.PrintFormatted($"|player:{newOwnerId}| is the new owner of |tile:{propertyId}|");
         }
         #endregion
 
@@ -164,7 +172,7 @@ namespace MonopolyPreUnity.Managers
         public void BuildHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
         {
             developmentComponent.HousesBuilt++;
-            _playerManager.ChangeBalance(playerId, -developmentComponent.HouseBuyPrice);
+            _playerManager.PlayerCashCharge(playerId, developmentComponent.HouseBuyPrice);
         }
 
         /// <summary>
@@ -176,7 +184,7 @@ namespace MonopolyPreUnity.Managers
         public void SellHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
         {
             developmentComponent.HousesBuilt--;
-            _playerManager.ChangeBalance(playerId, developmentComponent.HouseSellPrice);
+            _playerManager.PlayerCashGive(playerId, developmentComponent.HouseSellPrice);
         }
 
         /// <summary>
