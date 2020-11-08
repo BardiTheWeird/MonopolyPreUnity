@@ -66,18 +66,11 @@ namespace MonopolyPreUnity.Managers
             // transfer property
             if (chargerId is int transferId)
             {
-                var chargerPlayer = GetPlayer(transferId);
-
-                // Cash and JailCards
-                chargerPlayer.Cash += player.Cash;
-                chargerPlayer.JailCards += player.JailCards;
-
-                // Property transfer
-                foreach (var propId in player.Properties)
-                    _propertyManager.TransferProperty(propId, transferId);
+                TransferPlayerAssets(transferId, playerId);
             }
             else
             {
+                // basically empty the ownership of properties
                 foreach (var propId in player.Properties)
                 {
                     var prop = _tileManager.GetTileComponent<PropertyComponent>(propId);
@@ -126,6 +119,27 @@ namespace MonopolyPreUnity.Managers
             player.Cash += amount;
             _consoleUI.PrintCashGiveMessage(playerId, amount, message);
         }
+        #endregion
+
+        #region TransferPlayerAssets
+        public void TransferPlayerAssets(int receiverId, PlayerAssets assets)
+        {
+            var receiver = GetPlayer(receiverId);
+            receiver.Cash += assets.Cash;
+            receiver.JailCards += assets.JailCards;
+
+            foreach (var prop in assets.Properties)
+                _propertyManager.TransferProperty(prop, receiverId);
+        }
+
+        public void TransferPlayerAssets(TradeOffer trade)
+        {
+            TransferPlayerAssets(trade.ReceiverAssets.PlayerId, trade.InitiatorAssets);
+            TransferPlayerAssets(trade.InitiatorAssets.PlayerId, trade.ReceiverAssets);
+        }
+
+        public void TransferPlayerAssets(int receiverId, int senderId) =>
+            TransferPlayerAssets(receiverId, new PlayerAssets(GetPlayer(senderId)));
         #endregion
 
         #region Bankruptcy
