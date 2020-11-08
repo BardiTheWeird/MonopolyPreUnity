@@ -31,7 +31,7 @@ namespace MonopolyPreUnity.Classes
             var player = new Player(id, name, props);
             player.Cash = cash;
             player.JailCards = jailCards;
-            player.TurnsInPrison = turnsInPrison;
+            player.TurnsInJail = turnsInPrison;
             player.CurrentTileId = curTileId;
 
             MockData.PlayerDict.Add(id, player);
@@ -111,9 +111,9 @@ namespace MonopolyPreUnity.Classes
         }
         #endregion
 
-        public MockDataMaker()
+        public MockDataMaker(GameConfig gameConfig)
         {
-            MockData = new GameData();
+            MockData = new GameData(gameConfig);
         }
     }
 }

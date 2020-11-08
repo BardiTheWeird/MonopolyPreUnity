@@ -18,6 +18,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         private readonly ConsoleUI _consoleUI;
         private readonly PropertyManager _propertyManager;
         private readonly TileManager _tileManager;
+        private readonly InJailManager _inJailManager;
         #endregion
 
         #region TurnChoice
@@ -32,8 +33,15 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
                     MonopolyCommand.MakeDeal
                 };
 
-                if (player.CanMove)
-                    commandList.Add(MonopolyCommand.MakeMove);
+                if (player.TurnsInJail == null)
+                {
+                    if (player.CanMove)
+                        commandList.Add(MonopolyCommand.MakeMove);
+                    else
+                        commandList.Add(MonopolyCommand.EndTurn);
+                }
+                else if (!player.RolledJailDiceThisTurn)
+                    commandList.AddRange(_inJailManager.GetAvailableJailCommands(player.Id));
                 else
                     commandList.Add(MonopolyCommand.EndTurn);
 
@@ -47,6 +55,15 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
                         break;
                     case MonopolyCommand.MakeMove:
                         _moveManager.MakeAMove(player.Id);
+                        break;
+                    case MonopolyCommand.PayJailFine:
+                        _inJailManager.PayFine(player.Id);
+                        break;
+                    case MonopolyCommand.JailRollDice:
+                        _inJailManager.RollDice(player.Id);
+                        break;
+                    case MonopolyCommand.UseJailCard:
+                        _inJailManager.UseJailCard(player.Id);
                         break;
                 }
             } while (curCommand != MonopolyCommand.EndTurn);
@@ -108,12 +125,17 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         }
 
         #region ctor
-        public HotSeatTurnScenario(MoveManager moveManager, ConsoleUI consoleUI, PropertyManager propertyManager, TileManager tileManager)
+        public HotSeatTurnScenario(MoveManager moveManager, 
+            ConsoleUI consoleUI, 
+            PropertyManager propertyManager, 
+            TileManager tileManager,
+            InJailManager inJailManager)
         {
             _moveManager = moveManager;
             _consoleUI = consoleUI;
             _propertyManager = propertyManager;
             _tileManager = tileManager;
+            _inJailManager = inJailManager;
         }
         #endregion
     }

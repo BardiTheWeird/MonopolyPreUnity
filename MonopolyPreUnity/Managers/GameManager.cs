@@ -39,7 +39,10 @@ namespace MonopolyPreUnity.Managers
         void NextTurn()
         {
             _turnInfo.CurTurnPlayer = (_turnInfo.CurTurnPlayer + 1) % _turnInfo.TurnOrder.Count;
-            _playerManager.GetPlayer(_turnInfo.CurTurnPlayerId).CanMove = true;
+            var curTurnPlayer = _playerManager.GetPlayer(_turnInfo.CurTurnPlayerId);
+            curTurnPlayer.CanMove = true;
+            curTurnPlayer.RolledJailDiceThisTurn = false;
+
 
             _consoleUI.PrintFormatted($"Next turn. It's time for |player:{_turnInfo.CurTurnPlayerId}| to make a move!");
         }

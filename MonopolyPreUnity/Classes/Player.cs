@@ -14,24 +14,26 @@ namespace MonopolyPreUnity.Classes
         public string DisplayName { get; }
         public int Cash { get; set; }
         public int JailCards { get; set; }
-        public int? TurnsInPrison { get; set; }
+        public int? TurnsInJail { get; set; }
         public int CurrentTileId { get; set; }
         public bool CanMove { get; set; }
         public bool IsBankrupt { get; set; }
         public bool IsWinner { get; set; }
+        public bool RolledJailDiceThisTurn { get; set; }
         public HashSet<int> Properties { get; }
 
         public Player(int id, string displayName, int cash, 
-            HashSet<int> properties, int jailCards, int? turnsInPrison, int curTileId)
+            HashSet<int> properties, int jailCards, int? turnsInPrison, int curTileId, bool rolledJailDiceThisTurn)
         {
             Id = id;
             DisplayName = displayName;
             Cash = cash;
             Properties = properties;
             JailCards = jailCards;
-            TurnsInPrison = turnsInPrison;
+            TurnsInJail = turnsInPrison;
             CanMove = true;
             CurrentTileId = curTileId;
+            RolledJailDiceThisTurn = rolledJailDiceThisTurn;
         }
 
         public Player(int id, string displayName, HashSet<int> props = null)
