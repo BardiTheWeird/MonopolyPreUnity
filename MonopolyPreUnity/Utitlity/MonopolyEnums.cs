@@ -26,9 +26,9 @@ namespace MonopolyPreUnity.Utitlity
         CreateTradeOffer,
         ValidateTradeOffer,
 
-        JailPayMoney,
-        JailUseCard,
-        JailUseDice,
+        PayJailFine,
+        UseJailCard,
+        JailRollDice,
         StayInJail,
 
         CancelAction

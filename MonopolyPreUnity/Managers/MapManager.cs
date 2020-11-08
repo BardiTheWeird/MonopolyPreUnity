@@ -75,9 +75,6 @@ namespace MonopolyPreUnity.Managers
         // Full "laps" are handled in MoveBySteps
         private bool GoPassed(int tileStartId, int tileEndId)
         {
-            if (_mapInfo.GoId == null)
-                return false;
-
             int goIndex = mapIndex[(int)_mapInfo.GoId];
             int tileStartIndex = mapIndex[tileStartId];
             int tileEndIndex = mapIndex[tileEndId];
@@ -101,7 +98,7 @@ namespace MonopolyPreUnity.Managers
         {
             Player player = _playerManager.GetPlayer(playerId);
 
-            if (giveGOCash && (fullLap || GoPassed(player.CurrentTileId, tileId)))
+            if (_mapInfo.GoId != null && giveGOCash && (fullLap || GoPassed(player.CurrentTileId, tileId)))
                 OnGoPassed(playerId);
 
             return player.CurrentTileId = tileId;

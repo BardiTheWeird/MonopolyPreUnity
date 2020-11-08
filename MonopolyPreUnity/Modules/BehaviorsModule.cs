@@ -22,6 +22,7 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<ActionTileBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(ActionTileComponent));
             builder.RegisterType<PropertyLandedBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(PropertyComponent));
             builder.RegisterType<FreeParkingBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(FreeParkingComponent));
+            builder.RegisterType<JailLandedBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(JailComponent));
 
             // Rent
             builder.RegisterType<DevelopmentRentBehavior>().AsSelf().SingleInstance().Keyed<IRentBehavior>(typeof(PropertyDevelopmentComponent));

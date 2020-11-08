@@ -63,11 +63,11 @@ namespace MonopolyPreUnity.Classes
             TurnInfo = turnInfo;
         }
 
-        public GameData()
+        public GameData(GameConfig gameConfig)
         {
             MapIdSequence = new List<int>();
             MapIndex = new Dictionary<int, int>();
-            DiceValues = new Dice();
+            DiceValues = new Dice(gameConfig.DieSides);
             TileDict = new Dictionary<int, Tile>();
             PropertySetDict = new Dictionary<int, HashSet<int>>();
             PlayerDict = new Dictionary<int, Player>();
