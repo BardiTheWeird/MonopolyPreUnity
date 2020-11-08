@@ -7,6 +7,7 @@ using System.Text;
 using Autofac.Features.Indexed;
 using MonopolyPreUnity.RequestHandlers;
 using MonopolyPreUnity.Requests;
+using MonopolyPreUnity.UI;
 
 namespace MonopolyPreUnity.Managers
 {
@@ -26,6 +27,7 @@ namespace MonopolyPreUnity.Managers
         private readonly TileManager _tileManager;
         public PropertyManager _propertyManager { get; set; }
         private readonly RequestManager _requestManager;
+        public ConsoleUI _consoleUI { get; set; }
         #endregion
 
         #region fields
@@ -96,21 +98,13 @@ namespace MonopolyPreUnity.Managers
         public int GetPlayerCash(int playerId) =>
             GetPlayer(playerId).Cash;
 
-        public void ChangeBalance(int playerId, int amount)
-        {
-            if (amount < 0)
-                PlayerCashCharge(playerId, Math.Abs(amount));
-            else
-                PlayerCashGive(playerId, amount);
-        }
-
-        public void PlayerCashCharge(int playerId, int amount, int? chargerId = null)
+        public void PlayerCashCharge(int playerId, int amount, int? chargerId = null, string message = null)
         {
             var player = GetPlayer(playerId);
             if (player.Cash >= amount)
             {
                 player.Cash -= amount;
-                Logger.Log(playerId, $"paid {amount}$. {player.Cash}$ left");
+                _consoleUI.PrintCashChargeMessage(playerId, chargerId, amount, message);
                 if (chargerId != null)
                     PlayerCashGive((int)chargerId, amount);
             }
@@ -120,18 +114,17 @@ namespace MonopolyPreUnity.Managers
                 {
                     player.IsBankrupt = true;
                     BankruptPlayerAssetsTransfer(playerId, chargerId);
-                    Logger.Log(playerId, "is bankrupt");
-
+                    _consoleUI.PrintFormatted($"|player:{playerId}| is bankrupt");
                     RaisePlayerBankruptEvent(playerId);
                 }
             }
         }
 
-        public void PlayerCashGive(int playerId, int amount)
+        public void PlayerCashGive(int playerId, int amount, string message = null)
         {
             var player = GetPlayer(playerId);
             player.Cash += amount;
-            Logger.Log(playerId, $"received {amount}$. {player.Cash}$ left");
+            _consoleUI.PrintCashGiveMessage(playerId, amount, message);
         }
         #endregion
 
@@ -174,7 +167,6 @@ namespace MonopolyPreUnity.Managers
             }
             else
             {
-                Logger.Log("Man you can still sell houses and mortgage ur property to be in game!=)))");
                 do
                 {
                     _requestManager.SendRequest(player.Id, new BankruptcyRequest(debtAmount));
@@ -186,7 +178,10 @@ namespace MonopolyPreUnity.Managers
         #endregion
 
         #region Constructor
-        public PlayerManager(GameData gameData, TileManager tileManager, RequestManager requestManager, GameConfig gameConfig)
+        public PlayerManager(GameData gameData, 
+            TileManager tileManager, 
+            RequestManager requestManager, 
+            GameConfig gameConfig)
         {
             _playerDict = gameData.PlayerDict;
             _tileManager = tileManager;

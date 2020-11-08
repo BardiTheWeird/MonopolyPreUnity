@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.UI;
 
 namespace MonopolyPreUnity.Managers
 {
@@ -37,6 +38,7 @@ namespace MonopolyPreUnity.Managers
         private readonly PlayerManager _playerManager;
         private readonly TileManager _tileManager;
         private readonly MapInfo _mapInfo;
+        private readonly ConsoleUI _consoleUI;
         #endregion
 
         #region Constructor
@@ -44,7 +46,8 @@ namespace MonopolyPreUnity.Managers
             TileManager tileManager,
             GameData gameData,
             GameConfig config,
-            MapInfo mapInfo)
+            MapInfo mapInfo,
+            ConsoleUI consoleUI)
         {
             _playerManager = playerManager;
             _tileManager = tileManager;
@@ -52,6 +55,7 @@ namespace MonopolyPreUnity.Managers
             mapIndex = gameData.MapIndex;
             _cashPerLap = config.CashPerLap;
             _mapInfo = mapInfo;
+            _consoleUI = consoleUI;
         }
         #endregion
 
@@ -69,7 +73,7 @@ namespace MonopolyPreUnity.Managers
 
         #region GoPassed
         // Full "laps" are handled in MoveBySteps
-        private bool GoPassed(int tileStartId, int tileEndId, int playerId)
+        private bool GoPassed(int tileStartId, int tileEndId)
         {
             if (_mapInfo.GoId == null)
                 return false;
@@ -79,7 +83,7 @@ namespace MonopolyPreUnity.Managers
             int tileEndIndex = mapIndex[tileEndId];
 
             if (goIndex <= tileEndIndex
-                && (tileStartIndex <= goIndex || tileEndIndex < tileStartIndex))
+                && (tileStartIndex < goIndex || tileEndIndex < tileStartIndex))
                 return true;
 
             return false;
@@ -87,7 +91,7 @@ namespace MonopolyPreUnity.Managers
 
         private void OnGoPassed(int playerId)
         {
-            Logger.Log(playerId, "passed GO Tile");
+            _consoleUI.PrintFormatted($"|player:{playerId}| has passed a GO Tile!");
             _playerManager.PlayerCashGive(playerId, _cashPerLap);
         }
         #endregion
@@ -97,7 +101,7 @@ namespace MonopolyPreUnity.Managers
         {
             Player player = _playerManager.GetPlayer(playerId);
 
-            if (giveGOCash && (fullLap || GoPassed(player.CurrentTileId, tileId, playerId)))
+            if (giveGOCash && (fullLap || GoPassed(player.CurrentTileId, tileId)))
                 OnGoPassed(playerId);
 
             return player.CurrentTileId = tileId;

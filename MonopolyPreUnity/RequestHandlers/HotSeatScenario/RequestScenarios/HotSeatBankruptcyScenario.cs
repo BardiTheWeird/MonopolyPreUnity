@@ -2,6 +2,7 @@
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Requests;
+using MonopolyPreUnity.UI;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         {
             var request = requestIn as BankruptcyRequest;
 
+            _consoleUI.PrintFormatted($"|player:{player.Id}|, you can still pay the debt off" +
+                $"to stay in the game by selling houses or mortgaging property");
             _consoleUI.Print($"Amount needed to pay the debt: {request.DebtAmount - player.Cash}");
 
             while (true)

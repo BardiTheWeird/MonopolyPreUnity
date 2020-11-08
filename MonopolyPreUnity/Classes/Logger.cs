@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics.Tracing;
+using System.Diagnostics;
 
 namespace MonopolyPreUnity.Classes
 {
@@ -8,11 +10,11 @@ namespace MonopolyPreUnity.Classes
     {
         public static void Log(string message)
         {
-            Console.WriteLine(message);
+            Debug.WriteLine(message);
         }
         public static void Log(int playerId, string message)
         {
-            Console.WriteLine($"Player {playerId} " + message);
+            Debug.WriteLine($"Player {playerId} " + message);
         }
     }
 }

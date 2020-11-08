@@ -26,7 +26,7 @@ namespace MonopolyPreUnity.Managers
                 if (_rentBehaviorIndex.TryGetValue(component.GetType(), out var behavior))
                 {
                     var rent = behavior.GetRent(renteeId, ownerId, component, tileId);
-                    _playerManager.PlayerCashCharge(renteeId, rent, ownerId);
+                    _playerManager.PlayerCashCharge(renteeId, rent, ownerId, "for rent");
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +15,7 @@ namespace MonopolyPreUnity.Managers
         private readonly MapManager _mapManager;
         private readonly PlayerLandedManager _playerLandedManager;
         private readonly InJailManager _inJailManager;
+        private readonly ConsoleUI _consoleUI;
         #endregion
 
         #region fields
@@ -28,15 +30,13 @@ namespace MonopolyPreUnity.Managers
             {
                 _diceValues.Throw();
 
-                Logger.Log(playerId, $"throws the dice and gets {_diceValues.Die1} and {_diceValues.Die2}");
-
+                _consoleUI.PrintFormatted($"|player:{playerId}| threw the dice and got {_diceValues.Die1} and {_diceValues.Die2}");
 
                 if (currentPlayer.CanMove = _diceValues.Die1 == _diceValues.Die2)
-                    Logger.Log(playerId, "threw doubles and can move again");
+                    _consoleUI.Print("It's doubles, so they can move again!");
 
                 int tileId = _mapManager.MoveBySteps(playerId, _diceValues.Sum);
-
-                Logger.Log(playerId, $"landed on tile {tileId}");
+                _consoleUI.PrintTileLanded(tileId, playerId);
 
                 _playerLandedManager.PlayerLanded(playerId, tileId);
             }
@@ -66,7 +66,9 @@ namespace MonopolyPreUnity.Managers
             MapManager mapManager, 
             PlayerLandedManager playerLandedManager,
             GameData gameData,
-            GameConfig gameConfig)
+            GameConfig gameConfig,
+            ConsoleUI consoleUI,
+            InJailManager inJailManager)
         {
             _playerManager = playerManager;
             _tileManager = tileManager;
@@ -74,6 +76,8 @@ namespace MonopolyPreUnity.Managers
             _playerLandedManager = playerLandedManager;
             _diceValues = gameData.DiceValues;
             _maxDicePairThrows = gameConfig.MaxDicePairThrows;
+            _consoleUI = consoleUI;
+            _inJailManager = inJailManager;
         }
         #endregion
     }
