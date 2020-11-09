@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MonopolyPreUnity.Components;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Classes
+namespace MonopolyPreUnity.Components
 {
-    class AuctionInfo
+    class AuctionInfo : IEntityComponent
     {
         public int PropertyOnAuctionId { get; set; }
         public int AmountBid { get; set; }

@@ -7,9 +7,9 @@ using System.Data;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MonopolyPreUnity.Classes
+namespace MonopolyPreUnity.Components
 {
-    class PropertyComponent : ITileComponent
+    class PropertyComponent : IEntityComponent
     {
         public int SetId { get; }
         public int BasePrice { get; }
@@ -18,7 +18,7 @@ namespace MonopolyPreUnity.Classes
 
         public PropertyComponent(int setId, int basePrice)
         {
-            this.SetId = setId;
+            SetId = setId;
             BasePrice = basePrice;
             OwnerId = null;
             IsMortgaged = false;
@@ -26,7 +26,7 @@ namespace MonopolyPreUnity.Classes
 
         public PropertyComponent(int setId, int basePrice, int? ownerId, bool isMortgaged)
         {
-            this.SetId = setId;
+            SetId = setId;
             BasePrice = basePrice;
             OwnerId = ownerId;
             IsMortgaged = isMortgaged;

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Classes
+namespace MonopolyPreUnity.Components
 {
-    class Dice
+    class Dice : IEntityComponent
     {
         public int Die1 { get; set; }
         public int Die2 { get; set; }

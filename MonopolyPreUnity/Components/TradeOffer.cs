@@ -1,10 +1,11 @@
-﻿using System;
+﻿using MonopolyPreUnity.Classes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Classes
+namespace MonopolyPreUnity.Components
 {
-    class TradeOffer
+    class TradeOffer : IEntityComponent
     {
         public PlayerAssets InitiatorAssets { get; set; }
         public PlayerAssets ReceiverAssets { get; set; }

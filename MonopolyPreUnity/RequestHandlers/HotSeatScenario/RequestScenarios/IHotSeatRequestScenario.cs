@@ -1,4 +1,4 @@
-﻿using MonopolyPreUnity.Classes;
+﻿using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Requests;
 using System;
 using System.Collections.Generic;

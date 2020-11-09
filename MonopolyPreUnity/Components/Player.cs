@@ -1,14 +1,11 @@
-﻿using MonopolyPreUnity.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
 using System.Runtime.Serialization;
 
-namespace MonopolyPreUnity.Classes
+namespace MonopolyPreUnity.Components
 {
-    [Serializable]
-    class Player
+    class Player : IEntityComponent
     {
         public int Id { get; }
         public string DisplayName { get; }
@@ -22,7 +19,7 @@ namespace MonopolyPreUnity.Classes
         public bool RolledJailDiceThisTurn { get; set; }
         public HashSet<int> Properties { get; }
 
-        public Player(int id, string displayName, int cash, 
+        public Player(int id, string displayName, int cash,
             HashSet<int> properties, int jailCards, int? turnsInPrison, int curTileId, bool rolledJailDiceThisTurn)
         {
             Id = id;

@@ -10,11 +10,10 @@ using System.Runtime.Serialization;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Behaviors;
 using MonopolyPreUnity.Utitlity;
-
-
+using MonopolyPreUnity.Components;
 
 namespace MonopolyPreUnity.Classes
-{   
+{
     [DataContract]
     [Serializable]
     class GameData

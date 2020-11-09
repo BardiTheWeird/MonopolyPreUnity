@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class PropertyDevelopmentComponent : ITileComponent
+    class PropertyDevelopmentComponent : IEntityComponent
     {
         public int HousesBuilt { get; set; }
         public int HouseBuyPrice { get; }

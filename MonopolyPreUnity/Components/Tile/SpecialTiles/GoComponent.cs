@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class GoComponent : ITileComponent
+    class GoComponent : IEntityComponent
     {
     }
 }

@@ -32,7 +32,7 @@ namespace MonopolyPreUnity.UI
         {
             var type = component.GetType();
             var check =
-                !( type == typeof(TileIdentityComponent)
+                !( type == typeof(TileComponent)
                 || type == typeof(PropertyComponent)
                 || type == typeof(PropertyDevelopmentComponent)
                 || type == typeof(TrainStationComponent)
@@ -167,7 +167,7 @@ namespace MonopolyPreUnity.UI
                     case "player":
                         return _playerManager.GetPlayer(id).DisplayName;
                     case "tile":
-                        return _tileManager.GetTileComponent<TileIdentityComponent>(id).Name;
+                        return _tileManager.GetTileComponent<TileComponent>(id).Name;
                 }
                 return match.Value;
             });
@@ -340,7 +340,7 @@ namespace MonopolyPreUnity.UI
         {
             var sb = new StringBuilder();
 
-            var identity = _tileManager.GetTileComponent<TileIdentityComponent>(tileId);
+            var identity = _tileManager.GetTileComponent<TileComponent>(tileId);
             sb.Append(identity.Name.Trim());
 
             if (_tileManager.ContainsComponent<PropertyComponent>(tileId))
@@ -431,7 +431,7 @@ namespace MonopolyPreUnity.UI
 
         public string GetPropertyTileString(int propertyId)
         {
-            var name = _tileManager.GetTileComponent<TileIdentityComponent>(propertyId).Name;
+            var name = _tileManager.GetTileComponent<TileComponent>(propertyId).Name;
             return $"{name}: " + GetPropertyString(propertyId);
         }
 

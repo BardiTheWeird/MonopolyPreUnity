@@ -96,12 +96,12 @@ namespace MonopolyPreUnity.Classes
             return true;
         }
 
-        TileIdentityComponent CreateTileIdentity(string name)
+        TileComponent CreateTileIdentity(string name)
         {
             int id = 1;
             if (MockData.TileDict.Keys.Count() > 0)
                 id = MockData.TileDict.Keys.Max() + 1;
-            return new TileIdentityComponent(id, name);
+            return new TileComponent(id, name);
         }
 
         void AddToMap(int tileId)

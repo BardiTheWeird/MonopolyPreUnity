@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Classes
+namespace MonopolyPreUnity.Components
 {
     [Serializable]
-    class TurnInfo
+    class TurnInfo : IEntityComponent
     {
         public List<int> TurnOrder { get; set; }
         public int CurTurnPlayer { get; set; }
@@ -13,8 +13,8 @@ namespace MonopolyPreUnity.Classes
 
         public TurnInfo(List<int> turnOrder, int curTurnPlayer)
         {
-            this.TurnOrder = turnOrder;
-            this.CurTurnPlayer = curTurnPlayer;
+            TurnOrder = turnOrder;
+            CurTurnPlayer = curTurnPlayer;
         }
 
         public TurnInfo()
