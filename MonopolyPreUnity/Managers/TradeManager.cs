@@ -4,6 +4,7 @@ using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MonopolyPreUnity.Managers
@@ -15,6 +16,7 @@ namespace MonopolyPreUnity.Managers
         private readonly PropertyManager _propertyManager;
         private readonly PlayerManager _playerManager;
         private readonly ConsoleUI _consoleUI;
+        private readonly TileManager _tileManager;
         #endregion
 
         #region Trade
@@ -39,16 +41,31 @@ namespace MonopolyPreUnity.Managers
         }
         #endregion
 
+        #region TradableProperties
+        public IEnumerable<int> TradableProperties(IEnumerable<int> properties)
+        {
+            return properties.Where(id =>
+            {
+                var prop = _tileManager.GetTileComponent<PropertyComponent>(id);
+                var dev = _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id);
+
+                return !prop.IsMortgaged && (dev == null || dev.HousesBuilt == 0);
+            });
+        }
+        #endregion
+
         #region ctor
         public TradeManager(RequestManager requestManager, 
             PropertyManager propertyManager, 
             PlayerManager playerManager, 
-            ConsoleUI consoleUI)
+            ConsoleUI consoleUI,
+            TileManager tileManager)
         {
             _requestManager = requestManager;
             _propertyManager = propertyManager;
             _playerManager = playerManager;
             _consoleUI = consoleUI;
+            _tileManager = tileManager;
         }
         #endregion
     }

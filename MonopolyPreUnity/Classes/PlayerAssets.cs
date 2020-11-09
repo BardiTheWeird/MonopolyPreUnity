@@ -30,6 +30,7 @@ namespace MonopolyPreUnity.Classes
 
         public PlayerAssets()
         {
+            Properties = new List<int>();
         }
     }
 }
