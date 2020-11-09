@@ -1,90 +1,72 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Requests;
+using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MonopolyPreUnity.Managers
 {
-
-    class NotEnoughMoney: Exception
-    {
-        public override string ToString()
-            => "Not enough money.Sorry=)";
-    }
     class TradeManager
     {
-        #region Variables
-        private readonly int _initiatorPlayerId;
-        private readonly int _recepientPlayerId;
-        private LinkedList <int> _initiatorOffer;
-        private LinkedList <int> _recepientOffer;
-        private int _initiatorAmount = 0;
-        private int _recepientAmount = 0;
-        #endregion
-
+        #region Dependencies
+        private readonly RequestManager _requestManager;
+        private readonly PropertyManager _propertyManager;
         private readonly PlayerManager _playerManager;
+        private readonly ConsoleUI _consoleUI;
+        private readonly TileManager _tileManager;
+        #endregion
 
-        #region Constructor
-        public TradeManager(int initiatorPlayerId, int recepientPlayerId,PlayerManager playerManager)
+        #region Trade
+        public void SendTradeValidationRequest(TradeOffer trade)
         {
-            _initiatorPlayerId = initiatorPlayerId;
-            _recepientPlayerId = recepientPlayerId;
-            _playerManager = playerManager;
+            _consoleUI.PrintFormatted($"|player:{trade.InitiatorAssets.PlayerId}| " +
+                $"sent a trade offer to |player:{trade.ReceiverAssets.PlayerId}|");
+
+            _requestManager.SendRequest(trade.ReceiverAssets.PlayerId,
+                new TradeValidationRequest(trade));
+        }
+
+        public void ValidateTrade(TradeOffer trade, bool validated)
+        {
+            if (!validated)
+                _consoleUI.PrintFormatted($"|player:{trade.ReceiverAssets.PlayerId}| declined the trade offer");
+            else
+            {
+                _consoleUI.PrintFormatted($"|player:{trade.ReceiverAssets.PlayerId}| accepted the trade offer");
+                _playerManager.TransferPlayerAssets(trade);
+            }
         }
         #endregion
 
-        public void AddPropertyForInitiator(TileIdentityComponent tileIdentityComponent)=>
-            _initiatorOffer.AddLast(tileIdentityComponent.Id);
-
-        public void AddPropertyForRecepient(TileIdentityComponent tileIdentityComponent) =>
-            _recepientOffer.AddLast(tileIdentityComponent.Id);
-
-        public void RemovePropertyForInitiator(TileIdentityComponent tileIdentityComponent) =>
-            _initiatorOffer.Remove(tileIdentityComponent.Id);
-
-        public void RemovePropertyForRecepient(TileIdentityComponent tileIdentityComponent) =>
-            _initiatorOffer.Remove(tileIdentityComponent.Id);
-
-        public void SetInitiatorMoney(int amount)
+        #region TradableProperties
+        public IEnumerable<int> TradableProperties(IEnumerable<int> properties)
         {
-            if (_playerManager.GetPlayerCash(_initiatorPlayerId) > amount)
-                _initiatorAmount = amount;
-            else throw new NotEnoughMoney();
-        }
+            return properties.Where(id =>
+            {
+                var prop = _tileManager.GetTileComponent<PropertyComponent>(id);
+                var dev = _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id);
 
-        public void AddInitiatorMoney(int amount)
+                return !prop.IsMortgaged && (dev == null || dev.HousesBuilt == 0);
+            });
+        }
+        #endregion
+
+        #region ctor
+        public TradeManager(RequestManager requestManager, 
+            PropertyManager propertyManager, 
+            PlayerManager playerManager, 
+            ConsoleUI consoleUI,
+            TileManager tileManager)
         {
-            if (_playerManager.GetPlayerCash(_initiatorPlayerId) > amount+_initiatorAmount)
-                _initiatorAmount += amount;
-            else throw new NotEnoughMoney();
+            _requestManager = requestManager;
+            _propertyManager = propertyManager;
+            _playerManager = playerManager;
+            _consoleUI = consoleUI;
+            _tileManager = tileManager;
         }
-
-        public void SetRecepientMoney(int amount)
-        {
-            if (_playerManager.GetPlayerCash(_recepientPlayerId) > amount)
-                _recepientAmount = amount;
-            else throw new NotEnoughMoney();
-        }
-            
-        public void AddRecepientMoney(int amount)
-        {
-            if (_playerManager.GetPlayerCash(_recepientPlayerId) > amount + _recepientAmount)
-                _recepientAmount += amount;
-            else throw new NotEnoughMoney();
-        }
-
-
-        public void ExchangeItems()
-        {
-            _playerManager.PlayerCashCharge(_initiatorPlayerId, _initiatorAmount);
-            _playerManager.PlayerCashGive(_recepientPlayerId, _initiatorAmount);
-            _playerManager.PlayerCashCharge(_recepientPlayerId, _initiatorAmount);
-            _playerManager.PlayerCashGive(_initiatorPlayerId, _initiatorAmount);
-
-
-        }
-
-
+        #endregion
     }
 }

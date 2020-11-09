@@ -19,6 +19,8 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         private readonly PropertyManager _propertyManager;
         private readonly TileManager _tileManager;
         private readonly InJailManager _inJailManager;
+        private readonly PlayerManager _playerManager;
+        private readonly TradeManager _tradeManager;
         #endregion
 
         #region TurnChoice
@@ -115,7 +117,31 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         #region MakeDeal
         public void MakeDeal(Player player)
         {
-            Console.WriteLine("Not doing anything yet");
+            // Creating a trade
+            _consoleUI.Print("Choose a player to trade with");
+
+            var playersNoSelf = _playerManager.GetAllPlayerId().Where(id => id != player.Id).ToList();
+            _consoleUI.PrintPlayers(playersNoSelf);
+            _consoleUI.Print("Write -1 to cancel");
+
+            var playerIndex = _consoleUI.InputValueIndex(playersNoSelf, true);
+            if (playerIndex == -1)
+                return;
+
+            var receiverId = playersNoSelf[playerIndex];
+            var receiver = _playerManager.GetPlayer(receiverId);
+
+            var offer = new TradeOffer();
+
+            _consoleUI.Print("Choose assets the receiver will trade");
+            offer.ReceiverAssets = _consoleUI.ChoosePlayerAssets(receiverId,
+                _tradeManager.TradableProperties(receiver.Properties));
+
+            _consoleUI.Print("Choose assets you will trade");
+            offer.InitiatorAssets = _consoleUI.ChoosePlayerAssets(player.Id,
+                _tradeManager.TradableProperties(player.Properties));
+
+            _tradeManager.SendTradeValidationRequest(offer);
         }
         #endregion
 
@@ -129,13 +155,17 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
             ConsoleUI consoleUI, 
             PropertyManager propertyManager, 
             TileManager tileManager,
-            InJailManager inJailManager)
+            InJailManager inJailManager,
+            PlayerManager playerManager,
+            TradeManager tradeManager)
         {
             _moveManager = moveManager;
             _consoleUI = consoleUI;
             _propertyManager = propertyManager;
             _tileManager = tileManager;
             _inJailManager = inJailManager;
+            _playerManager = playerManager;
+            _tradeManager = tradeManager;
         }
         #endregion
     }

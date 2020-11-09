@@ -79,27 +79,98 @@ namespace MonopolyPreUnity.UI
         public T InputValue<T>(IEnumerable<T> possibleValues) where T : IConvertible =>
             InputValue<T>(x => possibleValues.Contains(x), "Value not present");
 
-        public int InputValueIndex<T>(IEnumerable<T> values) =>
-            InputValue<int>(x => 1 <= x && x <= values.Count(), "Index out of range");
+        public int InputValueIndex<T>(IEnumerable<T> values, bool canCancel = false)
+        {
+            var value = InputValue<int>(x => (1 <= x && x <= values.Count()) || (canCancel && x == -1), "Index out of range");
+            return value == -1 ? -1 : value - 1;
+        }
         #endregion
 
-        #region Output
+        #region Specific Input
+        public MonopolyCommand ChooseCommand(List<MonopolyCommand> commands)
+        {
+            Console.WriteLine("Choose command:");
+            PrintCommands(commands);
+            return commands[InputValueIndex(commands)];
+        }
+
+        public int? ChoosePropertyId(IEnumerable<int> properties)
+        {
+            var propList = properties.ToList();
+            Print("Choose a property:");
+            Print(GetStringOfListOfItems(propList, GetPropertyString, true));
+
+            Print($"Enter -1 to cancel");
+
+            int? input = InputValueIndex(properties, true);
+            return input == -1 ? null : (int?)propList[(int)input];
+        }
+
+        public List<int> ChoosePropertyIdMultiple(IEnumerable<int> properties)
+        {
+            var propList = properties.ToList();
+            var outPropList = new List<int>();
+            while (true)
+            {
+                var curProp = ChoosePropertyId(propList);
+                if (curProp == null)
+                    break;
+
+                outPropList.Add((int)curProp);
+                propList.Remove((int)curProp);
+            }
+            return outPropList;
+        }
+
+        public PlayerAssets ChoosePlayerAssets(int playerId, IEnumerable<int> availableProperties)
+        {
+            var player = _playerManager.GetPlayer(playerId);
+            var assets = new PlayerAssets();
+            assets.PlayerId = playerId;
+
+            if (availableProperties.Count() > 0)
+            {
+                Print("Choose properties to trade");
+                assets.Properties = ChoosePropertyIdMultiple(availableProperties);
+            }
+
+            Print($"Write an amount of cash you wish to trade (between 0 and {player.Cash})");
+            assets.Cash = InputValue<int>(x => 0 <= x && x <= player.Cash, "Input not in available range");
+
+            if (player.JailCards > 0)
+            {
+                Print($"Write an amount of jail cards you wish to trade (between 0 and {player.JailCards})");
+                assets.JailCards = InputValue<int>(x => 0 <= x && x <= player.JailCards, "Input not in available range");
+            }
+
+            return assets;
+        }
+        #endregion
+
+        #region Print
         public void Print(string message) =>
             Console.WriteLine(message);
 
-        public void PrintCommands(List<MonopolyCommand> commands)
+        public void PrintFormatted(string message)
         {
-            for (int i = 0; i < commands.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}: {CommandName(commands[i])}");
-            }
+            Console.WriteLine(FormattedString(message));
         }
 
-        public void PrintProperties(IEnumerable<int> propertyIds)
+        public string FormattedString(string str)
         {
-            propertyIds.OrderBy(x => x);
-            foreach (var id in propertyIds)
-                Console.WriteLine($"{id}: {GetPropertyTileString(id)}");
+            return Regex.Replace(str, @"\|(\w+):(\d+)\|", match =>
+            {
+                var formatVal = match.Groups[1].Value;
+                var id = Convert.ToInt32(match.Groups[2].Value);
+                switch (formatVal)
+                {
+                    case "player":
+                        return _playerManager.GetPlayer(id).DisplayName;
+                    case "tile":
+                        return _tileManager.GetTileComponent<TileIdentityComponent>(id).Name;
+                }
+                return match.Value;
+            });
         }
         #endregion
 
@@ -184,26 +255,75 @@ namespace MonopolyPreUnity.UI
         #endregion
 
         #region Player
-        public void PrintFormatted(string message)
+        public void PrintPlayer(int playerId) =>
+            Print(GetPlayerString(playerId));
+
+        public void PrintPlayers(IEnumerable<int> ids) =>
+            Print(GetStringOfListOfItems(ids.ToList(), GetPlayerString, true));
+
+        public string GetPlayerString(int playerId)
         {
-            Console.WriteLine(FormattedString(message));
+            var player = _playerManager.GetPlayer(playerId);
+            var sb = new StringBuilder();
+
+            sb.Append($"Name: {player.DisplayName}\n");
+            sb.Append(GetPlayerStateString(player).AddTwoSpacesAtNewLine());
+
+            return sb.ToString().Trim();
         }
 
-        public string FormattedString(string str) 
+        public string GetPlayerStateString(Player player, bool addCurrentTile = false, bool addInJail = true, bool addProperties = true)
         {
-            return Regex.Replace(str, @"\|(\w+):(\d+)\|", match =>
+            var sb = new StringBuilder();
+            sb.AppendLine($"Cash: {player.Cash}");
+            sb.AppendLine($"JailCards: {player.JailCards}");
+            if (addCurrentTile)
+                sb.AppendLine(FormattedString($"Currently at: |tile:{player.CurrentTileId}|"));
+            if (addInJail) 
             {
-                var formatVal = match.Groups[1].Value;
-                var id = Convert.ToInt32(match.Groups[2].Value);
-                switch (formatVal)
+                var str = player.TurnsInJail == null ? "Not in jail" : "In jail"; 
+                sb.AppendLine(str);
+            }
+            if (addProperties)
+            {
+                sb.AppendLine("Properties:");
+                foreach (var prop in player.Properties)
                 {
-                    case "player":
-                        return _playerManager.GetPlayer(id).DisplayName;
-                    case "tile":
-                        return _tileManager.GetTileComponent<TileIdentityComponent>(id).Name;
+                    sb.AppendLine(GetPropertyString(prop).AddTwoSpacesAtNewLine());
                 }
-                return match.Value;
-            });
+            }
+            return sb.ToString().Trim();
+        }
+
+        public string GetPlayerAssetsString(PlayerAssets assets)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine(FormattedString($"Player name: |player:{assets.PlayerId}|"));
+
+            sb.AppendLine($"Cash: {assets.Cash}".AddTwoSpacesAtNewLine());
+            if (assets.JailCards > 0) 
+                sb.AppendLine($"Jail cards: {assets.JailCards}".AddTwoSpacesAtNewLine());
+            if (assets.Properties.Count > 0)
+            {
+                var properties = GetStringOfListOfItems(assets.Properties, GetPropertyString, false);
+
+                sb.AppendLine("Properties:".AddTwoSpacesAtNewLine());
+                sb.Append(properties.AddTwoSpacesAtNewLine().AddTwoSpacesAtNewLine());
+            }
+
+            return sb.ToString().Trim();
+        }
+        #endregion
+
+        #region Trade
+        public void PrintTradeOffer(TradeOffer offer)
+        {
+            Print("Initiator assets");
+            Print(GetPlayerAssetsString(offer.InitiatorAssets));
+
+            Print("Receiver assets");
+            Print(GetPlayerAssetsString(offer.ReceiverAssets));
         }
         #endregion
 
@@ -214,7 +334,6 @@ namespace MonopolyPreUnity.UI
             var tileString = TileString(tileId);
 
             Console.WriteLine(landedString + tileString.Trim());
-            //Console.WriteLine(tileString);
         }
 
         public string TileString(int tileId)
@@ -234,66 +353,6 @@ namespace MonopolyPreUnity.UI
                 if (compString.Length > 0)
                     sb.Append("\n" + compString);
             }
-
-            return sb.ToString();
-        }
-        #endregion
-
-        #region Specific
-        public MonopolyCommand ChooseCommand(List<MonopolyCommand> commands)
-        {
-            Console.WriteLine("Choose command:");
-            PrintCommands(commands);
-            return commands[InputValueIndex(commands) - 1];
-        }
-
-        public int? ChoosePropertyId(IEnumerable<int> properties)
-        {
-            Print("Choose a property:");
-            PrintProperties(properties);
-
-            var cancelInt = properties.Count() > 0 ? Math.Min(-1, properties.Min() - 1) : -1;
-            properties = properties.Concat(new[] { cancelInt });
-
-            Print($"Enter {cancelInt} to cancel");
-
-            int? input = InputValue(properties);
-            return input == cancelInt ? null : input;
-        }
-        #endregion
-
-        #region Misc
-        public string CommandName(MonopolyCommand command)
-        {
-            var commandName = command.ToString();
-            var lastDotIndex = commandName.LastIndexOf('.');
-            return commandName.Substring(lastDotIndex == -1 ? 0 : lastDotIndex).SplitByCapitalLetter();
-        }
-
-        public string GetPropertyTileString(int propertyId)
-        {
-            var name = _tileManager.GetTileComponent<TileIdentityComponent>(propertyId).Name;
-            return $"{ name}: " + GetPropertyString(propertyId);
-        }
-
-        public string GetPropertyString(int tileId)
-        {
-            var prop = GetTileComponentString(_tileManager.GetTileComponent<PropertyComponent>(tileId));
-            var dev = GetTileComponentString(_tileManager.GetTileComponent<PropertyDevelopmentComponent>(tileId));
-            var station = GetTileComponentString(_tileManager.GetTileComponent<TrainStationComponent>(tileId));
-            var utility = GetTileComponentString(_tileManager.GetTileComponent<UtilityComponent>(tileId));
-
-            Func<string, string> newLineDoubleSpace = x => "\n" + x.AddTwoSpacesAtNewLine();
-
-            var sb = new StringBuilder();
-            sb.Append(newLineDoubleSpace(prop));
-
-            if (dev != "")
-                sb.Append(newLineDoubleSpace(dev));
-            if (station != "")
-                sb.Append(newLineDoubleSpace(station));
-            if (utility != "")
-                sb.Append(newLineDoubleSpace(utility));
 
             return sb.ToString();
         }
@@ -358,6 +417,75 @@ namespace MonopolyPreUnity.UI
             }
 
             return outStr;
+        }
+        #endregion
+
+        #region Properties
+        public string GetPropertyListString(List<int> propertyIds)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < propertyIds.Count; i++)
+                sb.Append($"{i}: {GetPropertyTileString(propertyIds[i])}");
+            return sb.ToString();
+        }
+
+        public string GetPropertyTileString(int propertyId)
+        {
+            var name = _tileManager.GetTileComponent<TileIdentityComponent>(propertyId).Name;
+            return $"{name}: " + GetPropertyString(propertyId);
+        }
+
+        public string GetPropertyString(int tileId)
+        {
+            var prop = GetTileComponentString(_tileManager.GetTileComponent<PropertyComponent>(tileId));
+            var dev = GetTileComponentString(_tileManager.GetTileComponent<PropertyDevelopmentComponent>(tileId));
+            var station = GetTileComponentString(_tileManager.GetTileComponent<TrainStationComponent>(tileId));
+            var utility = GetTileComponentString(_tileManager.GetTileComponent<UtilityComponent>(tileId));
+
+            Func<string, string> newLineDoubleSpace = x => "\n" + x.AddTwoSpacesAtNewLine();
+
+            var sb = new StringBuilder();
+            sb.Append(newLineDoubleSpace(prop));
+
+            if (dev != "")
+                sb.Append(newLineDoubleSpace(dev));
+            if (station != "")
+                sb.Append(newLineDoubleSpace(station));
+            if (utility != "")
+                sb.Append(newLineDoubleSpace(utility));
+
+            return sb.ToString();
+        }
+        #endregion
+
+        #region MiscOutput
+        public string GetStringOfListOfItems<T>(List<T> list, Func<T, string> valToString, bool indexate)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (indexate)
+                    sb.Append($"{i + 1}: ");
+                sb.Append(valToString(list[i]).Trim());
+            }
+            return sb.ToString().Trim();
+        }
+        #endregion
+
+        #region Commands
+        public void PrintCommands(List<MonopolyCommand> commands)
+        {
+            for (int i = 0; i < commands.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}: {CommandName(commands[i])}");
+            }
+        }
+
+        public string CommandName(MonopolyCommand command)
+        {
+            var commandName = command.ToString();
+            var lastDotIndex = commandName.LastIndexOf('.');
+            return commandName.Substring(lastDotIndex == -1 ? 0 : lastDotIndex).SplitByCapitalLetter();
         }
         #endregion
 
