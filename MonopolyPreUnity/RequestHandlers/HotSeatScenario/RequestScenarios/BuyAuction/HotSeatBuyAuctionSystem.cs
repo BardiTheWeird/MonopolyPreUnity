@@ -32,10 +32,10 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios.BuyA
             switch (commandChoice.Command)
             {
                 case MonopolyCommand.BuyProperty:
-                    _context.Add(new BuyProperty(player.Id, player.CurrentTileId));
+                    _context.Add(new BuyProperty(player.Id, player.CurTileId));
                     break;
                 case MonopolyCommand.AuctionProperty:
-                    _context.Add(new StartAuction(player.CurrentTileId));
+                    _context.Add(new StartAuction(player.CurTileId));
                     break;
             }
 

@@ -22,7 +22,7 @@ namespace MonopolyPreUnity.Systems
             foreach (var rent in _context.GetComponents<CollectRent>())
             {
                 var rentee = _context.GetPlayer(rent.RenteeId);
-                var tile = _context.GetTileId(rentee.CurrentTileId);
+                var tile = _context.GetTileId(rentee.CurTileId);
                 var prop = _context.GetTileComponent<Property>(tile.Id);
                 foreach (var component in _context.GetTileComponents(tile.Id))
                 {

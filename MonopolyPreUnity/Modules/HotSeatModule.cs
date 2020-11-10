@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using MonopolyPreUnity.RequestHandlers.HotSeatScenario;
+using MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios.BuyAuction;
 using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.UI;
 using System;
@@ -19,8 +20,9 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<HotSeatTradeValidationScenario>().Keyed<IHotSeatRequestScenario>(typeof(TradeValidationRequest));
             builder.RegisterType<HotSeatTurnScenario>().Keyed<IHotSeatRequestScenario>(typeof(TurnRequest));
 
-            // UI
-            builder.RegisterType<ConsoleUI>().AsSelf().SingleInstance();
+            // Systems
+            builder.RegisterType<HotSeatTurnScenario>().AsSelf().SingleInstance();
+            builder.RegisterType<HotSeatBuyAuctionSystem>().AsSelf().SingleInstance();
         }
     }
 }

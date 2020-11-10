@@ -1,6 +1,9 @@
 ﻿using MonopolyPreUnity.Actions;
 using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest.Output;
+using MonopolyPreUnity.Components.SystemRequest.PlayerState;
+using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.UI;
 using System;
@@ -11,34 +14,21 @@ namespace MonopolyPreUnity.Behaviors.Action
 {
     class GoToJailActionBehavior : IActionBehavior
     {
-        #region Dependencies
-        private readonly PlayerManager _playerManager;
-        private readonly MapManager _mapManager;
-        private readonly MapInfo _mapInfo;
-        private readonly ConsoleUI _consoleUI;
-        #endregion
+        private readonly Context _context;
 
         public void Execute(int playerId, IMonopolyAction action)
         {
-            if (_mapInfo.JailId == null)
-                _consoleUI.Print("No Jail present");
-            else
+            var mapInfo = _context.MapInfo();
+            if (mapInfo.JailId == null)
             {
-                _mapManager.MoveToTile(playerId, (int)_mapInfo.JailId, false);
-                _playerManager.GetPlayer(playerId).TurnsInJail = 0;
-                _consoleUI.PrintFormatted($"|player:{playerId}| was moved to Jail");
+                _context.Add(new PrintLine("No Jail present"));
+                return;
             }
+
+            _context.Add(new SendToJail(playerId));
         }
 
-        public GoToJailActionBehavior(PlayerManager playerManager, 
-            MapManager mapManager, 
-            ConsoleUI consoleUI, 
-            MapInfo mapInfo)
-        {
-            _playerManager = playerManager;
-            _mapManager = mapManager;
-            _consoleUI = consoleUI;
-            _mapInfo = mapInfo;
-        }
+        public GoToJailActionBehavior(Context context) =>
+            _context = context;
     }
 }

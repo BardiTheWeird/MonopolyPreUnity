@@ -5,6 +5,7 @@ using MonopolyPreUnity.Behaviors.PlayerLanded;
 using MonopolyPreUnity.Behaviors.Rent;
 using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Initialization;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Modules;
@@ -22,10 +23,13 @@ namespace MonopolyPreUnity
     {
         static void Main(string[] args)
         {
+            var config = new GameConfig(@"..\..\..\Resources\defaultGameConfig.xml");
+            var context = new Context();
+
             IContainer container;
             try
             {
-                container = InitContainerBuilder.CreateDiContainer();
+                container = DiContainer.CreateDiContainer(context);
             }
             catch (Exception e)
             {

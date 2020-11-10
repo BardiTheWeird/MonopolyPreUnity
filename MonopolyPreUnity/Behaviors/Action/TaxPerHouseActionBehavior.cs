@@ -1,5 +1,7 @@
 ﻿using MonopolyPreUnity.Actions;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest.Cash;
+using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.UI;
 using System;
@@ -11,25 +13,22 @@ namespace MonopolyPreUnity.Behaviors.Action
     class TaxPerHouseActionBehavior : IActionBehavior
     {
         #region Dependencies
-        private readonly PlayerManager _playerManager;
-        private readonly TileManager _tileManager;
+        private readonly Context _context;
         #endregion
 
         public void Execute(int playerId, IMonopolyAction action)
         {
             int sum = 0;
-            foreach (var propertyId in _playerManager.GetPlayer(playerId).Properties)
+            foreach (var propId in _context.GetPlayer(playerId).Properties)
             {
-                if (_tileManager.GetTileComponent<PropertyDevelopment>(propertyId, out var developmentComponent))
-                    sum += developmentComponent.HousesBuilt * (action as TaxPerHouseAction).Amount;
+                var dev = _context.GetTileComponent<PropertyDevelopment>(propId);
+                if (dev != null)
+                    sum += dev.HousesBuilt * (action as TaxPerHouseAction).Amount;
             }
-            _playerManager.PlayerCashCharge(playerId, sum, message: "for houses built");
+            _context.Add(new ChargeCash(sum, playerId, message: "for houses built"));
         }
 
-        public TaxPerHouseActionBehavior(PlayerManager playerManager, TileManager tileManager)
-        {
-            _playerManager = playerManager;
-            _tileManager = tileManager;
-        }
+        public TaxPerHouseActionBehavior(Context context) =>
+            _context = context;
     }
 }

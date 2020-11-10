@@ -26,7 +26,7 @@ namespace MonopolyPreUnity.Behaviors
 
             if (property.OwnerId == null)
             {
-                _context.Add(new PlayerInputRequest(player.Id, new BuyAuctionRequest(player.CurrentTileId)));
+                _context.Add(new PlayerInputRequest(player.Id, new BuyAuctionRequest(player.CurTileId)));
             }
             else if (property.OwnerId != player.Id && property.IsMortgaged == false)
             {

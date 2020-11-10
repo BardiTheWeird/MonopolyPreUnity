@@ -25,5 +25,9 @@ namespace MonopolyPreUnity.Components
             JailId = jailId;
             MapSize = mapSize;
         }
+
+        public MapInfo()
+        {
+        }
     }
 }

@@ -31,13 +31,18 @@ namespace MonopolyPreUnity.Systems
         {
             var playerProperty = player.Properties;
             int sum = 0;
-            foreach (int propertyId in playerProperty)
+            foreach (int propId in playerProperty)
             {
-                if (_tileManager.GetTileComponent<PropertyDevelopment>(propertyId, out var realEstate))
-                    sum += realEstate.HousesBuilt * realEstate.HouseSellPrice;
+                var prop = _context.GetTileComponent<Property>(propId);
+                var dev = _context.GetTileComponent<PropertyDevelopment>(propId);
 
-                if (_tileManager.GetTileComponent<Property>(propertyId, out var property))
-                    sum += (int)(property.BasePrice * _mortgageFee);
+                var mortgageFee = _context.GameConfig().MortgageFee;
+
+                if (!prop.IsMortgaged)
+                    sum += (int)(prop.BasePrice * mortgageFee);
+
+                if (dev != null)
+                    sum += dev.HousesBuilt * dev.HouseSellPrice; 
             }
             if (sum + player.Cash > debtAmount)
                 return true;

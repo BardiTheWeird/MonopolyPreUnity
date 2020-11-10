@@ -46,6 +46,17 @@ namespace MonopolyPreUnity.Entity
 
         public static List<IEntityComponent> GetTileComponents(this Context context, int tileId) =>
             context.GetEntity<Tile>(entity => entity.GetComponent<Tile>().Id == tileId).Components;
+
+        public static bool ContainsComponent(this Tile tile, Type type, Context context)
+        {
+            var entity = context.GetEntity<Tile>(e => e.GetComponent<Tile>() == tile);
+            foreach (var comp in entity.Components)
+            {
+                if (comp.GetType() == type)
+                    return true;
+            }
+            return false;
+        }
         #endregion
 
         #region Property

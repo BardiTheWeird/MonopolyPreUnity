@@ -1,4 +1,6 @@
 ﻿using MonopolyPreUnity.Actions;
+using MonopolyPreUnity.Components.SystemRequest.Move;
+using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.UI;
 using System;
@@ -11,21 +13,16 @@ namespace MonopolyPreUnity.Behaviors.Action
     class GoToTileComponentActionBehavior : IActionBehavior
     {
         #region Dependencies
-        private readonly MapManager _mapManager;
-        private readonly ConsoleUI _consoleUI; 
+        private readonly Context _context;
         #endregion
 
         public void Execute(int playerId, IMonopolyAction action)
         {
             var componentType = (action as GoToTileComponentAction).ComponentType;
-            _mapManager.MoveByFunc(playerId, x => x.Components.FirstOrDefault(comp => comp.GetType() == componentType) != null);
-            _consoleUI.PrintFormatted($"|player:{playerId}| was moved to a nearest {_consoleUI.GetTypeString(componentType)} tile");
+            _context.Add(new MoveType(playerId, componentType, true));
         }
 
-        public GoToTileComponentActionBehavior(MapManager mapManager, ConsoleUI consoleUI)
-        {
-            _mapManager = mapManager;
-            _consoleUI = consoleUI;
-        }
+        public GoToTileComponentActionBehavior(Context context) =>
+            _context = context;
     }
 }

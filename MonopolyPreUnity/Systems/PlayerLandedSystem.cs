@@ -20,7 +20,7 @@ namespace MonopolyPreUnity.Systems
             foreach (var playerLanded in _context.GetComponents<PlayerLanded>())
             {
                 var player = _context.GetPlayer(playerLanded.PlayerId);
-                foreach (var component in _context.GetTileComponents(player.CurrentTileId))
+                foreach (var component in _context.GetTileComponents(player.CurTileId))
                 {
                     if (_playerLandedBehaviorindex.TryGetValue(component.GetType(), out var behavior))
                         behavior.PlayerLanded(player, component);

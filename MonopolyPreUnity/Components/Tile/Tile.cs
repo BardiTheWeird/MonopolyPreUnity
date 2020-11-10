@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 namespace MonopolyPreUnity.Components
 {
-    class Tile : IEntityComponent
+    class Tile : IIdentifiable
     {
         public int Id { get; }
         public int MapPosition { get; set; }

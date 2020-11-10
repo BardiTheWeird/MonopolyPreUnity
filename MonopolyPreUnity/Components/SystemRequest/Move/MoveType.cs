@@ -4,16 +4,16 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components.SystemRequest.Move
 {
-    class MoveTileId : IMoveRequest
+    class MoveType : IMoveRequest
     {
         public int PlayerId { get; set; }
+        public Type ComponentType { get; set; }
         public bool CountGoPassed { get; set; }
-        public int TileId { get; set; }
 
-        public MoveTileId(int playerId, int tileId, bool countGoPassed)
+        public MoveType(int playerId, Type componentType, bool countGoPassed)
         {
             PlayerId = playerId;
-            TileId = tileId;
+            ComponentType = componentType;
             CountGoPassed = countGoPassed;
         }
     }

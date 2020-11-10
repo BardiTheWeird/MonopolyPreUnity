@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace MonopolyPreUnity.Components
 {
     public class GameConfig : IEntityComponent
     {
+        #region properties
         public int CashPerLap { get; set; }
         public int MaxTurnsInJail { get; set; }
         public int JailFine { get; set; }
@@ -13,7 +16,27 @@ namespace MonopolyPreUnity.Components
         public float MortgageFee { get; set; }
         public float MortgageCommission { get; set; }
         public int DieSides { get; set; }
+        #endregion
 
+        #region read/write
+        public static GameConfig ReadGameConfig(string filePath)
+        {
+            var serializer = new XmlSerializer(typeof(GameConfig));
+            var textReader = new StreamReader(filePath);
+
+            return (GameConfig)serializer.Deserialize(textReader);
+        }
+
+        public static void WriteGameConfig(GameConfig config, string filePath)
+        {
+            var serializer = new XmlSerializer(typeof(GameConfig));
+            var textWriter = new StreamWriter(filePath);
+
+            serializer.Serialize(textWriter, config);
+        }
+        #endregion
+
+        #region ctor
         public GameConfig(int cashPerLap, int maxTurnsInJail,
             int maxDicePairThrows, float mortgageFee,
             float mortgageComission, int jailFine, int dieSides)
@@ -27,8 +50,12 @@ namespace MonopolyPreUnity.Components
             DieSides = dieSides;
         }
 
+        public GameConfig(string filePath) =>
+            ReadGameConfig(filePath);
+
         public GameConfig()
         {
         }
+        #endregion
     }
 }

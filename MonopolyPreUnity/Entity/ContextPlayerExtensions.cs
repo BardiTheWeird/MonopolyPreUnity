@@ -2,17 +2,24 @@
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MonopolyPreUnity.Entity
 {
     static class ContextPlayerExtensions
     {
+        #region get player(s)
         public static Player GetPlayer(this Context context, int id) =>
             context.GetComponent<Player>(p => p.Id == id);
 
-        public static int GetPlayerCash(this Context context, int id) =>
-            context.GetComponent<Player>(p => p.Id == id).Cash;
+        public static List<Player> GetPlayers(this Context context, Func<Player, bool> predicate) =>
+            context.GetAllPlayers().Where(predicate).ToList();
+
+        public static List<Player> GetAllPlayers(this Context context) =>
+            context.GetComponents<Player>();
+
+        #endregion
 
         #region available commands
         public static List<MonopolyCommand> GetAvailableTurnCommands(this Context context, Player player)

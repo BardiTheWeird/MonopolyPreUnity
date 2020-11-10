@@ -93,6 +93,18 @@ namespace MonopolyPreUnity.Entity
 
         public void Add(params IEntityComponent[] components) =>
             Add(new Entity(components));
+
+        public void AddEntities(params Entity[] entities)
+        {
+            foreach (var entity in entities)
+                Add(entity);
+        }
+
+        public void AddEntities(params IEntityComponent[] components)
+        {
+            foreach (var comp in components)
+                Add(comp);
+        }
         #endregion
 
         #region ctor

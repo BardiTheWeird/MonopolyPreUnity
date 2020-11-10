@@ -5,14 +5,14 @@ using System.Runtime.Serialization;
 
 namespace MonopolyPreUnity.Components
 {
-    class Player : IEntityComponent
+    class Player : IIdentifiable
     {
         public int Id { get; }
         public string DisplayName { get; }
         public int Cash { get; set; }
         public int JailCards { get; set; }
         public int? TurnsInJail { get; set; }
-        public int CurrentTileId { get; set; }
+        public int CurTileId { get; set; }
         public bool CanMove { get; set; }
         public bool IsBankrupt { get; set; }
         public bool IsWinner { get; set; }
@@ -29,7 +29,7 @@ namespace MonopolyPreUnity.Components
             JailCards = jailCards;
             TurnsInJail = turnsInPrison;
             CanMove = true;
-            CurrentTileId = curTileId;
+            CurTileId = curTileId;
             RolledJailDiceThisTurn = rolledJailDiceThisTurn;
         }
 

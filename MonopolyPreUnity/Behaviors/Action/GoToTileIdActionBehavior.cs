@@ -1,4 +1,6 @@
 ﻿using MonopolyPreUnity.Actions;
+using MonopolyPreUnity.Components.SystemRequest.Move;
+using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.UI;
 using System;
@@ -10,21 +12,16 @@ namespace MonopolyPreUnity.Behaviors.Action
     class GoToTileIdActionBehavior : IActionBehavior
     {
         #region Dependencies
-        private readonly MapManager _mapManager;
-        private readonly ConsoleUI _consoleUI;
+        private readonly Context _context;
         #endregion
 
         public void Execute(int playerId, IMonopolyAction action)
         {
             var tileId = (action as GoToTileIdAction).TileId;
-            _mapManager.MoveToTile(playerId, tileId);
-            _consoleUI.PrintFormatted($"|player:{playerId}| was moved to |tile:{tileId}|");
+            _context.Add(new MoveTileId(playerId, tileId, true));
         }
 
-        public GoToTileIdActionBehavior(MapManager mapManager, ConsoleUI consoleUI)
-        {
-            _mapManager = mapManager;
-            _consoleUI = consoleUI;
-        }
+        public GoToTileIdActionBehavior(Context context) =>
+            _context = context;
     }
 }

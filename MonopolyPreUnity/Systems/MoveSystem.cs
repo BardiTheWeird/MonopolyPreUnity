@@ -1,5 +1,6 @@
 ﻿using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest.Move;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.SystemState;
 using MonopolyPreUnity.Entity;
 using System;
@@ -29,6 +30,9 @@ namespace MonopolyPreUnity.Systems
                         break;
                     case MoveDice moveDice:
                         MoveDice(player, moveDice);
+                        break;
+                    case MoveType moveType:
+                        MoveType(player, moveType);
                         break;
                 }
                 _context.Add(new PlayerLanded(player.Id));
@@ -60,11 +64,11 @@ namespace MonopolyPreUnity.Systems
         {
             // check if passed GO
             var goId = _context.MapInfo().GoId;
-            if (goId != null && countGoPassed && (fullLap || IsGoPassed(player.CurrentTileId, newTileId)))
+            if (goId != null && countGoPassed && (fullLap || IsGoPassed(player.CurTileId, newTileId)))
                 _context.Add(new GoPassed(player.Id));
 
             // actual move
-            player.CurrentTileId = newTileId;
+            player.CurTileId = newTileId;
         }
 
         public void MoveBySteps(Player player, MoveSteps moveSteps) =>
@@ -74,7 +78,7 @@ namespace MonopolyPreUnity.Systems
         {
             var mapSize = _context.MapInfo().MapSize;
 
-            int curTilePosition = _context.GetTileId(player.CurrentTileId).MapPosition;
+            int curTilePosition = _context.GetTileId(player.CurTileId).MapPosition;
             int newTilePosition = (curTilePosition + steps) % mapSize;
             int newTileId = _context.GetTilePosition(newTilePosition).Id;
 
@@ -89,19 +93,30 @@ namespace MonopolyPreUnity.Systems
             MoveBySteps(player, dice.Sum, moveDice.CountGoPassed);
         }
 
-        //public int MoveByFunc(int playerId, Func<Tile, bool> predicate, bool giveGOCash = true)
-        //{
-        //    Player player = _playerManager.GetPlayer(playerId);
-        //    int currentTileIndex = mapIndex[player.CurrentTileId];
+        public void MoveType(Player player, MoveType moveType)
+        {
+            Func<Tile, bool> pred = x => 
+                x.ContainsComponent(moveType.ComponentType, _context);
 
-        //    for (int i = (currentTileIndex + 1) % map.Count; i != currentTileIndex; i = (i + 1) % map.Count)
-        //    {
-        //        if (predicate(_tileManager.GetTile(mapIndex[i])))
-        //            return MoveToTile(playerId, map[i], giveGOCash);
-        //    }
+            MoveByFunc(player, pred, moveType.CountGoPassed);
+        }
 
-        //    throw new TileNotFoundException("No tile found for a given predicate.");
-        //}
+        public void MoveByFunc(Player player, Func<Tile, bool> predicate, bool countGoPassed)
+        {
+            int curTilePosition = _context.GetPosition(player.CurTileId);
+            int mapSize = _context.MapInfo().MapSize;
+
+            for (int i = (curTilePosition + 1) % mapSize; i != curTilePosition; i = (i + 1) % mapSize)
+            {
+                var curTile = _context.GetTilePosition(i);
+                if (predicate(curTile))
+                {
+                    MoveToTile(player, curTile.Id, countGoPassed);
+                    return;
+                }
+            }
+            _context.Add(new PrintLine("No tile found for a given predicate"));
+        }
         #endregion
 
         #region ctor
