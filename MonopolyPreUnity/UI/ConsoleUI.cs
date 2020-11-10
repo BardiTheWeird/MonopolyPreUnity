@@ -26,10 +26,10 @@ namespace MonopolyPreUnity.UI
     //    public static string AddTwoSpacesAtNewLine(this string str) =>
     //        "  " + Regex.Replace(str, @"\n", "\n  ");
 
-    //    public static T GetComponent<T>(this List<ITileComponent> components) where T : ITileComponent =>
+    //    public static T GetComponent<T>(this List<IEntityComponent> components) where T : IEntityComponent =>
     //        (T)components.FirstOrDefault(x => x.GetType() == typeof(T));
 
-    //    public static bool NotIdentityOrProperty(this ITileComponent component)
+    //    public static bool NotIdentityOrProperty(this IEntityComponent component)
     //    {
     //        var type = component.GetType();
     //        var check =
@@ -365,7 +365,7 @@ namespace MonopolyPreUnity.UI
             return typeStr.SplitByCapitalLetter();
         }
 
-        public string GetTileComponentString(ITileComponent component)
+        public string GetTileComponentString(IEntityComponent component)
         {
             if (component == null)
                 return "";

@@ -1,5 +1,6 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
 using System;
 using System.Collections.Generic;
@@ -10,28 +11,24 @@ namespace MonopolyPreUnity.Behaviors.Rent
     class DevelopmentRentBehavior : IRentBehavior
     {
         #region Dependencies
-        private readonly PropertyManager _propertyManager;
-        private readonly TileManager _tileManager;
+        private readonly Context _context;
         #endregion
 
-        public int GetRent(int renteeId, int ownerId, ITileComponent component, int tileId)
+        public int GetRent(int renteeId, int ownerId, IEntityComponent component, int tileId)
         {
-            var development = component as PropertyDevelopment;
+            var dev = component as PropertyDevelopment;
             var rentChoice = 0;
-            var propertyComponent = _tileManager.GetTileComponent<Property>(tileId);
-            if (_propertyManager.IsSetOwned(ownerId, propertyComponent))
-            {
-                rentChoice += 1 + development.HousesBuilt;
-            }
-            return development.RentList[rentChoice];
+            var prop = _context.GetTileComponent<Property>(tileId);
+
+            var owner = _context.GetPlayer(ownerId);
+            if (_context.IsPropertySetOwned(owner, prop.SetId))
+                rentChoice += 1 + dev.HousesBuilt;
+            return dev.RentList[rentChoice];
         }
 
         #region Constructor
-        public DevelopmentRentBehavior(PropertyManager propertyManager, TileManager tileManager)
-        {
-            _propertyManager = propertyManager;
-            _tileManager = tileManager;
-        }
+        public DevelopmentRentBehavior(Context context) => 
+            _context = context;
         #endregion
     }
 }

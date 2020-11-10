@@ -39,10 +39,10 @@ namespace MonopolyPreUnity.Classes
             return id;
         }
 
-        public int AddTile(string name, params ITileComponent[] components) =>
+        public int AddTile(string name, params IEntityComponent[] components) =>
             AddTile(name, components.ToList());
 
-        public int AddTile(string name, List<ITileComponent> components)
+        public int AddTile(string name, List<IEntityComponent> components)
         {
             var identity = CreateTileIdentity(name);
             components.Add(identity);
@@ -88,7 +88,7 @@ namespace MonopolyPreUnity.Classes
         #endregion
 
         #region Utility
-        public bool FindTileComponent<T>(List<ITileComponent> components, out T comp) where T : class, ITileComponent
+        public bool FindTileComponent<T>(List<IEntityComponent> components, out T comp) where T : class, IEntityComponent
         {
             comp = components.Find(x => x.GetType() == typeof(T)) as T;
             if (comp == null)

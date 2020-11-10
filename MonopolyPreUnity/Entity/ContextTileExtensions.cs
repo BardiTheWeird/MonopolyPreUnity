@@ -47,5 +47,29 @@ namespace MonopolyPreUnity.Entity
         public static List<IEntityComponent> GetTileComponents(this Context context, int tileId) =>
             context.GetEntity<Tile>(entity => entity.GetComponent<Tile>().Id == tileId).Components;
         #endregion
+
+        #region Property
+        public static HashSet<int> GetPropertySet(this Context context, int setId) =>
+            context
+            .GetEntities<Tile>()
+            .GetEntities<Property>()
+            .Select(e => e.GetComponent<Property>().SetId)
+            .Where(id => id == setId)
+            .ToHashSet();
+
+        public static bool IsPropertySetOwned(this Context context, Player player, int setId)
+        {
+            HashSet<int> set = context.GetPropertySet(setId);
+            var intersection = player.Properties.Intersect(set);
+            if (set.Count == intersection.Count())
+                return true;
+            return false;
+        }
+
+        public static HashSet<int> OwnedPropertiesInSet(this Context context, Player player, int setId) =>
+            player.Properties
+            .Intersect(context.GetPropertySet(setId))
+            .ToHashSet();
+        #endregion
     }
 }

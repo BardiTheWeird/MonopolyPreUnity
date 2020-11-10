@@ -7,6 +7,6 @@ namespace MonopolyPreUnity.Behaviors.Rent
 {
     interface IRentBehavior
     {
-        public int GetRent(int renteeId, int ownerId, ITileComponent component, int tileId);
+        public int GetRent(int renteeId, int ownerId, IEntityComponent component, int tileId);
     }
 }

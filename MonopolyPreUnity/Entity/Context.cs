@@ -25,6 +25,7 @@ namespace MonopolyPreUnity.Entity
                 }
             }
         }
+
         public string InputString { get; set; } = "";
         #endregion
 

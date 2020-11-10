@@ -27,7 +27,7 @@ namespace MonopolyPreUnity.Managers
         public Tile GetTile(int tileId) =>
             _tileDict[tileId];
 
-        public T GetTileComponent<T>(int tileId) where T : ITileComponent
+        public T GetTileComponent<T>(int tileId) where T : IEntityComponent
         {
             T component;
             if ((component = (T)_tileDict[tileId].Components.Find(x => x.GetType() == typeof(T))) != null)
@@ -37,7 +37,7 @@ namespace MonopolyPreUnity.Managers
             return default;
         }
 
-        public bool GetTileComponent<T>(int tileId, out T component) where T : ITileComponent
+        public bool GetTileComponent<T>(int tileId, out T component) where T : IEntityComponent
         {
             component = GetTileComponent<T>(tileId);
             if (component == null)
@@ -45,7 +45,7 @@ namespace MonopolyPreUnity.Managers
             return true;
         }
 
-        public int? GetTileWithComponent<T>() where T : ITileComponent
+        public int? GetTileWithComponent<T>() where T : IEntityComponent
         {
             var keyValuePair = _tileDict.FirstOrDefault(x => x.Value.GetType() == typeof(T));
             if (keyValuePair.Value != null)
@@ -53,7 +53,7 @@ namespace MonopolyPreUnity.Managers
             return null;
         }
 
-        public bool GetTileWithComponent<T>(out int index) where T : ITileComponent
+        public bool GetTileWithComponent<T>(out int index) where T : IEntityComponent
         {
             index = -1;
             var nullable = GetTileWithComponent<T>();
@@ -68,10 +68,10 @@ namespace MonopolyPreUnity.Managers
         public bool ContainsComponent<T>(Tile tile) =>
             tile.Components.FirstOrDefault(x => x.GetType() == typeof(T)) != null;
 
-        public bool ContainsComponent<T>(int tileId) where T : ITileComponent =>
+        public bool ContainsComponent<T>(int tileId) where T : IEntityComponent =>
             ContainsComponent<T>(_tileDict[tileId]);
 
-        public List<int> GetAllTilesWithComponent<T>() where T : ITileComponent 
+        public List<int> GetAllTilesWithComponent<T>() where T : IEntityComponent 
         {
             return _tileDict
             .Where(x => ContainsComponent<T>(x.Key))
