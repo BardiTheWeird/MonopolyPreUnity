@@ -48,6 +48,11 @@ namespace MonopolyPreUnity.Entity
             GetComponents<T>().Where(predicate).ToList();
         #endregion
 
+        #region ContainsComponent
+        public bool ContainsComponent<T>() where T : IEntityComponent =>
+            GetComponent<T>() != null;
+        #endregion
+
         #region Entity Methods
         public Entity GetEntity<T>(Func<Entity, bool> predicate) where T : IEntityComponent=>
             GetEntities<T>().FirstOrDefault(predicate);

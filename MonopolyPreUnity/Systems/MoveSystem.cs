@@ -27,6 +27,9 @@ namespace MonopolyPreUnity.Systems
                     case MoveTileId tileId:
                         MoveToTile(player, tileId);
                         break;
+                    case MoveDice moveDice:
+                        MoveDice(player, moveDice);
+                        break;
                 }
                 _context.AddEntity(new PlayerLanded(player.Id));
             }
@@ -64,16 +67,26 @@ namespace MonopolyPreUnity.Systems
             player.CurrentTileId = newTileId;
         }
 
-        public void MoveBySteps(Player player, MoveSteps moveSteps)
+        public void MoveBySteps(Player player, MoveSteps moveSteps) =>
+            MoveBySteps(player, moveSteps.Steps, moveSteps.CountGoPassed);
+
+        public void MoveBySteps(Player player, int steps, bool countGoPassed)
         {
             var mapSize = _context.MapInfo().MapSize;
-            var steps = moveSteps.Steps;
 
             int curTilePosition = _context.GetTileId(player.CurrentTileId).MapPosition;
             int newTilePosition = (curTilePosition + steps) % mapSize;
             int newTileId = _context.GetTilePosition(newTilePosition).Id;
 
-            MoveToTile(player, newTileId, moveSteps.CountGoPassed, steps >= mapSize);
+            MoveToTile(player, newTileId, countGoPassed, steps >= mapSize);
+        }
+
+        public void MoveDice(Player player, MoveDice moveDice)
+        {
+            var dice = _context.GetComponent<Dice>();
+            if (!dice.IsPair)
+                player.CanMove = false;
+            MoveBySteps(player, dice.Sum, moveDice.CountGoPassed);
         }
 
         //public int MoveByFunc(int playerId, Func<Tile, bool> predicate, bool giveGOCash = true)

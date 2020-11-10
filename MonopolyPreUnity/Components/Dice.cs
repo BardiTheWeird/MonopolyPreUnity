@@ -11,6 +11,7 @@ namespace MonopolyPreUnity.Components
         public int DieSides { get; }
 
         public int Sum => Die1 + Die2;
+        public bool IsPair => Die1 == Die2;
 
         public void Throw()
         {
