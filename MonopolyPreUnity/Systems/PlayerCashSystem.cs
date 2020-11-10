@@ -41,7 +41,7 @@ namespace MonopolyPreUnity.Systems
                     PlayerCashGive((int)charge.PlayerChargerId, charge.Amount);
             }
             else
-                _context.AddEntity(new PlayerDebt(player.Id, charge.Amount, charge.PlayerChargerId));
+                _context.Add(new PlayerDebt(player.Id, charge.Amount, charge.PlayerChargerId));
         }
         #endregion
 

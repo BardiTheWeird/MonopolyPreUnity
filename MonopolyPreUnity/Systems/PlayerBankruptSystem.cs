@@ -18,10 +18,10 @@ namespace MonopolyPreUnity.Systems
             foreach (var bankrupt in _context.GetComponents<PlayerBankrupt>())
             {
                 var player = _context.GetPlayer(bankrupt.PlayerId);
-                _context.AddEntity(new TransferAssets(bankrupt.CreditorId, player));
-                _context.AddEntity(new RemovePlayerFromGame(player.Id));
+                _context.Add(new TransferAssets(bankrupt.CreditorId, player));
+                _context.Add(new RemovePlayerFromGame(player.Id));
             }
-            _context.RemoveEntities<PlayerBankrupt>();
+            _context.Remove<PlayerBankrupt>();
         }
 
         #region ctor

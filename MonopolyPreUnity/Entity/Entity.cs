@@ -32,6 +32,9 @@ namespace MonopolyPreUnity.Entity
         public IEntityComponent GetComponent(Func<IEntityComponent, bool> predicate) =>
             Components.FirstOrDefault(predicate);
 
+        public bool ContainsComponent(IEntityComponent component) =>
+            Components.FirstOrDefault(c => c == component) != null;
+
         public bool ContainsComponent<T>() where T : IEntityComponent =>
             GetComponent<T>() != null;
 

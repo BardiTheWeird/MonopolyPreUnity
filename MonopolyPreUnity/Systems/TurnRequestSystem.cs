@@ -16,7 +16,7 @@ namespace MonopolyPreUnity.Systems
             if (!_context.ContainsComponent<PlayerInputRequest>())
             {
                 var curTurnPlayerId = _context.TurnInfo().CurTurnPlayerId;
-                _context.AddEntity(new PlayerInputRequest(curTurnPlayerId, new TurnRequest()));
+                _context.Add(new PlayerInputRequest(curTurnPlayerId, new TurnRequest()));
             }
         }
 

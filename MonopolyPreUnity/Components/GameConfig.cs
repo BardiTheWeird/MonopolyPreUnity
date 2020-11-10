@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Classes
+namespace MonopolyPreUnity.Components
 {
-    public class GameConfig
+    public class GameConfig : IEntityComponent
     {
         public int CashPerLap { get; set; }
         public int MaxTurnsInJail { get; set; }
@@ -14,8 +14,8 @@ namespace MonopolyPreUnity.Classes
         public float MortgageCommission { get; set; }
         public int DieSides { get; set; }
 
-        public GameConfig(int cashPerLap, int maxTurnsInJail, 
-            int maxDicePairThrows, float mortgageFee, 
+        public GameConfig(int cashPerLap, int maxTurnsInJail,
+            int maxDicePairThrows, float mortgageFee,
             float mortgageComission, int jailFine, int dieSides)
         {
             CashPerLap = cashPerLap;

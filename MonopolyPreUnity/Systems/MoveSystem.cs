@@ -31,7 +31,7 @@ namespace MonopolyPreUnity.Systems
                         MoveDice(player, moveDice);
                         break;
                 }
-                _context.AddEntity(new PlayerLanded(player.Id));
+                _context.Add(new PlayerLanded(player.Id));
             }
             _context.RemoveEntitiesInterface<IMoveRequest>();
         }
@@ -61,7 +61,7 @@ namespace MonopolyPreUnity.Systems
             // check if passed GO
             var goId = _context.MapInfo().GoId;
             if (goId != null && countGoPassed && (fullLap || IsGoPassed(player.CurrentTileId, newTileId)))
-                _context.AddEntity(new GoPassed(player.Id));
+                _context.Add(new GoPassed(player.Id));
 
             // actual move
             player.CurrentTileId = newTileId;

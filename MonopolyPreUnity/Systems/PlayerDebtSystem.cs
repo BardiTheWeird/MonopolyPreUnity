@@ -19,11 +19,11 @@ namespace MonopolyPreUnity.Systems
             {
                 var debtor = _context.GetPlayer(debt.DebtorId);
                 if (!EnoughPropertyToPayOff(debtor, debt.DebtAmount))
-                    _context.AddEntity(new PlayerBankrupt(debt));
+                    _context.Add(new PlayerBankrupt(debt));
                 else
-                    _context.AddEntity(new PlayerHasToPayOffDebt(debt));
+                    _context.Add(new PlayerHasToPayOffDebt(debt));
             }
-            _context.RemoveEntities<PlayerDebt>();
+            _context.Remove<PlayerDebt>();
         }
 
         #region Methods

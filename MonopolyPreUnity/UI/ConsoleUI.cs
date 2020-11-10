@@ -14,32 +14,34 @@ using System.Text.RegularExpressions;
 
 namespace MonopolyPreUnity.UI
 {
-    static class ConsoleUIExtensions
-    {
-        public static string SplitByCapitalLetter(this string str) =>
-            Regex.Replace(str, @"[A-Z]", match => " " + match.Value).Trim();
+    #region extensions
+    //static class ConsoleUIExtensions
+    //{
+    //    public static string SplitByCapitalLetter(this string str) =>
+    //        Regex.Replace(str, @"[A-Z]", match => " " + match.Value).Trim();
 
-        public static string Tabulize(this string str) =>
-            "\t" + Regex.Replace(str, @"\n", "\n\t");
+    //    public static string Tabulize(this string str) =>
+    //        "\t" + Regex.Replace(str, @"\n", "\n\t");
 
-        public static string AddTwoSpacesAtNewLine(this string str) =>
-            "  " + Regex.Replace(str, @"\n", "\n  ");
+    //    public static string AddTwoSpacesAtNewLine(this string str) =>
+    //        "  " + Regex.Replace(str, @"\n", "\n  ");
 
-        public static T GetComponent<T>(this List<ITileComponent> components) where T : ITileComponent =>
-            (T)components.FirstOrDefault(x => x.GetType() == typeof(T));
+    //    public static T GetComponent<T>(this List<ITileComponent> components) where T : ITileComponent =>
+    //        (T)components.FirstOrDefault(x => x.GetType() == typeof(T));
 
-        public static bool NotIdentityOrProperty(this ITileComponent component)
-        {
-            var type = component.GetType();
-            var check =
-                !( type == typeof(Tile)
-                || type == typeof(Property)
-                || type == typeof(PropertyDevelopment)
-                || type == typeof(TrainStation)
-                || type == typeof(UtilityProperty));
-            return check;
-        }
-    }
+    //    public static bool NotIdentityOrProperty(this ITileComponent component)
+    //    {
+    //        var type = component.GetType();
+    //        var check =
+    //            !( type == typeof(Tile)
+    //            || type == typeof(Property)
+    //            || type == typeof(PropertyDevelopment)
+    //            || type == typeof(TrainStation)
+    //            || type == typeof(UtilityProperty));
+    //        return check;
+    //    }
+    //}
+    #endregion
 
     class ConsoleUI
     {
@@ -60,7 +62,7 @@ namespace MonopolyPreUnity.UI
                 }
                 catch
                 {
-                    Console.WriteLine("Invalid input. Try again");
+                    _context.Add(new PrintLine(("Invalid input. Try again");
                 }
             }
         }
@@ -72,12 +74,9 @@ namespace MonopolyPreUnity.UI
                 var val = InputValue<T>();
                 if (pred(val))
                     return val;
-                Console.WriteLine(errorMessage + ". Try again");
+                _context.Add(new PrintLine((errorMessage + ". Try again");
             }
         }
-
-        public T InputValue<T>(IEnumerable<T> possibleValues) where T : IConvertible =>
-            InputValue<T>(x => possibleValues.Contains(x), "Value not present");
 
         public int InputValueIndex<T>(IEnumerable<T> values, bool canCancel = false)
         {
@@ -89,7 +88,7 @@ namespace MonopolyPreUnity.UI
         #region Specific Input
         public MonopolyCommand ChooseCommand(List<MonopolyCommand> commands)
         {
-            Console.WriteLine("Choose command:");
+            _context.Add(new PrintLine(("Choose command:");
             PrintCommands(commands);
             return commands[InputValueIndex(commands)];
         }
@@ -149,11 +148,11 @@ namespace MonopolyPreUnity.UI
 
         #region Print
         public void Print(string message) =>
-            Console.WriteLine(message);
+            _context.Add(new PrintLine((message);
 
         public void PrintFormatted(string message)
         {
-            Console.WriteLine(FormattedString(message));
+            _context.Add(new PrintLine((FormattedString(message));
         }
 
         public string FormattedString(string str)
@@ -192,7 +191,7 @@ namespace MonopolyPreUnity.UI
             if (charger != null)
                 sb.Append($"; Charger: {charger.Cash}$");
 
-            Console.WriteLine(sb);
+            _context.Add(new PrintLine((sb);
         }
 
         public void PrintCashGiveMessage(int receiverId, int amount, string message = null)
@@ -206,7 +205,7 @@ namespace MonopolyPreUnity.UI
             if (message != null)
                 sb.Append("\n  Message: " + message);
 
-            Console.WriteLine(sb);
+            _context.Add(new PrintLine((sb);
         }
         #endregion
 
@@ -219,8 +218,8 @@ namespace MonopolyPreUnity.UI
             if (preface.Length > 0)
                 preface += " ";
 
-            Console.WriteLine(preface + name);
-            Console.WriteLine(desc.AddTwoSpacesAtNewLine());
+            _context.Add(new PrintLine((preface + name);
+            _context.Add(new PrintLine((desc.AddTwoSpacesAtNewLine());
         }
 
         public string GetActionDescription(IMonopolyAction action)
@@ -333,7 +332,7 @@ namespace MonopolyPreUnity.UI
             var landedString = FormattedString($"|player:{playerId}| landed on ");
             var tileString = TileString(tileId);
 
-            Console.WriteLine(landedString + tileString.Trim());
+            _context.Add(new PrintLine((landedString + tileString.Trim());
         }
 
         public string TileString(int tileId)
@@ -477,7 +476,7 @@ namespace MonopolyPreUnity.UI
         {
             for (int i = 0; i < commands.Count; i++)
             {
-                Console.WriteLine($"{i + 1}: {CommandName(commands[i])}");
+                _context.Add(new PrintLine(($"{i + 1}: {CommandName(commands[i])}");
             }
         }
 

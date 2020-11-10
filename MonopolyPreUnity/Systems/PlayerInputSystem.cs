@@ -17,7 +17,7 @@ namespace MonopolyPreUnity.Systems
         {
             foreach (var request in _context.GetComponents<PlayerInputRequest>())
                 _scenarioIndex[request.PlayerId].HandleRequest(request.Request);
-            _context.RemoveEntities<PlayerInputRequest>();
+            _context.Remove<PlayerInputRequest>();
         }
 
         #region ctor

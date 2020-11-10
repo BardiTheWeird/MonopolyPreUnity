@@ -69,23 +69,29 @@ namespace MonopolyPreUnity.Entity
         public List<Entity> GetEntities<T>() where T : IEntityComponent =>
             GetEntities(entity => entity.ContainsComponent<T>());
 
-        public void RemoveEntity(Entity entity) =>
+        public void Remove(IEntityComponent component) =>
+            Entities.Where(e => e.ContainsComponent(component));
+
+        public void Remove(Entity entity) =>
             Entities.Remove(entity);
 
         public void RemoveRange(IEnumerable<Entity> entities) =>
             Entities.RemoveAll(entity => entities.Contains(entity));
 
-        public void RemoveEntities<T>() where T : IEntityComponent =>
-            RemoveEntities(entity => entity.ContainsComponent<T>());
+        public void Remove<T>() where T : IEntityComponent =>
+            Remove(entity => entity.ContainsComponent<T>());
 
-        public void RemoveEntities(Func<Entity, bool> predicate) =>
+        public void Remove<T>(Func<T, bool> predicate) where T : IEntityComponent =>
+            Remove(entity => entity.ContainsComponent<T>() && predicate(entity.GetComponent<T>()));
+
+        public void Remove(Func<Entity, bool> predicate) =>
             Entities.RemoveAll(new Predicate<Entity>(predicate));
 
-        public void AddEntity(Entity entity) =>
+        public void Add(Entity entity) =>
             Entities.Add(entity);
 
-        public void AddEntity(params IEntityComponent[] components) =>
-            AddEntity(new Entity(components));
+        public void Add(params IEntityComponent[] components) =>
+            Add(new Entity(components));
         #endregion
 
         #region ctor

@@ -26,7 +26,7 @@ namespace MonopolyPreUnity.Systems
                         behavior.PlayerLanded(player, component);
                 }
             }
-            _context.RemoveEntities<PlayerLanded>();
+            _context.Remove<PlayerLanded>();
         }
 
         #region ctor

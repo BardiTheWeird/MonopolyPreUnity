@@ -24,7 +24,7 @@ namespace MonopolyPreUnity.Systems
                 else
                     TransferToBank(transfer.Assets);
             }
-            _context.RemoveEntities<TransferAssets>();
+            _context.Remove<TransferAssets>();
         }
 
         #region to bank

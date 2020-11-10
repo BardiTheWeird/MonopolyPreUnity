@@ -13,5 +13,8 @@ namespace MonopolyPreUnity.Entity
 
         public static Dice Dice(this Context context) =>
             context.GetComponent<Dice>();
+
+        public static GameConfig GameConfig(this Context context) =>
+            context.GetComponent<GameConfig>();
     }
 }

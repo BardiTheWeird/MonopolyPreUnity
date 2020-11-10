@@ -14,7 +14,10 @@ namespace MonopolyPreUnity.Entity
             .Select(entity => (IT)entity.GetComponent(comp => comp is IT))
             .ToList();
 
+        public static IT GetComponentInterface<IT>(this Context context) where IT : IEntityComponent =>
+            context.GetComponentsInterface<IT>().FirstOrDefault();
+
         public static void RemoveEntitiesInterface<IT>(this Context context) where IT : IEntityComponent =>
-            context.RemoveEntities(entity => entity.ContainsComponent(comp => comp is IT));
+            context.Remove(entity => entity.ContainsComponent(comp => comp is IT));
     }
 }
