@@ -13,7 +13,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios.TurnScenario
 {
-    class HotSeatTurnChoiceSystem : ISystem
+    class HotSeatTurnSystem : ISystem
     {
         private readonly Context _context;
         private readonly MonopolyCommand[] _appropriateCommands =
@@ -62,7 +62,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios.Turn
         }
 
         #region ctor
-        public HotSeatTurnChoiceSystem(Context context)
+        public HotSeatTurnSystem(Context context)
         {
             _context = context;
         }

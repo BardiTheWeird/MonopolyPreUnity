@@ -9,9 +9,7 @@ namespace MonopolyPreUnity.Components
     {
         public IMonopolyAction Action { get; }
 
-        public ActionTile(IMonopolyAction action)
-        {
+        public ActionTile(IMonopolyAction action) =>
             Action = action;
-        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest;
+using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
 using System;
 using System.Collections.Generic;
@@ -9,17 +11,13 @@ namespace MonopolyPreUnity.Behaviors.PlayerLanded
     class ActionTileBehavior : IPlayerLandedBehavior
     {
         #region Dependencies
-        private readonly ActionManager _actionManager;
+        private readonly Context _context;
         #endregion
 
-        public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId)
-        {
-            _actionManager.ExecuteAction(playerId, ((ActionTile)tileComponent).Action);
-        }
+        public void PlayerLanded(Player player, IEntityComponent component) =>
+            _context.Add(new ExecuteAction(((ActionTile)component).Action, player.Id));
 
-        public ActionTileBehavior(ActionManager actionManager)
-        {
-            _actionManager = actionManager;
-        }
+        public ActionTileBehavior(Context context) =>
+            _context = context;
     }
 }

@@ -9,9 +9,9 @@ namespace MonopolyPreUnity.Components
     {
         public List<IMonopolyAction> ActionList { get; }
 
-        public ActionBox(List<IMonopolyAction> actions)
-        {
+        public ActionBox(List<IMonopolyAction> actions) =>
             ActionList = actions;
-        }
+
+        public static implicit operator List<IMonopolyAction>(ActionBox box) => box.ActionList;
     }
 }

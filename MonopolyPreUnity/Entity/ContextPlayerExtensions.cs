@@ -48,6 +48,17 @@ namespace MonopolyPreUnity.Entity
 
             return commands;
         }
+
+        public static List<MonopolyCommand> GetBuyAuctionCommands(this Context context, Player player, int propId)
+        {
+            var property = context.GetTileComponent<Property>(propId);
+
+            var availableActions = new List<MonopolyCommand> { MonopolyCommand.AuctionProperty };
+            if (player.Cash >= property.BasePrice)
+                availableActions.Add(MonopolyCommand.BuyProperty);
+
+            return availableActions;
+        }
         #endregion
     }
 }

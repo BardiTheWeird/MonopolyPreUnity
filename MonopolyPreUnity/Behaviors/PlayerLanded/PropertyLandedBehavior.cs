@@ -1,5 +1,8 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest;
+using MonopolyPreUnity.Components.SystemRequest.Output;
+using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.UI;
@@ -13,39 +16,31 @@ namespace MonopolyPreUnity.Behaviors
     class PropertyLandedBehavior : IPlayerLandedBehavior
     {
         #region Dependencies
-        private readonly RentManager _rentManager;
-        private readonly RequestManager _requestManager;
-        private readonly ConsoleUI _consoleUI;
+        private readonly Context _context;
         #endregion
 
         #region Behavior
-        public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId)
+        public void PlayerLanded(Player player, IEntityComponent component)
         {
-            var property = (Property)tileComponent;
+            var property = (Property)component;
 
             if (property.OwnerId == null)
             {
-                _requestManager.SendRequest(playerId, new BuyAuctionRequest(tileId));
+                _context.Add(new PlayerInputRequest(player.Id, new BuyAuctionRequest(player.CurrentTileId)));
             }
-            else if (property.OwnerId != playerId && property.IsMortgaged == false)
+            else if (property.OwnerId != player.Id && property.IsMortgaged == false)
             {
-                _rentManager.CollectRent(playerId, tileId, (int)property.OwnerId);
+                _context.Add(new CollectRent(player.Id));
             }
-            else
-                _consoleUI.Print("It's their own property");
+            //else
+            //    _context.Add(new PrintLine("It's their own property"));
         }
 
         #endregion
 
         #region Constructor
-        public PropertyLandedBehavior(RentManager rentManager,
-            RequestManager requestManager,
-            ConsoleUI consoleUI)
-        {
-            _rentManager = rentManager;
-            _requestManager = requestManager;
-            _consoleUI = consoleUI;
-        }
+        public PropertyLandedBehavior(Context context) =>
+            _context = context;
         #endregion
     }
 }
