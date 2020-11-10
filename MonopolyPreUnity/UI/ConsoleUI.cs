@@ -32,11 +32,11 @@ namespace MonopolyPreUnity.UI
         {
             var type = component.GetType();
             var check =
-                !( type == typeof(TileComponent)
-                || type == typeof(PropertyComponent)
-                || type == typeof(PropertyDevelopmentComponent)
-                || type == typeof(TrainStationComponent)
-                || type == typeof(UtilityComponent));
+                !( type == typeof(Tile)
+                || type == typeof(Property)
+                || type == typeof(PropertyDevelopment)
+                || type == typeof(TrainStation)
+                || type == typeof(UtilityProperty));
             return check;
         }
     }
@@ -167,7 +167,7 @@ namespace MonopolyPreUnity.UI
                     case "player":
                         return _playerManager.GetPlayer(id).DisplayName;
                     case "tile":
-                        return _tileManager.GetTileComponent<TileComponent>(id).Name;
+                        return _tileManager.GetTileComponent<Tile>(id).Name;
                 }
                 return match.Value;
             });
@@ -340,10 +340,10 @@ namespace MonopolyPreUnity.UI
         {
             var sb = new StringBuilder();
 
-            var identity = _tileManager.GetTileComponent<TileComponent>(tileId);
+            var identity = _tileManager.GetTileComponent<Tile>(tileId);
             sb.Append(identity.Name.Trim());
 
-            if (_tileManager.ContainsComponent<PropertyComponent>(tileId))
+            if (_tileManager.ContainsComponent<Property>(tileId))
                 sb.Append(GetPropertyString(tileId));
 
             var components = _tileManager.GetTile(tileId).Components.Where(comp => comp.NotIdentityOrProperty());
@@ -373,26 +373,26 @@ namespace MonopolyPreUnity.UI
 
             switch (component)
             {
-                case PropertyComponent prop:
+                case Property prop:
                     return GetPropComponentString(prop);
-                case PropertyDevelopmentComponent dev:
+                case PropertyDevelopment dev:
                     return GetDevComponentString(dev);
-                case TrainStationComponent train:
+                case TrainStation train:
                     return $"Base station rent: {train.BaseRent}";
-                case UtilityComponent utility:
+                case UtilityProperty utility:
                     return "";
 
-                case ActionBoxComponent actionBox:
-                case ActionTileComponent actionTile:
-                case FreeParkingComponent freeParking:
-                case GoComponent go:
-                case JailComponent jail:
+                case ActionBox actionBox:
+                case ActionTile actionTile:
+                case FreeParking freeParking:
+                case Go go:
+                case Jail jail:
                     return "";
             }
             return($"COULD NOT GET A STRING FOR {GetTypeString(component.GetType())}");
         }
 
-        public string GetPropComponentString(PropertyComponent prop)
+        public string GetPropComponentString(Property prop)
         {
             string ownerName = prop.OwnerId == null ? "No owner" : _playerManager.GetPlayer((int)prop.OwnerId).DisplayName;
             return $"Owner: {ownerName}\n" +
@@ -401,7 +401,7 @@ namespace MonopolyPreUnity.UI
                 $"IsMortgaged: {prop.IsMortgaged}";
         }
 
-        public string GetDevComponentString(PropertyDevelopmentComponent dev, bool writeRentList = true)
+        public string GetDevComponentString(PropertyDevelopment dev, bool writeRentList = true)
         {
             var outStr = $"Houses built: {dev.HousesBuilt} out of {dev.HouseCap}\n" +
                 $"House Buy/Sell price: {dev.HouseBuyPrice}/{dev.HouseSellPrice}";
@@ -431,16 +431,16 @@ namespace MonopolyPreUnity.UI
 
         public string GetPropertyTileString(int propertyId)
         {
-            var name = _tileManager.GetTileComponent<TileComponent>(propertyId).Name;
+            var name = _tileManager.GetTileComponent<Tile>(propertyId).Name;
             return $"{name}: " + GetPropertyString(propertyId);
         }
 
         public string GetPropertyString(int tileId)
         {
-            var prop = GetTileComponentString(_tileManager.GetTileComponent<PropertyComponent>(tileId));
-            var dev = GetTileComponentString(_tileManager.GetTileComponent<PropertyDevelopmentComponent>(tileId));
-            var station = GetTileComponentString(_tileManager.GetTileComponent<TrainStationComponent>(tileId));
-            var utility = GetTileComponentString(_tileManager.GetTileComponent<UtilityComponent>(tileId));
+            var prop = GetTileComponentString(_tileManager.GetTileComponent<Property>(tileId));
+            var dev = GetTileComponentString(_tileManager.GetTileComponent<PropertyDevelopment>(tileId));
+            var station = GetTileComponentString(_tileManager.GetTileComponent<TrainStation>(tileId));
+            var utility = GetTileComponentString(_tileManager.GetTileComponent<UtilityProperty>(tileId));
 
             Func<string, string> newLineDoubleSpace = x => "\n" + x.AddTwoSpacesAtNewLine();
 

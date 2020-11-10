@@ -21,7 +21,7 @@ namespace MonopolyPreUnity.Behaviors
         #region Behavior
         public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId)
         {
-            var property = (PropertyComponent)tileComponent;
+            var property = (Property)tileComponent;
 
             if (property.OwnerId == null)
             {

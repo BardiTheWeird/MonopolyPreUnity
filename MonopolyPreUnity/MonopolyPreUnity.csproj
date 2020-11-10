@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\ManagerState\" />
     <Folder Include="RequestHandlers\AIScenario\" />
   </ItemGroup>
 

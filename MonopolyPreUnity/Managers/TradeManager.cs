@@ -46,8 +46,8 @@ namespace MonopolyPreUnity.Managers
         {
             return properties.Where(id =>
             {
-                var prop = _tileManager.GetTileComponent<PropertyComponent>(id);
-                var dev = _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id);
+                var prop = _tileManager.GetTileComponent<Property>(id);
+                var dev = _tileManager.GetTileComponent<PropertyDevelopment>(id);
 
                 return !prop.IsMortgaged && (dev == null || dev.HousesBuilt == 0);
             });

@@ -33,8 +33,8 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
                     return;
 
                 MonopolyCommand command;
-                var property = _tileManager.GetTileComponent<PropertyComponent>(propId);
-                var development = _tileManager.GetTileComponent<PropertyDevelopmentComponent>(propId);
+                var property = _tileManager.GetTileComponent<Property>(propId);
+                var development = _tileManager.GetTileComponent<PropertyDevelopment>(propId);
                 do
                 {
                     var availableActions = _propertyManager.GetAvailableActions(player.Id, property, development);

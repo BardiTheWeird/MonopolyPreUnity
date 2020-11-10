@@ -67,8 +67,14 @@ namespace MonopolyPreUnity.Entity
         public void RemoveEntity(Entity entity) =>
             Entities.Remove(entity);
 
+        public void RemoveRange(IEnumerable<Entity> entities) =>
+            Entities.RemoveAll(entity => entities.Contains(entity));
+
         public void RemoveEntities<T>() where T : IEntityComponent =>
-            Entities.RemoveAll(entity => entity.ContainsComponent<T>());
+            RemoveEntities(entity => entity.ContainsComponent<T>());
+
+        public void RemoveEntities(Func<Entity, bool> predicate) =>
+            Entities.RemoveAll(new Predicate<Entity>(predicate));
 
         public void AddEntity(Entity entity) =>
             Entities.Add(entity);

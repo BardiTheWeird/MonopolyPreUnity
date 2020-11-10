@@ -16,8 +16,8 @@ namespace MonopolyPreUnity.Behaviors.Rent
 
         public int GetRent(int renteeId, int ownerId, ITileComponent component, int tileId)
         {
-            var station = component as TrainStationComponent;
-            var property = _tileManager.GetTileComponent<PropertyComponent>(tileId);
+            var station = component as TrainStation;
+            var property = _tileManager.GetTileComponent<Property>(tileId);
 
             var ownedPropertyInSet = _propertyManager.OwnedPropertiesInSet(ownerId, property.SetId);
 

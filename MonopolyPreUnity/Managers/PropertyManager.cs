@@ -50,7 +50,7 @@ namespace MonopolyPreUnity.Managers
         #region Transfer Property
         public void TransferProperty(int propertyId, int newOwnerId)
         {
-            var property = _tileManager.GetTileComponent<PropertyComponent>(propertyId);
+            var property = _tileManager.GetTileComponent<Property>(propertyId);
             if (property.OwnerId != null)
             {
                 _consoleUI.PrintFormatted($"|player:{(int)property.OwnerId}| is no longer the owner of |tile:{propertyId}|");
@@ -80,7 +80,7 @@ namespace MonopolyPreUnity.Managers
         /// <param name="playerId">player</param>
         /// <param name="propertyComponent">property to check for set</param>
         /// <returns></returns>
-        public bool IsSetOwned(int playerId, PropertyComponent propertyComponent)
+        public bool IsSetOwned(int playerId, Property propertyComponent)
         {
             var playerSet = _tileManager.GetPropertySet(propertyComponent.SetId);
             var player = _playerManager.GetPlayer(playerId);
@@ -100,25 +100,25 @@ namespace MonopolyPreUnity.Managers
         /// <param name="propertyDevelopmentComponent">specific real estate</param>
         /// <returns></returns>
         
-        public bool BuildOnPropertyAllowed(HashSet<int> playerSet, int playerId, PropertyComponent propertyComponent, PropertyDevelopmentComponent propertyDevelopmentComponent)
+        public bool BuildOnPropertyAllowed(HashSet<int> playerSet, int playerId, Property propertyComponent, PropertyDevelopment propertyDevelopmentComponent)
             //набор зданий одного цвета
-            => (playerSet.Max(id => _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id).HousesBuilt) -
+            => (playerSet.Max(id => _tileManager.GetTileComponent<PropertyDevelopment>(id).HousesBuilt) -
                 propertyDevelopmentComponent.HousesBuilt + _house <= 1 &&/*проверка на возможность достроить дом
                  на определенном тайле не нарушив баланс разности с максимально развитым тайлом*/
                 propertyDevelopmentComponent.HousesBuilt + _house -
-                playerSet.Min(id => _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id).HousesBuilt) <= 1 &&
+                playerSet.Min(id => _tileManager.GetTileComponent<PropertyDevelopment>(id).HousesBuilt) <= 1 &&
                 /*аналогично для минимального тайла*/
                 _playerManager.GetPlayerCash(playerId) >
                 propertyDevelopmentComponent.HouseBuyPrice &&//достаток денег для постройки
                     propertyDevelopmentComponent.HousesBuilt != _housesLimit &&//проверка максимальной развитости тайла
                     IsSetOwned(playerId, propertyComponent));//проверка на наличие сета у игрока
 
-        public bool SellOnPropertyAllowed(HashSet<int> playerSet, int playerId, PropertyComponent propertyComponent, PropertyDevelopmentComponent propertyDevelopmentComponent)
+        public bool SellOnPropertyAllowed(HashSet<int> playerSet, int playerId, Property propertyComponent, PropertyDevelopment propertyDevelopmentComponent)
 
-            => playerSet.Max(id => _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id).HousesBuilt) -
+            => playerSet.Max(id => _tileManager.GetTileComponent<PropertyDevelopment>(id).HousesBuilt) -
                 propertyDevelopmentComponent.HousesBuilt - _house <= 1 &&
                 propertyDevelopmentComponent.HousesBuilt - _house -
-                playerSet.Min(id => _tileManager.GetTileComponent<PropertyDevelopmentComponent>(id).HousesBuilt) <= 1 &&
+                playerSet.Min(id => _tileManager.GetTileComponent<PropertyDevelopment>(id).HousesBuilt) <= 1 &&
                 IsSetOwned(playerId, propertyComponent);
 
     
@@ -137,7 +137,7 @@ namespace MonopolyPreUnity.Managers
         /// <returns></returns>
         /// 
         
-        public List<MonopolyCommand> GetAvailableActions(int playerId,PropertyComponent propertyComponent,PropertyDevelopmentComponent propertyDevelopmentComponent)
+        public List<MonopolyCommand> GetAvailableActions(int playerId,Property propertyComponent,PropertyDevelopment propertyDevelopmentComponent)
         {
             var playerSet = _tileManager.GetPropertySet(propertyComponent.SetId);
             var AvailableActions= new List<MonopolyCommand>();
@@ -169,7 +169,7 @@ namespace MonopolyPreUnity.Managers
         /// <param name="playerId">Player to deal with</param>
         /// <param name="developmentComponent">Real estate to deal with</param>
         
-        public void BuildHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
+        public void BuildHouse(int playerId,PropertyDevelopment developmentComponent)
         {
             developmentComponent.HousesBuilt++;
             _playerManager.PlayerCashCharge(playerId, developmentComponent.HouseBuyPrice);
@@ -181,7 +181,7 @@ namespace MonopolyPreUnity.Managers
         /// <param name="playerId">Player to deal with</param>
         /// <param name="developmentComponent">Real estate to deal with</param>
         
-        public void SellHouse(int playerId,PropertyDevelopmentComponent developmentComponent)
+        public void SellHouse(int playerId,PropertyDevelopment developmentComponent)
         {
             developmentComponent.HousesBuilt--;
             _playerManager.PlayerCashGive(playerId, developmentComponent.HouseSellPrice);
@@ -193,7 +193,7 @@ namespace MonopolyPreUnity.Managers
         /// <param name="playerId">Player to deal with</param>
         /// <param name="developmentComponent">Real estate to deal with</param>
         
-        public void Mortage(int playerId, PropertyComponent propertyComponent)
+        public void Mortage(int playerId, Property propertyComponent)
         {
             _playerManager.PlayerCashGive(playerId, (int)(_mortgageFee * propertyComponent.BasePrice));
             propertyComponent.IsMortgaged = true;
@@ -205,7 +205,7 @@ namespace MonopolyPreUnity.Managers
         /// <param name="playerId">Player to deal with</param>
         /// <param name="developmentComponent">Real estate to deal with</param>
         
-        public void UnMortage(int playerId, PropertyComponent propertyComponent)
+        public void UnMortage(int playerId, Property propertyComponent)
         {
             propertyComponent.IsMortgaged = false;
             _playerManager.PlayerCashCharge(playerId, (int)((_mortgageFee + _mortgageComission) * propertyComponent.BasePrice));

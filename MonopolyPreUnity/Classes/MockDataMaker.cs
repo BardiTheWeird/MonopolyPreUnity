@@ -50,7 +50,7 @@ namespace MonopolyPreUnity.Classes
             MockData.TileDict.Add(identity.Id, new Tile(components));
             AddToMap(identity.Id);
 
-            if (FindTileComponent<PropertyComponent>(components, out var prop))
+            if (FindTileComponent<Property>(components, out var prop))
             {
                 if (MockData.PropertySetDict.ContainsKey(prop.SetId))
                     MockData.PropertySetDict[prop.SetId].Add(identity.Id);
@@ -96,12 +96,12 @@ namespace MonopolyPreUnity.Classes
             return true;
         }
 
-        TileComponent CreateTileIdentity(string name)
+        Tile CreateTileIdentity(string name)
         {
             int id = 1;
             if (MockData.TileDict.Keys.Count() > 0)
                 id = MockData.TileDict.Keys.Max() + 1;
-            return new TileComponent(id, name);
+            return new Tile(id, name);
         }
 
         void AddToMap(int tileId)

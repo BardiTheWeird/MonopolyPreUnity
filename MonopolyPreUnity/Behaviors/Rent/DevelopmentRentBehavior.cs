@@ -16,9 +16,9 @@ namespace MonopolyPreUnity.Behaviors.Rent
 
         public int GetRent(int renteeId, int ownerId, ITileComponent component, int tileId)
         {
-            var development = component as PropertyDevelopmentComponent;
+            var development = component as PropertyDevelopment;
             var rentChoice = 0;
-            var propertyComponent = _tileManager.GetTileComponent<PropertyComponent>(tileId);
+            var propertyComponent = _tileManager.GetTileComponent<Property>(tileId);
             if (_propertyManager.IsSetOwned(ownerId, propertyComponent))
             {
                 rentChoice += 1 + development.HousesBuilt;

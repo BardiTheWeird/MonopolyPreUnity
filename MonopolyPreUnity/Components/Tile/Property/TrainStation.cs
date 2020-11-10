@@ -4,11 +4,11 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class TrainStationComponent : IEntityComponent
+    class TrainStation : IEntityComponent
     {
         public int BaseRent { get; set; }
 
-        public TrainStationComponent(int baseRent)
+        public TrainStation(int baseRent)
         {
             BaseRent = baseRent;
         }

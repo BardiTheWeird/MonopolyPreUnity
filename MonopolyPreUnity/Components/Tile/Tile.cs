@@ -6,13 +6,13 @@ using System.Runtime.Serialization;
 
 namespace MonopolyPreUnity.Components
 {
-    class TileComponent : IEntityComponent
+    class Tile : IEntityComponent
     {
         public int Id { get; }
         public int MapPosition { get; set; }
         public string Name { get; set; }
 
-        public TileComponent(int id, string name)
+        public Tile(int id, string name)
         {
             Id = id;
             Name = name;

@@ -14,7 +14,7 @@ namespace MonopolyPreUnity.Behaviors.PlayerLanded
 
         public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId)
         {
-            _actionManager.ExecuteAction(playerId, ((ActionTileComponent)tileComponent).Action);
+            _actionManager.ExecuteAction(playerId, ((ActionTile)tileComponent).Action);
         }
 
         public ActionTileBehavior(ActionManager actionManager)

@@ -73,8 +73,8 @@ namespace MonopolyPreUnity.Managers
                 // basically empty the ownership of properties
                 foreach (var propId in player.Properties)
                 {
-                    var prop = _tileManager.GetTileComponent<PropertyComponent>(propId);
-                    var dev = _tileManager.GetTileComponent<PropertyDevelopmentComponent>(propId);
+                    var prop = _tileManager.GetTileComponent<Property>(propId);
+                    var dev = _tileManager.GetTileComponent<PropertyDevelopment>(propId);
 
                     prop.OwnerId = null;
                     prop.IsMortgaged = false;
@@ -144,21 +144,16 @@ namespace MonopolyPreUnity.Managers
 
         #region Bankruptcy
 
-        /// <summary>
-        /// Player complete bankrupt checker bool method
-        /// </summary>
-        /// <param name="player">player</param>
-        /// <returns></returns>   
         bool EnoughPropertyToPayOff(Player player, int debtAmount)
         {
             var playerProperty = player.Properties;
             int sum = 0;
             foreach (int propertyId in playerProperty)
             {
-                if (_tileManager.GetTileComponent<PropertyDevelopmentComponent>(propertyId, out var realEstate))
+                if (_tileManager.GetTileComponent<PropertyDevelopment>(propertyId, out var realEstate))
                     sum += realEstate.HousesBuilt * realEstate.HouseSellPrice;
 
-                if (_tileManager.GetTileComponent<PropertyComponent>(propertyId, out var property))
+                if (_tileManager.GetTileComponent<Property>(propertyId, out var property))
                     sum += (int)(property.BasePrice * _mortgageFee);
             }
             if (sum + player.Cash > debtAmount)
@@ -166,13 +161,6 @@ namespace MonopolyPreUnity.Managers
             return false;
         }
 
-        /// <summary>
-        /// Method allows to sell property in case of negative balance and returns false or returns true
-        /// and....
-        /// to be continued in PlayerCashCharge...
-        /// </summary>
-        /// <param name="player"></param>
-        /// <returns></returns>      
         bool IsBankrupt(Player player, int debtAmount)
         {
             if (!EnoughPropertyToPayOff(player, debtAmount))

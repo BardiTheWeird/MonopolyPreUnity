@@ -23,7 +23,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         public void RunScenario(IRequest requestIn, Player player)
         {
             var request = requestIn as BuyAuctionRequest;
-            var property = _tileManager.GetTileComponent<PropertyComponent>(request.PropertyId);
+            var property = _tileManager.GetTileComponent<Property>(request.PropertyId);
 
             var availableActions = new List<MonopolyCommand> { MonopolyCommand.AuctionProperty };
             if (player.Cash >= property.BasePrice)

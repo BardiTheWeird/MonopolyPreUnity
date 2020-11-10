@@ -23,14 +23,20 @@ namespace MonopolyPreUnity.Entity
 
         public T GetComponent<T>() where T : IEntityComponent
         {
-            var component = Components.FirstOrDefault(comp => comp.GetType() == typeof(T));
+            var component = GetComponent(comp => comp.GetType() == typeof(T));
             if (component == null)
                 return default;
             return (T)component;
         }
 
+        public IEntityComponent GetComponent(Func<IEntityComponent, bool> predicate) =>
+            Components.FirstOrDefault(predicate);
+
         public bool ContainsComponent<T>() where T : IEntityComponent =>
             GetComponent<T>() != null;
+
+        public bool ContainsComponent(Func<IEntityComponent, bool> predicate) =>
+            GetComponent(predicate) != null;
         #endregion
 
         #region ctor

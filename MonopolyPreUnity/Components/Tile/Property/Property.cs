@@ -9,14 +9,14 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class PropertyComponent : IEntityComponent
+    class Property : IEntityComponent
     {
         public int SetId { get; }
         public int BasePrice { get; }
         public int? OwnerId { get; set; } = null;
         public bool IsMortgaged { get; set; } = false;
 
-        public PropertyComponent(int setId, int basePrice)
+        public Property(int setId, int basePrice)
         {
             SetId = setId;
             BasePrice = basePrice;
@@ -24,7 +24,7 @@ namespace MonopolyPreUnity.Components
             IsMortgaged = false;
         }
 
-        public PropertyComponent(int setId, int basePrice, int? ownerId, bool isMortgaged)
+        public Property(int setId, int basePrice, int? ownerId, bool isMortgaged)
         {
             SetId = setId;
             BasePrice = basePrice;

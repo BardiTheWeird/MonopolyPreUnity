@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class PropertyDevelopmentComponent : IEntityComponent
+    class PropertyDevelopment : IEntityComponent
     {
         public int HousesBuilt { get; set; }
         public int HouseBuyPrice { get; }
@@ -12,7 +12,7 @@ namespace MonopolyPreUnity.Components
         public int HouseCap { get; }
         public List<int> RentList { get; }
 
-        public PropertyDevelopmentComponent(
+        public PropertyDevelopment(
             int houseBuyPrice,
             List<int> rentList)
         {
@@ -26,7 +26,7 @@ namespace MonopolyPreUnity.Components
                 throw new ArgumentException("RentList.Count isn't equal to 2 + HouseCap");
         }
 
-        public PropertyDevelopmentComponent(int housesBuilt, 
+        public PropertyDevelopment(int housesBuilt, 
             int houseBuyPrice, 
             int houseSellPrice, 
             int houseCap, 

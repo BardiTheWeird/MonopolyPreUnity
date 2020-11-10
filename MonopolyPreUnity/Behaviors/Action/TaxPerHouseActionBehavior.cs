@@ -20,7 +20,7 @@ namespace MonopolyPreUnity.Behaviors.Action
             int sum = 0;
             foreach (var propertyId in _playerManager.GetPlayer(playerId).Properties)
             {
-                if (_tileManager.GetTileComponent<PropertyDevelopmentComponent>(propertyId, out var developmentComponent))
+                if (_tileManager.GetTileComponent<PropertyDevelopment>(propertyId, out var developmentComponent))
                     sum += developmentComponent.HousesBuilt * (action as TaxPerHouseAction).Amount;
             }
             _playerManager.PlayerCashCharge(playerId, sum, message: "for houses built");

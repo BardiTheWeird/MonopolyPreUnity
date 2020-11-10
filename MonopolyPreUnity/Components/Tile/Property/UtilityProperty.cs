@@ -4,7 +4,8 @@ using System.Text;
 
 namespace MonopolyPreUnity.Components
 {
-    class FreeParkingComponent : IEntityComponent
+    class UtilityProperty : IEntityComponent
     {
+
     }
 }
