@@ -1,6 +1,7 @@
 ﻿using MonopolyPreUnity.Behaviors.Rent;
 using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest;
 using MonopolyPreUnity.Components.SystemRequest.HotSeatInput;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
@@ -101,6 +102,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
                 };
             commandList.AddRange(_context.GetAvailableTurnCommands(player));
 
+            _context.Remove<PlayerInputRequest>();
             _context.Add(new HotSeatCommandChoiceRequest(commandList, player.Id));
         }
 

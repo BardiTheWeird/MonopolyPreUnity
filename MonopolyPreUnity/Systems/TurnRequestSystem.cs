@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Components.SystemRequest;
+using MonopolyPreUnity.Components.SystemRequest.PlayerState;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Requests;
 using System;
@@ -13,11 +14,11 @@ namespace MonopolyPreUnity.Systems
 
         public void Execute()
         {
-            if (!_context.ContainsComponent<PlayerInputRequest>())
-            {
-                var curTurnPlayerId = _context.TurnInfo().CurTurnPlayerId;
-                _context.Add(new PlayerInputRequest(curTurnPlayerId, new TurnRequest()));
-            }
+            if (_context.ContainsComponent<PlayerInputRequest>() || _context.ContainsComponent<PlayerBusy>())
+                return;
+
+            var curTurnPlayerId = _context.TurnInfo().CurTurnPlayerId;
+            _context.Add(new PlayerInputRequest(curTurnPlayerId, new TurnRequest()));
         }
 
         #region ctor
