@@ -8,9 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
+namespace MonopolyPreUnity.RequestHandlers.HSScenario
 {
-    class HotSeatAuctionScenario : IHotSeatRequestScenario
+    class HSAuctionScenario : IHSRequestScenario
     {
         #region Dependencies
         private readonly Context _context;
@@ -31,7 +31,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         }
 
         #region ctor
-        public HotSeatAuctionScenario(Context context) =>
+        public HSAuctionScenario(Context context) =>
             _context = context;
         #endregion
     }

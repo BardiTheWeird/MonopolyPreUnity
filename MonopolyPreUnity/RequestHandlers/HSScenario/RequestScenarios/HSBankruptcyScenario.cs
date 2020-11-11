@@ -9,9 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
+namespace MonopolyPreUnity.RequestHandlers.HSScenario
 {
-    class HotSeatBankruptcyScenario : IHotSeatRequestScenario
+    class HSBankruptcyScenario : IHSRequestScenario
     {
         #region Dependencies
         private readonly Context _context;
@@ -70,7 +70,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         }
 
         #region ctor
-        public HotSeatBankruptcyScenario(Context context) =>
+        public HSBankruptcyScenario(Context context) =>
             _context = context;
         #endregion
     }

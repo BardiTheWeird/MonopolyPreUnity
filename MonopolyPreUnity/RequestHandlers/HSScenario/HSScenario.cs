@@ -5,17 +5,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
+namespace MonopolyPreUnity.RequestHandlers.HSScenario
 {
-    class HotSeatScenario : IPlayerScenario
+    class HSScenario : IPlayerScenario
     {
-        private readonly IIndex<Type, IHotSeatRequestScenario> _index;
+        private readonly IIndex<Type, IHSRequestScenario> _index;
         private readonly Player _player;
 
         public void HandleRequest(IRequest request) =>
             _index[request.GetType()].RunScenario(request, _player);
 
-        public HotSeatScenario(IIndex<Type, IHotSeatRequestScenario> index, Player player)
+        public HSScenario(IIndex<Type, IHSRequestScenario> index, Player player)
         {
             _index = index;
             _player = player;

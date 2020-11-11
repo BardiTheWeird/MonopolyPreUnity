@@ -26,6 +26,8 @@ namespace MonopolyPreUnity.Systems
             _context.Add(new ClearOutput());
             _context.Add(new PrintFormattedLine
                 ($"Next turn. It's time for |player:{turnInfo.CurTurnPlayerId}| to make a move!"));
+
+            _context.Remove<EndTurn>();
         }
     }
 }

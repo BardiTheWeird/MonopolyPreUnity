@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Components.SystemRequest.HotSeatInput.Choice
+namespace MonopolyPreUnity.Components.SystemRequest.HSInput
 {
-    interface IHotSeatChoice : IEntityComponent
+    interface IHSRequest : IEntityComponent
     {
         public int PlayerId { get; set; }
     }

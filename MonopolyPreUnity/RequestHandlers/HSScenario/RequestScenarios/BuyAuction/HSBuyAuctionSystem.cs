@@ -1,4 +1,4 @@
-﻿using MonopolyPreUnity.Components.SystemRequest.HotSeatInput.Choice;
+﻿using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput.Property;
 using MonopolyPreUnity.Components.SystemRequest.PlayerState;
 using MonopolyPreUnity.Entity;
@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios.BuyAuction
+namespace MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.BuyAuction
 {
-    class HotSeatBuyAuctionSystem : ISystem
+    class HSBuyAuctionSystem : ISystem
     {
         #region fields
         private readonly Context _context;
@@ -24,7 +24,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios.BuyA
 
         public void Execute()
         {
-            var commandChoice = _context.GetComponent<HotSeatCommandChoice>();
+            var commandChoice = _context.GetComponent<HSCommandChoice>();
             if (commandChoice == null || !_appropiateCommands.Contains(commandChoice.Command))
                 return;
 
@@ -39,12 +39,12 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios.BuyA
                     break;
             }
 
-            _context.Remove<HotSeatCommandChoice>(c => c.Command == commandChoice.Command);
+            _context.Remove<HSCommandChoice>(c => c.Command == commandChoice.Command);
             _context.Remove<PlayerBusy>();
         }
 
         #region ctor
-        public HotSeatBuyAuctionSystem(Context context)
+        public HSBuyAuctionSystem(Context context)
         {
             _context = context;
         }

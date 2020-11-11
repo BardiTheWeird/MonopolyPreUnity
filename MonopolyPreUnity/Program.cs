@@ -10,7 +10,7 @@ using MonopolyPreUnity.Initialization;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Modules;
 using MonopolyPreUnity.RequestHandlers;
-using MonopolyPreUnity.RequestHandlers.HotSeatScenario;
+using MonopolyPreUnity.RequestHandlers.HSScenario;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -2,7 +2,7 @@
 using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest;
-using MonopolyPreUnity.Components.SystemRequest.HotSeatInput;
+using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Requests;
@@ -12,9 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
+namespace MonopolyPreUnity.RequestHandlers.HSScenario
 {
-    class HotSeatTurnScenario : IHotSeatRequestScenario
+    class HSTurnScenario : IHSRequestScenario
     {
         #region Dependencies
         private readonly Context _context;
@@ -103,11 +103,11 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
             commandList.AddRange(_context.GetAvailableTurnCommands(player));
 
             _context.Remove<PlayerInputRequest>();
-            _context.Add(new HotSeatCommandChoiceRequest(commandList, player.Id));
+            _context.Add(new HSCommandChoiceRequest(commandList, player.Id));
         }
 
         #region ctor
-        public HotSeatTurnScenario(Context context) =>
+        public HSTurnScenario(Context context) =>
             _context = context;
         #endregion
     }

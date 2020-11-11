@@ -24,7 +24,7 @@ namespace MonopolyPreUnity.Modules
             // rest (not api)
             builder.RegisterType<ActionsSystem>().AsSelf().SingleInstance();
             builder.RegisterType<ChangeTurnSystem>().AsSelf().SingleInstance();
-            builder.RegisterType<HotSeatInputSystem>().AsSelf().SingleInstance();
+            builder.RegisterType<HSInputSystem>().AsSelf().SingleInstance();
             builder.RegisterType<MoveSystem>().AsSelf().SingleInstance();
             builder.RegisterType<OutputSystem>().AsSelf().SingleInstance();
             builder.RegisterType<PlayerInputSystem>().AsSelf().SingleInstance();

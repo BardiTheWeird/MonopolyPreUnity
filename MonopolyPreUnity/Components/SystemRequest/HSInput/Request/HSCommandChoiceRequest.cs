@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Components.SystemRequest.HotSeatInput
+namespace MonopolyPreUnity.Components.SystemRequest.HSInput
 {
-    class HotSeatCommandChoiceRequest : IHotSeatRequest
+    class HSCommandChoiceRequest : IHSRequest
     {
         public int PlayerId { get; set; }
         public List<MonopolyCommand> Commands { get; set; }
 
-        public HotSeatCommandChoiceRequest(List<MonopolyCommand> commands, int playerId)
+        public HSCommandChoiceRequest(List<MonopolyCommand> commands, int playerId)
         {
             PlayerId = playerId;
             Commands = commands;

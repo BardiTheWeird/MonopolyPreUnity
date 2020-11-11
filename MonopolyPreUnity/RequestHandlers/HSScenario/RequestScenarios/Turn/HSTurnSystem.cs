@@ -1,5 +1,5 @@
 ﻿using MonopolyPreUnity.Components.SystemRequest;
-using MonopolyPreUnity.Components.SystemRequest.HotSeatInput.Choice;
+using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
 using MonopolyPreUnity.Components.SystemRequest.Move;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput.InJail;
@@ -11,9 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios.TurnScenario
+namespace MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.TurnScenario
 {
-    class HotSeatTurnSystem : ISystem
+    class HSTurnSystem : ISystem
     {
         private readonly Context _context;
         private readonly MonopolyCommand[] _appropriateCommands =
@@ -31,7 +31,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios.Turn
 
         public void Execute()
         {
-            var commandChoice = _context.GetComponent<HotSeatCommandChoice>();
+            var commandChoice = _context.GetComponent<HSCommandChoice>();
             if (commandChoice != null && _appropriateCommands.Contains(commandChoice.Command))
             {
                 var player = _context.GetPlayer(commandChoice.PlayerId);
@@ -57,12 +57,12 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario.RequestScenarios.Turn
                         break;
                 }
 
-                _context.Remove<HotSeatCommandChoice>(c => c.Command == commandChoice.Command);
+                _context.Remove<HSCommandChoice>(c => c.Command == commandChoice.Command);
             }
         }
 
         #region ctor
-        public HotSeatTurnSystem(Context context)
+        public HSTurnSystem(Context context)
         {
             _context = context;
         }

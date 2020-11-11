@@ -3,7 +3,7 @@ using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Modules;
 using MonopolyPreUnity.RequestHandlers;
-using MonopolyPreUnity.RequestHandlers.HotSeatScenario;
+using MonopolyPreUnity.RequestHandlers.HSScenario;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +19,7 @@ namespace MonopolyPreUnity.Initialization
         {
             foreach (var player in players)
             {
-                builder.RegisterType<HotSeatScenario>().Keyed<IPlayerScenario>(player.Id)
+                builder.RegisterType<HSScenario>().Keyed<IPlayerScenario>(player.Id)
                     .WithParameter(new TypedParameter(typeof(Player), player));
             }
         }
@@ -34,7 +34,7 @@ namespace MonopolyPreUnity.Initialization
             RegisterPlayerScenarios(builder, context.GetComponents<Player>());
 
             builder.RegisterModule<BehaviorsModule>();
-            builder.RegisterModule<HotSeatModule>();
+            builder.RegisterModule<HSModule>();
             builder.RegisterModule<SystemsModule>();
 
             return builder.Build();

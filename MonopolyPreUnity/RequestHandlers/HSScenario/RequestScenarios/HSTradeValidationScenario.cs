@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
+namespace MonopolyPreUnity.RequestHandlers.HSScenario
 {
-    class HotSeatTradeValidationScenario : IHotSeatRequestScenario
+    class HSTradeValidationScenario : IHSRequestScenario
     {
         #region Dependencies
         private readonly Context _context;
@@ -30,7 +30,7 @@ namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
         }
 
         #region ctor
-        public HotSeatTradeValidationScenario(Context context) =>
+        public HSTradeValidationScenario(Context context) =>
             _context = context;
         #endregion
     }

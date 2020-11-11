@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.RequestHandlers.HotSeatScenario
+namespace MonopolyPreUnity.RequestHandlers.HSScenario
 {
-    interface IHotSeatRequestScenario
+    interface IHSRequestScenario
     {
         public void RunScenario(IRequest request, Player player);
     }
