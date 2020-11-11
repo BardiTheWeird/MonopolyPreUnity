@@ -3,6 +3,7 @@ using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Requests;
@@ -10,6 +11,7 @@ using MonopolyPreUnity.UI;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MonopolyPreUnity.RequestHandlers.HSScenario
@@ -102,7 +104,10 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
                 };
             commandList.AddRange(_context.GetAvailableTurnCommands(player));
 
+            Debug.WriteLine("Have run an HSTurnScenario");
+
             _context.Remove<PlayerInputRequest>();
+            _context.Add(new PrintCommands(commandList));
             _context.Add(new HSCommandChoiceRequest(commandList, player.Id));
         }
 

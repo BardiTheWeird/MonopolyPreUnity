@@ -40,7 +40,6 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.BuyAuctio
             }
 
             _context.Remove<HSCommandChoice>(c => c.Command == commandChoice.Command);
-            _context.Remove<PlayerBusy>();
         }
 
         #region ctor

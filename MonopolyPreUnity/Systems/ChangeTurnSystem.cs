@@ -29,5 +29,10 @@ namespace MonopolyPreUnity.Systems
 
             _context.Remove<EndTurn>();
         }
+
+        public ChangeTurnSystem(Context context)
+        {
+            _context = context;
+        }
     }
 }

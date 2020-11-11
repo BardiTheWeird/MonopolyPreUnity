@@ -12,9 +12,10 @@ namespace MonopolyPreUnity.Components
         public int MapPosition { get; set; }
         public string Name { get; set; }
 
-        public Tile(int id, string name)
+        public Tile(int id, int mapPosition, string name)
         {
             Id = id;
+            MapPosition = mapPosition;
             Name = name;
         }
     }

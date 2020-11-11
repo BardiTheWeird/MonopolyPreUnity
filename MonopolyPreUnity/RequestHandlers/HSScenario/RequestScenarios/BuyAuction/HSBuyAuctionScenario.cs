@@ -25,7 +25,6 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
             var availableActions = _context.GetBuyAuctionCommands(player, request.PropertyId);
 
             _context.Add(new HSCommandChoiceRequest(availableActions, player.Id));
-            _context.Add(new PlayerBusy(player.Id));
         }
 
         #region ctor

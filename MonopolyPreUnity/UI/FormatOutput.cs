@@ -17,6 +17,13 @@ namespace MonopolyPreUnity.UI
 
         public static string AddTwoSpacesAtNewLine(this string str) =>
             "  " + Regex.Replace(str, @"\n", "\n  ");
+
+        public static string GetShortString(this Type type)
+        {
+            var typeString = type.ToString();
+            var lastDotIndex = typeString.LastIndexOf('.');
+            return typeString.Substring(lastDotIndex == -1 ? 0 : lastDotIndex + 1);
+        }
     }
 
     class FormatOutput
@@ -61,7 +68,7 @@ namespace MonopolyPreUnity.UI
             {
                 if (indexate)
                     sb.Append($"{i + 1}: ");
-                sb.Append(valToString(list[i]).Trim());
+                sb.AppendLine(valToString(list[i]).Trim());
             }
             return sb.ToString().Trim();
         }

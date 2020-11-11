@@ -11,13 +11,10 @@ namespace MonopolyPreUnity.Initialization
 {
     static class SystemArrays
     {
-        public static ISystem[] GetAllSystems(this Container c)
+        public static ISystem[] GetAllSystems(this IContainer c)
         {
             ISystem[] systems =
             {
-                c.Resolve<ChangeTurnSystem>(),
-                c.Resolve<TurnRequestSystem>(),
-
                 c.Resolve<ThrowDiceSystem>(),
                 c.Resolve<MoveSystem>(),
 
@@ -37,10 +34,19 @@ namespace MonopolyPreUnity.Initialization
                 c.Resolve<PlayerCashSystem>(),
                 c.Resolve<PlayerDebtSystem>(),
                 c.Resolve<PlayerBankruptSystem>(),
-                c.Resolve<AssetTransferSystem>()
+                c.Resolve<AssetTransferSystem>(),
+                
+                c.Resolve<ChangeTurnSystem>(),
+                c.Resolve<TurnRequestSystem>(),
             };
 
             return systems;
+        }
+
+        public static void Execute(this ISystem[] systems)
+        {
+            foreach (var system in systems)
+                system.Execute();
         }
     }
 }

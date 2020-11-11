@@ -20,5 +20,10 @@ namespace MonopolyPreUnity.Systems
             }
             _context.Remove<ThrowDice>();
         }
+
+        public ThrowDiceSystem(Context context)
+        {
+            _context = context;
+        }
     }
 }

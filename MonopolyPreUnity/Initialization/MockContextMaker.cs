@@ -32,10 +32,13 @@ namespace MonopolyPreUnity.Classes
         public void AddTile(string name, params IEntityComponent[] components)
         {
             var id = (MaxId<Tile>() ?? 0) + 1;
-            var entity = new Entity.Entity(new Tile(id, name));
+            var entity = new Entity.Entity(new Tile(id, MapSize, name));
 
             foreach (var comp in components)
                 entity.AddComponent(comp);
+
+            Context.Add(entity);
+            MapSize++;
         }
         #endregion
 

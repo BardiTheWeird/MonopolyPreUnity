@@ -39,8 +39,13 @@ namespace MonopolyPreUnity.Entity
         public T GetComponent<T>(Func<T, bool> predicate) where T : IEntityComponent =>
             GetComponents<T>().FirstOrDefault(predicate);
 
-        public T GetComponent<T>() where T : IEntityComponent =>
-            GetEntity<T>().GetComponent<T>();
+        public T GetComponent<T>() where T : IEntityComponent
+        {
+            var entity = GetEntity<T>();
+            if (entity == null)
+                return default;
+            return entity.GetComponent<T>();
+        }
 
         public List<T> GetComponents<T>() where T : IEntityComponent =>
             GetEntities<T>().Select(entity => entity.GetComponent<T>()).ToList();

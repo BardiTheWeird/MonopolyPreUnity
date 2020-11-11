@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,18 @@ namespace MonopolyPreUnity.Entity
 
         public bool ContainsComponent(Func<IEntityComponent, bool> predicate) =>
             GetComponent(predicate) != null;
+        #endregion
+
+        #region to string
+        public override string ToString()
+        {
+            if (Components.Count == 1)
+                return Components[0].GetType().GetShortString() + " Entity";
+            if (ContainsComponent<Tile>())
+                return GetComponent<Tile>().GetType().GetShortString() + " Entity";
+
+            return $"Entity, Components.Count=\"{Components.Count}\"";
+        }
         #endregion
 
         #region ctor

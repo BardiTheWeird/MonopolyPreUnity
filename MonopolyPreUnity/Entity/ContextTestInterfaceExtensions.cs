@@ -19,5 +19,8 @@ namespace MonopolyPreUnity.Entity
 
         public static void RemoveEntitiesInterface<IT>(this Context context) where IT : IEntityComponent =>
             context.Remove(entity => entity.ContainsComponent(comp => comp is IT));
+
+        public static bool ContainsComponentInterface<IT>(this Context context) where IT : IEntityComponent =>
+            context.GetComponentsInterface<IT>().Count > 0;
     }
 }
