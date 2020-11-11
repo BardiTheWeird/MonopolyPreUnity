@@ -1,6 +1,7 @@
 ﻿using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.SystemRequest.PlayerState;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Requests;
@@ -25,6 +26,7 @@ namespace MonopolyPreUnity.Systems
                 return;
 
             var curTurnPlayerId = _context.TurnInfo().CurTurnPlayerId;
+            _context.Add(new PrintFormattedLine($"|player:{curTurnPlayerId}| makes a move"));
             _context.Add(new PlayerInputRequest(curTurnPlayerId, new TurnRequest()));
             Debug.WriteLine($"Added PlayerInputRequest at TurnRequestSystem. containsHSRequest=\"{containsHSRequest}\"");
         }

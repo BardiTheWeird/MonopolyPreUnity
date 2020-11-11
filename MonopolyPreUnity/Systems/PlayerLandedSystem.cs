@@ -1,5 +1,6 @@
 ﻿using Autofac.Features.Indexed;
 using MonopolyPreUnity.Behaviors;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.SystemState;
 using MonopolyPreUnity.Entity;
 using System;
@@ -20,6 +21,8 @@ namespace MonopolyPreUnity.Systems
             foreach (var playerLanded in _context.GetComponents<PlayerLanded>())
             {
                 var player = _context.GetPlayer(playerLanded.PlayerId);
+                _context.Add(new PrintFormattedLine($"|player:{player.Id}| landed on a tile:"));
+
                 foreach (var component in _context.GetTileComponents(player.CurTileId))
                 {
                     if (_playerLandedBehaviorindex.TryGetValue(component.GetType(), out var behavior))

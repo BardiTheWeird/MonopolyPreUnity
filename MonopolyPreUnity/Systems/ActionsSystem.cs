@@ -2,6 +2,7 @@
 using MonopolyPreUnity.Actions;
 using MonopolyPreUnity.Behaviors.Action;
 using MonopolyPreUnity.Components.SystemRequest;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ namespace MonopolyPreUnity.Systems
             foreach (var actionRequest in _context.GetComponents<ExecuteAction>())
             {
                 var action = actionRequest.Action;
+                _context.Add(new PrintAction(action));
+
                 _behaviorIndex[action.GetType()].Execute(actionRequest.PlayerId, action);
             }
         }

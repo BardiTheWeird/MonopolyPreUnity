@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Components.SystemRequest.Output;
+﻿using MonopolyPreUnity.Actions;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.UI;
 using MonopolyPreUnity.Utitlity;
@@ -28,6 +29,18 @@ namespace MonopolyPreUnity.Systems
                     case PrintCommands commands:
                         PrintCommands(commands);
                         break;
+                    case PrintTile printTile:
+                        PrintTile(printTile.TileId);
+                        break;
+                    case PrintAction printAction:
+                        PrintAction(printAction.Action);
+                        break;
+                    case PrintCashCharge cashCharge:
+                        PrintCashCharge(cashCharge);
+                        break;
+                    case PrintCashGive cashGive:
+                        PrintCashGive(cashGive);
+                        break;
                     case ClearOutput clear:
                         ClearOutput();
                         break;
@@ -43,8 +56,24 @@ namespace MonopolyPreUnity.Systems
         void PrintFormattedLine(string formattedLine) =>
             PrintLine(_formatOutput.FormattedString(formattedLine));
 
-        void PrintCommands(List<MonopolyCommand> commands) =>
+        void PrintCommands(List<MonopolyCommand> commands)
+        {
+            PrintLine("Choose a command");
             PrintLine(_formatOutput.GetStringOfListOfItems(commands, _formatOutput.CommandName, true));
+        }
+
+        void PrintTile(int tileId) =>
+            PrintLine(_formatOutput.GetTileString(tileId));
+
+        void PrintAction(IMonopolyAction action) =>
+            PrintLine(_formatOutput.GetActionString(action));
+
+        void PrintCashCharge(PrintCashCharge charge) =>
+            PrintLine(_formatOutput.GetCashChargeString(
+                charge.PlayerChargedId, charge.PlayerChargerId, charge.Amount, charge.Message));
+
+        void PrintCashGive(PrintCashGive give) =>
+            PrintLine(_formatOutput.GetCashGiveString(give.PlayerId, give.Amount));
 
         void ClearOutput() =>
             _context.OutputString = "";

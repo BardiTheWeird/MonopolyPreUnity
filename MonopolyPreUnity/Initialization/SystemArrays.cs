@@ -15,21 +15,21 @@ namespace MonopolyPreUnity.Initialization
         {
             ISystem[] systems =
             {
+                c.Resolve<PlayerInputSystem>(),
+
+                c.Resolve<OutputSystem>(),
+
+                c.Resolve<HSInputSystem>(),
+
+                c.Resolve<HSTurnSystem>(),
+                c.Resolve<HSBuyAuctionSystem>(),
+
                 c.Resolve<ThrowDiceSystem>(),
                 c.Resolve<MoveSystem>(),
 
                 c.Resolve<PlayerLandedSystem>(),
                 c.Resolve<ActionsSystem>(),
                 c.Resolve<RentSystem>(),
-
-                c.Resolve<PlayerInputSystem>(),
-                
-                c.Resolve<OutputSystem>(),
-
-                c.Resolve<HSInputSystem>(),
-                
-                c.Resolve<HSTurnSystem>(),
-                c.Resolve<HSBuyAuctionSystem>(),
 
                 c.Resolve<PlayerCashSystem>(),
                 c.Resolve<PlayerDebtSystem>(),

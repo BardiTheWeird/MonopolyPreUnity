@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Components.SystemRequest.Cash;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.SystemRequest.PlayerState;
 using MonopolyPreUnity.Entity;
 using System;
@@ -37,6 +38,8 @@ namespace MonopolyPreUnity.Systems
             if (player.Cash >= charge.Amount)
             {
                 player.Cash -= charge.Amount;
+                _context.Add(new PrintCashCharge(charge));
+
                 if (charge.PlayerChargerId != null)
                     PlayerCashGive((int)charge.PlayerChargerId, charge.Amount);
             }
@@ -53,6 +56,8 @@ namespace MonopolyPreUnity.Systems
         {
             var player = _context.GetPlayer(playerId);
             player.Cash += amount;
+
+            _context.Add(new PrintCashGive(playerId, amount));
         }
         #endregion
 
