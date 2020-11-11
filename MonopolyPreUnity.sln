@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonopolyPreUnity", "Monopol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemTests", "SystemTests\SystemTests.csproj", "{3D63312B-9547-4778-AE9E-2572E213C3AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameInterface", "GameInterface\GameInterface.csproj", "{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3D63312B-9547-4778-AE9E-2572E213C3AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D63312B-9547-4778-AE9E-2572E213C3AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D63312B-9547-4778-AE9E-2572E213C3AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

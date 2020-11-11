@@ -4,6 +4,7 @@ using MonopolyPreUnity.Components.SystemRequest;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.Move;
 using MonopolyPreUnity.Components.SystemRequest.PlayerState;
+using MonopolyPreUnity.Components.SystemState;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Initialization;
 using MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.TurnScenario;
@@ -74,6 +75,31 @@ namespace SystemTests
             var newPlayerPos = (1 + context.Dice().Sum) % context.MapInfo().MapSize;
 
             Assert.Equal(newPlayerPos, context.GetPlayer(1).CurTileId);
+        }
+
+        [Fact]
+        public void TestInputSystem2()
+        {
+            Test1();
+            sysBag.TurnOff<ThrowDiceSystem>();
+            sysBag.TurnOff<PlayerLandedSystem>();
+            context.Dice().Die1 = 1;
+            context.Dice().Die2 = 1;
+
+            context.InputString = "3";
+
+            sysBag.Execute();
+            Assert.True(!context.ContainsComponentInterface<IHSRequest>());
+
+            sysBag.Execute();
+
+            Assert.True(context.ContainsComponent<PlayerLanded>());
+        }
+
+        [Fact]
+        public void TestInputSystem3()
+        {
+
         }
     }
 }

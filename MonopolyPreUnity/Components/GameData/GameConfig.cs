@@ -18,24 +18,6 @@ namespace MonopolyPreUnity.Components
         public int DieSides { get; set; }
         #endregion
 
-        #region read/write
-        public static GameConfig ReadGameConfig(string filePath)
-        {
-            var serializer = new XmlSerializer(typeof(GameConfig));
-            var textReader = new StreamReader(filePath);
-
-            return (GameConfig)serializer.Deserialize(textReader);
-        }
-
-        public static void WriteGameConfig(GameConfig config, string filePath)
-        {
-            var serializer = new XmlSerializer(typeof(GameConfig));
-            var textWriter = new StreamWriter(filePath);
-
-            serializer.Serialize(textWriter, config);
-        }
-        #endregion
-
         #region ctor
         public GameConfig(int cashPerLap, int maxTurnsInJail,
             int maxDicePairThrows, float mortgageFee,
@@ -49,9 +31,6 @@ namespace MonopolyPreUnity.Components
             JailFine = jailFine;
             DieSides = dieSides;
         }
-
-        public GameConfig(string filePath) =>
-            ReadGameConfig(filePath);
 
         public GameConfig()
         {

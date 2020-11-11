@@ -75,8 +75,12 @@ namespace MonopolyPreUnity.Entity
         public List<Entity> GetEntities<T>() where T : IEntityComponent =>
             GetEntities(entity => entity.ContainsComponent<T>());
 
-        public void Remove(IEntityComponent component) =>
-            Entities.Where(e => e.ContainsComponent(component));
+        public void Remove(IEntityComponent component) 
+        {
+            var entity = Entities.FirstOrDefault(e => e.ContainsComponent(component));
+            if (entity != null)
+                Remove(entity);
+        }
 
         public void Remove(Entity entity) =>
             Entities.Remove(entity);

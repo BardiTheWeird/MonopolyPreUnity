@@ -56,7 +56,6 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.TurnScena
                         _context.Add(new JailUseCard(player.Id));
                         break;
                 }
-
                 _context.Remove<HSCommandChoice>(c => c.Command == commandChoice.Command);
             }
         }

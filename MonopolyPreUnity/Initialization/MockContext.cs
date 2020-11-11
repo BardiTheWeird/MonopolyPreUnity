@@ -33,6 +33,9 @@ namespace MonopolyPreUnity.Initialization
             return mock.GetContext();
         }
 
+        public static Context CreateMockDataSmallTest() =>
+            CreateMockDataSmallTest(GameConfigMaker.DefaultGameConfig());
+
         //public static GameData CreateMockDataJailTest(GameConfig gameConfig)
         //{
         //    var mockData = new MockDataMaker(gameConfig);

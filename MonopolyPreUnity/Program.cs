@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace MonopolyPreUnity
@@ -23,24 +25,33 @@ namespace MonopolyPreUnity
     {
         static void Main(string[] args)
         {
-            var config = new GameConfig(@"..\..\..\Resources\defaultGameConfig.xml");
-            var context = new Context();
+            //var config = new GameConfig(@"..\..\..\Resources\defaultGameConfig.xml");
+            //var context = new Context();
 
-            IContainer container;
-            try
-            {
-                container = DiContainer.CreateDiContainer(context);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Startup error:\n" + e);
+            //IContainer container;
+            //try
+            //{
+            //    container = DiContainer.CreateDiContainer(context);
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine($"Startup error:\n" + e);
 
-                Environment.Exit(-1);
-                return;
-            }
+            //    Environment.Exit(-1);
+            //    return;
+            //}
 
             //var gameManager = container.Resolve<GameManager>();
             //gameManager.StartGame();
+        }
+
+        public static void RunSystemsContinuous(SystemsBag systemsBag)
+        {
+            while (true)
+            {
+                systemsBag.Execute();
+                Task.Delay(20);
+            }
         }
     }
 }

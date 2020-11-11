@@ -16,6 +16,7 @@ namespace MonopolyPreUnity.Systems
             foreach (var throwRequest in _context.GetComponents<ThrowDice>())
             {
                 var dice = _context.Dice();
+                dice.Throw();
                 _context.Add(new PrintLine($"The dice were thrown. Values: {dice.Die1}, {dice.Die2}"));
             }
             _context.Remove<ThrowDice>();
