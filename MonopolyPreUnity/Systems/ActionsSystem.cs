@@ -26,6 +26,7 @@ namespace MonopolyPreUnity.Systems
 
                 _behaviorIndex[action.GetType()].Execute(actionRequest.PlayerId, action);
             }
+            _context.Remove<ExecuteAction>();
         }
 
         public ActionsSystem(IIndex<Type, IActionBehavior> behaviorIndex, Context context)

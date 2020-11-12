@@ -42,10 +42,17 @@ namespace MonopolyPreUnity.Entity
 
         #region TileComponents
         public static T GetTileComponent<T>(this Context context, int tileId) where T : IEntityComponent =>
-            context.GetEntity<Tile>(e => e.ContainsComponent<T>()).GetComponent<T>();
+            (T)context
+            .GetTileComponents(tileId)
+            .FirstOrDefault(comp => comp.GetType() == typeof(T));
 
-        public static List<IEntityComponent> GetTileComponents(this Context context, int tileId) =>
-            context.GetEntity<Tile>(entity => entity.GetComponent<Tile>().Id == tileId).Components;
+        public static List<IEntityComponent> GetTileComponents(this Context context, int tileId)
+        {
+            var entity = context.GetEntity<Tile>(entity => entity.GetComponent<Tile>().Id == tileId);
+            if (entity == null)
+                return default;
+            return entity.Components;
+        }
 
         public static bool ContainsComponent(this Tile tile, Type type, Context context)
         {

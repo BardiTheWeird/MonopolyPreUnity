@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemTests", "SystemTests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameInterface", "GameInterface\GameInterface.csproj", "{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataSaving", "DataSaving\DataSaving.csproj", "{F51669C7-7D70-4F6D-B128-12F7F01047E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F51669C7-7D70-4F6D-B128-12F7F01047E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F51669C7-7D70-4F6D-B128-12F7F01047E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F51669C7-7D70-4F6D-B128-12F7F01047E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F51669C7-7D70-4F6D-B128-12F7F01047E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

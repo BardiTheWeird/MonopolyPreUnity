@@ -1,6 +1,7 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.SystemRequest.PlayerState;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
@@ -25,6 +26,7 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
             var availableActions = _context.GetBuyAuctionCommands(player, request.PropertyId);
 
             _context.Add(new HSCommandChoiceRequest(availableActions, player.Id));
+            _context.Add(new PrintCommands(availableActions));
         }
 
         #region ctor

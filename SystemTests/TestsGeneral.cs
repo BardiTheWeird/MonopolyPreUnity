@@ -31,6 +31,7 @@ namespace SystemTests
             sysBag = new SystemsBag(systems);
         }
 
+        #region theoretical tries
         [Fact]
         public void Test1()
         {
@@ -57,15 +58,14 @@ namespace SystemTests
             Assert.True(context.ContainsComponent<HSCommandChoiceRequest>());
 
             context.InputString = "3";
+            sysBag.Execute(); 
             sysBag.Execute();
 
-            Assert.True(context.ContainsComponent<ThrowDice>());
-            Assert.True(context.ContainsComponent<MoveDice>());
-
-            sysBag.Execute();
-
+            Assert.False(context.ContainsComponentInterface<IMoveRequest>());
             Assert.False(context.ContainsComponent<ThrowDice>());
-            Assert.False(context.ContainsComponent<MoveDice>());
+
+            Assert.True(context.ContainsComponent<HSCommandChoiceRequest>());
+            Assert.False(context.ContainsComponent<PlayerLanded>());
         }
 
         [Fact]
@@ -95,11 +95,29 @@ namespace SystemTests
 
             Assert.True(context.ContainsComponent<PlayerLanded>());
         }
+        #endregion
 
+        #region bug recreation
         [Fact]
-        public void TestInputSystem3()
+        public void ActionFloodBug()
         {
+            sysBag.TurnOff<ThrowDiceSystem>();
+            var dice = context.Dice();
+            dice.Die1 = 5; dice.Die2 = 6;
 
+            // starts off the game
+            sysBag.Execute();
+
+            context.InputString = "3";
+
+            sysBag.Execute();
+
+            sysBag.Execute();
+
+            sysBag.Execute();
+
+            Assert.True(true);
         }
+        #endregion
     }
 }

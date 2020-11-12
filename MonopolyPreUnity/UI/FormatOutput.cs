@@ -174,7 +174,7 @@ namespace MonopolyPreUnity.UI
             {
                 var compString = GetTileComponentString(comp);
                 if (compString.Length > 0)
-                    sb.Append("\n" + compString);
+                    sb.AppendLine(compString);
             }
 
             return sb.ToString();

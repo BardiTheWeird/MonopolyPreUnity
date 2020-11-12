@@ -21,7 +21,7 @@ using System.Xml.Serialization;
 
 namespace MonopolyPreUnity
 {
-    class Program
+    class MonopolyEntry
     {
         static void Main(string[] args)
         {
@@ -50,7 +50,7 @@ namespace MonopolyPreUnity
             while (true)
             {
                 systemsBag.Execute();
-                Task.Delay(20);
+                Task.Delay(50);
             }
         }
     }

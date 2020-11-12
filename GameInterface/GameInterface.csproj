@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataSaving\DataSaving.csproj" />
     <ProjectReference Include="..\MonopolyPreUnity\MonopolyPreUnity.csproj" />
   </ItemGroup>
 
