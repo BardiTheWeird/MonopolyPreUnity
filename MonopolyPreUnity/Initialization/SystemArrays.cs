@@ -1,8 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core;
-using MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.BuyAuction;
-using MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.TurnScenario;
 using MonopolyPreUnity.Systems;
+using MonopolyPreUnity.Systems.HSInput;
 using MonopolyPreUnity.Systems.PropertySystems;
 using System;
 using System.Collections.Generic;
@@ -22,6 +21,7 @@ namespace MonopolyPreUnity.Initialization
 
                 c.Resolve<HSInputSystem>(),
 
+                c.Resolve<HSGetStatusSystem>(),
                 c.Resolve<HSTurnSystem>(),
                 c.Resolve<HSBuyAuctionSystem>(),
 

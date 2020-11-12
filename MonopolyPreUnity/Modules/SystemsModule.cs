@@ -1,8 +1,7 @@
 ﻿using Autofac;
 using MonopolyPreUnity.RequestHandlers.HSScenario;
-using MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.BuyAuction;
-using MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.TurnScenario;
 using MonopolyPreUnity.Systems;
+using MonopolyPreUnity.Systems.HSInput;
 using MonopolyPreUnity.Systems.PropertySystems;
 using MonopolyPreUnity.UI;
 using System;
@@ -41,6 +40,7 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<HSInputSystem>().AsSelf().SingleInstance();
             builder.RegisterType<HSTurnSystem>().AsSelf().SingleInstance();
             builder.RegisterType<HSBuyAuctionSystem>().AsSelf().SingleInstance();
+            builder.RegisterType<HSGetStatusSystem>().AsSelf().SingleInstance();
 
             // helpers
             builder.RegisterType<FormatOutput>().AsSelf().SingleInstance();

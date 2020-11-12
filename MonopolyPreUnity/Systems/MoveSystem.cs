@@ -88,8 +88,12 @@ namespace MonopolyPreUnity.Systems
         public void MoveDice(Player player, MoveDice moveDice)
         {
             var dice = _context.GetComponent<Dice>();
-            if (!dice.IsPair)
-                player.CanMove = false;
+            player.CanMove = false;
+            if (dice.IsPair && moveDice.MoveAgainAllowed)
+            {
+                player.CanMove = true;
+                _context.Add(new PrintLine("You got a pair, so you can move again"));
+            }
             MoveBySteps(player, dice.Sum, moveDice.CountGoPassed);
         }
 

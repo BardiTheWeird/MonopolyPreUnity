@@ -3,7 +3,6 @@ using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Initialization;
-using MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.TurnScenario;
 using MonopolyPreUnity.Systems;
 using MonopolyPreUnity.Utitlity;
 using System;

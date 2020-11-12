@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using MonopolyPreUnity.RequestHandlers.HSScenario;
-using MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.BuyAuction;
 using MonopolyPreUnity.Requests;
+using MonopolyPreUnity.Systems.HSInput;
 using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;

@@ -13,6 +13,9 @@ namespace MonopolyPreUnity.Utitlity
         FileBankruptcy,
         EndGame,
 
+        GetPlayerStatus,
+        GetGameStatus,
+
         ChooseProperty,
         MortgageProperty,
         UnmortgageProperty,

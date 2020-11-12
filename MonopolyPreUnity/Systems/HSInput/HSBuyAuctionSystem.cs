@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.BuyAuction
+namespace MonopolyPreUnity.Systems.HSInput
 {
     class HSBuyAuctionSystem : ISystem
     {

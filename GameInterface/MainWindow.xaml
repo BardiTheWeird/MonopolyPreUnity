@@ -10,6 +10,10 @@
         <local:MainWindowViewModel/>
     </Window.DataContext>
 
+    <Window.InputBindings>
+        <KeyBinding Key="Return" Modifiers="Ctrl" Command="{Binding SendInputCommand}"/>
+    </Window.InputBindings>
+
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

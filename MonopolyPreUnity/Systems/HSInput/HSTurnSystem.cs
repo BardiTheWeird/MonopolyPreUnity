@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.TurnScenario
+namespace MonopolyPreUnity.Systems.HSInput
 {
     class HSTurnSystem : ISystem
     {

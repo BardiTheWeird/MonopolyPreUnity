@@ -102,7 +102,14 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
                     MonopolyCommand.ManageProperty,
                     MonopolyCommand.MakeDeal
                 };
+            var outputRequestCommands = new List<MonopolyCommand> 
+            { 
+                MonopolyCommand.GetPlayerStatus, 
+                MonopolyCommand.GetGameStatus 
+            };
+
             commandList.AddRange(_context.GetAvailableTurnCommands(player));
+            commandList.AddRange(outputRequestCommands);
 
             Debug.WriteLine("Have run an HSTurnScenario");
 

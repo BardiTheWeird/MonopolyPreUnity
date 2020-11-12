@@ -7,7 +7,6 @@ using MonopolyPreUnity.Components.SystemRequest.PlayerState;
 using MonopolyPreUnity.Components.SystemState;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Initialization;
-using MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.TurnScenario;
 using MonopolyPreUnity.Systems;
 using System;
 using System.Collections.Generic;
@@ -98,26 +97,7 @@ namespace SystemTests
         #endregion
 
         #region bug recreation
-        [Fact]
-        public void ActionFloodBug()
-        {
-            sysBag.TurnOff<ThrowDiceSystem>();
-            var dice = context.Dice();
-            dice.Die1 = 5; dice.Die2 = 6;
 
-            // starts off the game
-            sysBag.Execute();
-
-            context.InputString = "3";
-
-            sysBag.Execute();
-
-            sysBag.Execute();
-
-            sysBag.Execute();
-
-            Assert.True(true);
-        }
         #endregion
     }
 }

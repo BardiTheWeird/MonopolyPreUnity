@@ -26,6 +26,7 @@ namespace MonopolyPreUnity.Systems
                     case PrintFormattedLine formattedLine:
                         PrintFormattedLine(formattedLine);
                         break;
+
                     case PrintCommands commands:
                         PrintCommands(commands);
                         break;
@@ -35,12 +36,21 @@ namespace MonopolyPreUnity.Systems
                     case PrintAction printAction:
                         PrintAction(printAction.Action);
                         break;
+
                     case PrintCashCharge cashCharge:
                         PrintCashCharge(cashCharge);
                         break;
                     case PrintCashGive cashGive:
                         PrintCashGive(cashGive);
                         break;
+
+                    case PrintPlayerStatus playerStatus:
+                        PrintPlayerStatus(playerStatus);
+                        break;
+                    case PrintGameStatus gameStatus:
+                        PrintGameStatus();
+                        break;
+
                     case ClearOutput clear:
                         ClearOutput();
                         break;
@@ -77,6 +87,12 @@ namespace MonopolyPreUnity.Systems
 
         void PrintCashGive(PrintCashGive give) =>
             PrintLine(_formatOutput.GetCashGiveString(give.PlayerId, give.Amount));
+
+        void PrintPlayerStatus(int playerId) =>
+            PrintLine(_formatOutput.GetPlayerString(playerId));
+
+        void PrintGameStatus() =>
+            PrintLine("Printing Game Status is not implemented yed");
 
         void ClearOutput()
         {

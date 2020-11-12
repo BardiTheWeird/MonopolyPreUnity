@@ -114,6 +114,45 @@ namespace MonopolyPreUnity.UI
         }
         #endregion
 
+        #region PlayerStatus
+        public string GetPlayerString(int playerId)
+        {
+            var player = _context.GetPlayer(playerId);
+            var sb = new StringBuilder();
+
+            sb.Append($"Name: {player.DisplayName}\n");
+            sb.Append(GetPlayerStateString(player, addCurrentTile: true).AddTwoSpacesAtNewLine());
+
+            return sb.ToString().Trim();
+        }
+
+        public string GetPlayerStateString(Player player, bool addCurrentTile = false, bool addInJail = true, bool addProperties = true)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Cash: {player.Cash}");
+            sb.AppendLine($"JailCards: {player.JailCards}");
+            if (addCurrentTile)
+                sb.AppendLine(FormattedString($"Currently at: |tile:{player.CurTileId}|"));
+            if (addInJail)
+            {
+                var str = player.TurnsInJail == null ? "Not in jail" : $"In jail, {player.TurnsInJail} turns";
+                sb.AppendLine(str);
+            }
+            if (addProperties)
+            {
+                if (player.Properties.Count == 0)
+                    sb.AppendLine("No Properties owned");
+                else
+                {
+                    sb.AppendLine("Properties:");
+                    foreach (var prop in player.Properties)
+                        sb.AppendLine(GetPropertyString(prop, printOwner: false).AddTwoSpacesAtNewLine());
+                }
+            }
+            return sb.ToString().Trim();
+        }
+        #endregion
+
         #region Actions
         public string GetActionString<T>(T action, string preface = "") where T : IMonopolyAction
         {
@@ -208,13 +247,21 @@ namespace MonopolyPreUnity.UI
             return ($"COULD NOT GET A STRING FOR {component.GetType().GetShortTypeString()}");
         }
 
-        public string GetPropComponentString(Property prop)
+        public string GetPropComponentString(Property prop, bool printOwner = true)
         {
-            string ownerName = prop.OwnerId == null ? "No owner" : _context.GetPlayer((int)prop.OwnerId).DisplayName;
-            return $"Owner: {ownerName}\n" +
-                $"SetId: {prop.SetId}\n" +
-                $"BasePrice: {prop.BasePrice}\n" +
-                $"IsMortgaged: {prop.IsMortgaged}";
+            var sb = new StringBuilder();
+            if (printOwner)
+            {
+                if (prop.OwnerId.HasValue)
+                    sb.AppendLine($"Owner: {_context.GetPlayer((int)prop.OwnerId).DisplayName}");
+                else
+                    sb.AppendLine("No owner");
+            }
+            sb.AppendLine($"SetId: {prop.SetId}");
+            sb.AppendLine($"BasePrice: {prop.BasePrice}");
+            sb.Append($"IsMortgaged: {prop.IsMortgaged}");
+
+            return sb.ToString();
         }
 
         public string GetDevComponentString(PropertyDevelopment dev, bool writeRentList = true)
@@ -237,24 +284,22 @@ namespace MonopolyPreUnity.UI
         #endregion
 
         #region Property
-        public string GetPropertyString(int tileId)
+        public string GetPropertyString(int tileId, bool printOwner = true)
         {
-            var prop = GetTileComponentString(_context.GetTileComponent<Property>(tileId));
+            var prop = GetPropComponentString(_context.GetTileComponent<Property>(tileId), printOwner);
             var dev = GetTileComponentString(_context.GetTileComponent<PropertyDevelopment>(tileId));
             var station = GetTileComponentString(_context.GetTileComponent<TrainStation>(tileId));
             var utility = GetTileComponentString(_context.GetTileComponent<UtilityProperty>(tileId));
 
-            Func<string, string> newLineDoubleSpace = x => x.AddTwoSpacesAtNewLine();
-
             var sb = new StringBuilder();
-            sb.Append(newLineDoubleSpace(prop));
+            sb.AppendLine(prop.AddTwoSpacesAtNewLine());
 
             if (dev != "")
-                sb.Append(newLineDoubleSpace(dev));
+                sb.AppendLine(dev.AddTwoSpacesAtNewLine());
             if (station != "")
-                sb.Append(newLineDoubleSpace(station));
+                sb.AppendLine(station.AddTwoSpacesAtNewLine());
             if (utility != "")
-                sb.Append(newLineDoubleSpace(utility));
+                sb.AppendLine(utility.AddTwoSpacesAtNewLine());
 
             return sb.ToString();
         }
