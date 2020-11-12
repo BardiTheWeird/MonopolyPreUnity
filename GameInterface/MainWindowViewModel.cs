@@ -1,6 +1,7 @@
 ﻿using MonopolyPreUnity;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Entity;
+using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Initialization;
 using siof.Common;
 using System;

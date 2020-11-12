@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace MonopolyPreUnity.Entity
+namespace MonopolyPreUnity.Entity.ContextExtensions
 {
     static class ContextTileExtensions
     {
@@ -71,30 +71,6 @@ namespace MonopolyPreUnity.Entity
             }
             return false;
         }
-        #endregion
-
-        #region Property
-        public static HashSet<int> GetPropertySet(this Context context, int setId) =>
-            context
-            .GetEntities<Tile>()
-            .GetEntities<Property>()
-            .Select(e => e.GetComponent<Property>().SetId)
-            .Where(id => id == setId)
-            .ToHashSet();
-
-        public static bool IsPropertySetOwned(this Context context, Player player, int setId)
-        {
-            HashSet<int> set = context.GetPropertySet(setId);
-            var intersection = player.Properties.Intersect(set);
-            if (set.Count == intersection.Count())
-                return true;
-            return false;
-        }
-
-        public static HashSet<int> OwnedPropertiesInSet(this Context context, Player player, int setId) =>
-            player.Properties
-            .Intersect(context.GetPropertySet(setId))
-            .ToHashSet();
         #endregion
     }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace MonopolyPreUnity.Entity
+namespace MonopolyPreUnity.Entity.ContextExtensions
 {
     static class ContextTestInterfaceExtensions
     {
