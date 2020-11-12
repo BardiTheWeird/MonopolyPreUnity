@@ -1,5 +1,4 @@
-﻿using DataSaving;
-using MonopolyPreUnity;
+﻿using MonopolyPreUnity;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Initialization;
@@ -52,7 +51,6 @@ namespace GameInterface
 
         #region Commands
         public ICommand SendInputCommand { get; set; }
-        public ICommand SaveOutputLog { get; set; }
         #endregion
 
         #region backgroundWorker
@@ -71,7 +69,6 @@ namespace GameInterface
                     Context.InputString = InputText;
                 InputText = "";
             }, x => InputText.Length > 0 && Context.ContainsComponentInterface<IHSRequest>());
-            SaveOutputLog = new RelayCommand(x => Context.SaveOutputLog());
 
             _backgroundWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
             _backgroundWorker.DoWork += (x, y) => MonopolyEntry.RunSystemsContinuous(SysBag);

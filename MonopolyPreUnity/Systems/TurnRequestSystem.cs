@@ -26,7 +26,7 @@ namespace MonopolyPreUnity.Systems
                 return;
 
             var curTurnPlayerId = _context.TurnInfo().CurTurnPlayerId;
-            _context.Add(new PrintFormattedLine($"|player:{curTurnPlayerId}| makes a move"));
+            //_context.Add(new PrintFormattedLine($"|player:{curTurnPlayerId}| makes a move"));
             _context.Add(new PlayerInputRequest(curTurnPlayerId, new TurnRequest()));
             Debug.WriteLine($"Added PlayerInputRequest at TurnRequestSystem. containsHSRequest=\"{containsHSRequest}\"");
         }

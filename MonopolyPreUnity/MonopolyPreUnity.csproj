@@ -19,4 +19,8 @@
     <Folder Include="RequestHandlers\AIScenario\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataSaving\Logger.csproj" />
+  </ItemGroup>
+
 </Project>

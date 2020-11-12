@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Components.SystemRequest.Output;
+﻿using Microsoft.VisualBasic.CompilerServices;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
 using System;
 using System.Collections.Generic;
@@ -32,11 +33,15 @@ namespace MonopolyPreUnity.UI
 
         public bool TryParse<T>(Func<T, bool> pred, out T val, string errorMessage) where T : IConvertible
         {
-            if (TryParse(out val) && pred(val))
-                return true;
+            if (!TryParse(out val))
+                return false;
 
-            _context.Add(new PrintLine(errorMessage + ". Try again"));
-            return false;
+            if (!pred(val))
+            {
+                _context.Add(new PrintLine(errorMessage + ". Try again"));
+                return false;
+            }
+            return true;
         }
 
         public bool TryParseIndex<T>(IEnumerable<T> values, out int val, bool canCancel = false)

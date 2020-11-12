@@ -36,11 +36,5 @@
                 Command="{Binding SendInputCommand}">
             Send Input
         </Button>
-
-        <Button x:Name="SaveOutputLog"
-                Grid.Row="1" Grid.Column="0" Margin="10"
-                Command="{Binding SaveOutputLog}">
-            Save Output Log
-        </Button>
     </Grid>
 </Window>

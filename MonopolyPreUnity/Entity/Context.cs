@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Components;
+﻿using DataSaving;
+using MonopolyPreUnity.Components;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +11,8 @@ namespace MonopolyPreUnity.Entity
     class Context : INotifyPropertyChanged
     {
         public List<Entity> Entities { get; set; }
+
+        public Logger Logger { get; set; }
 
         #region I/O strings
         string _outputString = "";
@@ -60,7 +63,7 @@ namespace MonopolyPreUnity.Entity
         #endregion
 
         #region Entity Methods
-        public Entity GetEntity<T>(Func<Entity, bool> predicate) where T : IEntityComponent=>
+        public Entity GetEntity<T>(Func<Entity, bool> predicate) where T : IEntityComponent =>
             GetEntities<T>().FirstOrDefault(predicate);
 
         public Entity GetEntity(Func<Entity, bool> predicate) =>
@@ -75,7 +78,7 @@ namespace MonopolyPreUnity.Entity
         public List<Entity> GetEntities<T>() where T : IEntityComponent =>
             GetEntities(entity => entity.ContainsComponent<T>());
 
-        public void Remove(IEntityComponent component) 
+        public void Remove(IEntityComponent component)
         {
             var entity = Entities.FirstOrDefault(e => e.ContainsComponent(component));
             if (entity != null)
@@ -123,8 +126,11 @@ namespace MonopolyPreUnity.Entity
             InputString = input;
         }
 
-        public Context(List<Entity> entities) =>
+        public Context(List<Entity> entities)
+        {
             Entities = entities;
+            Logger = new Logger();
+        }
 
         public Context(params Entity[] entities) : this(entities.ToList()) { }
 

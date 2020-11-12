@@ -20,6 +20,8 @@ namespace MonopolyPreUnity.Systems
             if (request == null || _context.InputString == "")
                 return;
 
+            _context.Logger.AppendLine($"\n>> {_context.InputString}\n\n");
+
             bool success = false;
             switch (request)
             {

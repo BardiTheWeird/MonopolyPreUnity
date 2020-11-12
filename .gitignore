@@ -338,5 +338,7 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/DataSaving/SavedData/OutputLog/
 /DataSaving/SavedData/OutputLog/Log1.txt
 /DataSaving/SavedData/OutputLog/Log1 - Copy.txt
+/DataSaving/SavedData/OutputLog

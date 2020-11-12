@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonopolyPreUnity", "MonopolyPreUnity\MonopolyPreUnity.csproj", "{9C9E5D4F-E2E2-4CB9-8F2D-38730F1D12AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemTests", "SystemTests\SystemTests.csproj", "{3D63312B-9547-4778-AE9E-2572E213C3AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemTests", "SystemTests\SystemTests.csproj", "{3D63312B-9547-4778-AE9E-2572E213C3AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameInterface", "GameInterface\GameInterface.csproj", "{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameInterface", "GameInterface\GameInterface.csproj", "{B239ACF6-8D3E-42B7-85ED-A3860D9717EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataSaving", "DataSaving\DataSaving.csproj", "{F51669C7-7D70-4F6D-B128-12F7F01047E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logger", "DataSaving\Logger.csproj", "{F51669C7-7D70-4F6D-B128-12F7F01047E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

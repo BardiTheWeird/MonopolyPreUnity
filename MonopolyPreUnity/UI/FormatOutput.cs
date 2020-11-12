@@ -244,7 +244,7 @@ namespace MonopolyPreUnity.UI
             var station = GetTileComponentString(_context.GetTileComponent<TrainStation>(tileId));
             var utility = GetTileComponentString(_context.GetTileComponent<UtilityProperty>(tileId));
 
-            Func<string, string> newLineDoubleSpace = x => "\n" + x.AddTwoSpacesAtNewLine();
+            Func<string, string> newLineDoubleSpace = x => x.AddTwoSpacesAtNewLine();
 
             var sb = new StringBuilder();
             sb.Append(newLineDoubleSpace(prop));

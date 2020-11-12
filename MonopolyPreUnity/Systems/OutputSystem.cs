@@ -50,8 +50,11 @@ namespace MonopolyPreUnity.Systems
         }
 
         #region methods
-        void PrintLine(string line) =>
+        void PrintLine(string line)
+        {
             _context.OutputString += line + "\n";
+            _context.Logger.AppendLine(line + "\n");
+        }
 
         void PrintFormattedLine(string formattedLine) =>
             PrintLine(_formatOutput.FormattedString(formattedLine));
@@ -75,8 +78,11 @@ namespace MonopolyPreUnity.Systems
         void PrintCashGive(PrintCashGive give) =>
             PrintLine(_formatOutput.GetCashGiveString(give.PlayerId, give.Amount));
 
-        void ClearOutput() =>
+        void ClearOutput()
+        {
             _context.OutputString = "";
+            _context.Logger.AppendLine("\n##SCREEN CLEARED##\n\n");
+        }
         #endregion
 
         #region ctor
