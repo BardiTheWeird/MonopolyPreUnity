@@ -93,13 +93,14 @@ namespace MonopolyPreUnity.UI
         public string GetCashGiveString(int receiverId, int amount, string message = null)
         {
             var receiver = _context.GetPlayer(receiverId);
+            message = message == null || message == "" ? "" : $"({message})";
 
             var sb = new StringBuilder();
-            sb.Append($"{receiver.DisplayName} received {amount}$.");
+            sb.Append($"{receiver.DisplayName} received {amount}$ {message}");
             sb.Append($"\n  Current balance: {receiver.Cash}$");
 
-            if (message != null)
-                sb.Append("\n  Message: " + message);
+            //if (message != null)
+            //    sb.Append("\n  Message: " + message);
 
             return sb.ToString();
         }
@@ -183,9 +184,9 @@ namespace MonopolyPreUnity.UI
             var desc = GetActionDescription(action);
 
             if (preface.Length > 0)
-                preface += " ";
+                preface += ": ";
 
-            return preface + name + "\n" + desc.AddTwoSpacesAtNewLine();
+            return $"{preface}{name} ({desc})";
         }
 
         public string GetActionDescription(IMonopolyAction action)
@@ -236,10 +237,10 @@ namespace MonopolyPreUnity.UI
             {
                 var compString = GetTileComponentString(comp);
                 if (compString.Length > 0)
-                    sb.AppendLine(compString);
+                    sb.AppendLine(compString.Trim());
             }
 
-            return sb.ToString();
+            return sb.ToString().Trim();
         }
         #endregion
 

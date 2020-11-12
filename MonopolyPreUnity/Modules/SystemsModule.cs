@@ -35,6 +35,7 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<RentSystem>().AsSelf().SingleInstance();
             builder.RegisterType<TurnRequestSystem>().AsSelf().SingleInstance();
             builder.RegisterType<ThrowDiceSystem>().AsSelf().SingleInstance();
+            builder.RegisterType<OnGoPassedSystem>().AsSelf().SingleInstance();
 
             // HS input
             builder.RegisterType<HSInputSystem>().AsSelf().SingleInstance();

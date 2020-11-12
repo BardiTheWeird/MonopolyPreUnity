@@ -71,7 +71,7 @@ namespace GameInterface
             }, x => InputText.Length > 0 && Context.ContainsComponentInterface<IHSRequest>());
 
             _backgroundWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
-            _backgroundWorker.DoWork += (x, y) => MonopolyEntry.RunSystemsContinuous(SysBag);
+            _backgroundWorker.DoWork += (x, y) => MonopolyEntry.RunSystemsContinuousAsync(SysBag);
             _backgroundWorker.RunWorkerAsync();
         }
 

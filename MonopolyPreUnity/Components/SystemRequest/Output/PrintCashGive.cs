@@ -8,11 +8,13 @@ namespace MonopolyPreUnity.Components.SystemRequest.Output
     {
         public int PlayerId { get; set; }
         public int Amount { get; set; }
+        public string Message { get; set; }
 
-        public PrintCashGive(int playerId, int amount)
+        public PrintCashGive(int playerId, int amount, string message = "")
         {
             PlayerId = playerId;
             Amount = amount;
+            Message = message;
         }
     }
 }

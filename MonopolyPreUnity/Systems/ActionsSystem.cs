@@ -22,7 +22,7 @@ namespace MonopolyPreUnity.Systems
             foreach (var actionRequest in _context.GetComponents<ExecuteAction>())
             {
                 var action = actionRequest.Action;
-                _context.Add(new PrintAction(action));
+                _context.Add(new PrintAction(action, "Action to be executed"));
 
                 _behaviorIndex[action.GetType()].Execute(actionRequest.PlayerId, action);
             }

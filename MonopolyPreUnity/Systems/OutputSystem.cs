@@ -34,7 +34,7 @@ namespace MonopolyPreUnity.Systems
                         PrintTile(printTile.TileId);
                         break;
                     case PrintAction printAction:
-                        PrintAction(printAction.Action);
+                        PrintAction(printAction.Action, printAction.Preface);
                         break;
 
                     case PrintCashCharge cashCharge:
@@ -81,15 +81,15 @@ namespace MonopolyPreUnity.Systems
         void PrintTile(int tileId) =>
             PrintLine(_formatOutput.GetTileString(tileId));
 
-        void PrintAction(IMonopolyAction action) =>
-            PrintLine(_formatOutput.GetActionString(action));
+        void PrintAction(IMonopolyAction action, string preface) =>
+            PrintLine(_formatOutput.GetActionString(action, preface));
 
         void PrintCashCharge(PrintCashCharge charge) =>
             PrintLine(_formatOutput.GetCashChargeString(
                 charge.PlayerChargedId, charge.PlayerChargerId, charge.Amount, charge.Message));
 
         void PrintCashGive(PrintCashGive give) =>
-            PrintLine(_formatOutput.GetCashGiveString(give.PlayerId, give.Amount));
+            PrintLine(_formatOutput.GetCashGiveString(give.PlayerId, give.Amount, give.Message));
 
         void PrintPlayerStatus(int playerId) =>
             PrintLine(_formatOutput.GetPlayerString(playerId));

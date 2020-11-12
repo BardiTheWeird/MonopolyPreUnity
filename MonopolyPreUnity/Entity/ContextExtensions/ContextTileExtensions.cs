@@ -57,7 +57,7 @@ namespace MonopolyPreUnity.Entity
         {
             var entity = context.GetEntity<Tile>(entity => entity.GetComponent<Tile>().Id == tileId);
             if (entity == null)
-                return default;
+                return new List<IEntityComponent>();
             return entity.Components;
         }
 

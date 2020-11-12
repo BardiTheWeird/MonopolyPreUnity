@@ -50,14 +50,14 @@ namespace MonopolyPreUnity.Systems
 
         #region give cash
         void PlayerCashGive(GiveCash give) =>
-            PlayerCashGive(give.PlayerId, give.Amount);
+            PlayerCashGive(give.PlayerId, give.Amount, give.Message);
 
-        void PlayerCashGive(int playerId, int amount)
+        void PlayerCashGive(int playerId, int amount, string message = "")
         {
             var player = _context.GetPlayer(playerId);
             player.Cash += amount;
 
-            _context.Add(new PrintCashGive(playerId, amount));
+            _context.Add(new PrintCashGive(playerId, amount, message));
         }
         #endregion
 
