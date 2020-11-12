@@ -3,6 +3,7 @@ using Autofac.Core;
 using MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.BuyAuction;
 using MonopolyPreUnity.RequestHandlers.HSScenario.RequestScenarios.TurnScenario;
 using MonopolyPreUnity.Systems;
+using MonopolyPreUnity.Systems.PropertySystems;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,6 +25,9 @@ namespace MonopolyPreUnity.Initialization
                 c.Resolve<HSTurnSystem>(),
                 c.Resolve<HSBuyAuctionSystem>(),
 
+                c.Resolve<BuyPropertySystem>(),
+                c.Resolve<AuctionStartSystem>(),
+
                 c.Resolve<ThrowDiceSystem>(),
                 c.Resolve<MoveSystem>(),
 
@@ -32,6 +36,7 @@ namespace MonopolyPreUnity.Initialization
                 c.Resolve<RentSystem>(),
 
                 c.Resolve<PlayerCashSystem>(),
+                c.Resolve<PropertyTransferSystem>(),
                 c.Resolve<PlayerDebtSystem>(),
                 c.Resolve<PlayerBankruptSystem>(),
                 c.Resolve<AssetTransferSystem>(),

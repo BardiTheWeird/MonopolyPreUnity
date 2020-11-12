@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest;
 using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput.Property;
 using MonopolyPreUnity.Entity;
@@ -23,8 +24,7 @@ namespace MonopolyPreUnity.Systems.PropertySystems
             var player = _context.GetPlayer(_context.TurnInfo().CurTurnPlayerId);
 
             var prop = _context.GetTileComponent<Property>(startAuction.PropertyId);
-            player.Properties.Add(startAuction.PropertyId);
-            prop.OwnerId = player.Id;
+            _context.Add(new PropertyTransferRequest(startAuction.PropertyId, player.Id));
 
             _context.Remove<StartAuction>();
         }

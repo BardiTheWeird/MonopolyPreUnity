@@ -25,7 +25,7 @@ namespace MonopolyPreUnity.Initialization
         }
         #endregion
 
-        public static IContainer CreateDiContainer(Context context)
+        public static IContainer CreateDiContainer(this Context context)
         {
             var builder = new ContainerBuilder();
 

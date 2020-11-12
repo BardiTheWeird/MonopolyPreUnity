@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest;
 using MonopolyPreUnity.Components.SystemRequest.Cash;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput.Property;
 using MonopolyPreUnity.Entity;
@@ -21,9 +22,8 @@ namespace MonopolyPreUnity.Systems.PropertySystems
             var player = _context.GetPlayer(buyProperty.BuyerId);
             var prop = _context.GetTileComponent<Property>(buyProperty.PropertyId);
 
-            _context.Add(new ChargeCash(prop.BasePrice, player.Id, message: "property acquisition"));
-            player.Properties.Add(buyProperty.PropertyId);
-            prop.OwnerId = player.Id;
+            _context.Add(new ChargeCash(prop.BasePrice, player.Id, message: "for property acquisition"));
+            _context.Add(new PropertyTransferRequest(buyProperty.PropertyId, player.Id));
 
             _context.Remove<BuyProperty>();
         }
