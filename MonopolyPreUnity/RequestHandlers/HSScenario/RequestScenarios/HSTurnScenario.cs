@@ -104,8 +104,9 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
                 };
             var outputRequestCommands = new List<MonopolyCommand> 
             { 
-                MonopolyCommand.GetPlayerStatus, 
-                MonopolyCommand.GetGameStatus 
+                MonopolyCommand.PrintPlayerStatus, 
+                MonopolyCommand.PrintGameStatus,
+                MonopolyCommand.PrintMap,
             };
 
             commandList.AddRange(_context.GetAvailableTurnCommands(player));

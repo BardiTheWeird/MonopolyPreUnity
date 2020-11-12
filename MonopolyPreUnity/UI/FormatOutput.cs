@@ -153,6 +153,29 @@ namespace MonopolyPreUnity.UI
         }
         #endregion
 
+        #region Map
+        public string GetMapString()
+        {
+            var map = _context.GetMap();
+            var mapString = GetStringOfListOfItems(map, GetMapTileString, false);
+            return $"Map:\n" +
+                $"{mapString.AddTwoSpacesAtNewLine()}";
+        }
+
+        string GetMapTileString(Tile tile)
+        {
+            var players = _context.GetAllPlayers()
+                .Where(p => p.CurTileId == tile.Id)
+                .Select(p => p.DisplayName);
+
+            var playersString = "";
+            if (players.Count() > 0)
+                playersString = players.Aggregate("", (ps, p) => ps += p + ", ", ps => $"(players: {ps.Substring(0, ps.Length - 2)})");
+
+            return $"{tile.Name} {playersString}".Trim();
+        }
+        #endregion
+
         #region Actions
         public string GetActionString<T>(T action, string preface = "") where T : IMonopolyAction
         {

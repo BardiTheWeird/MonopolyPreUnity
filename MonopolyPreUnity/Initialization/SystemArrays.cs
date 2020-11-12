@@ -21,7 +21,7 @@ namespace MonopolyPreUnity.Initialization
 
                 c.Resolve<HSInputSystem>(),
 
-                c.Resolve<HSGetStatusSystem>(),
+                c.Resolve<HSPrintStatusSystem>(),
                 c.Resolve<HSTurnSystem>(),
                 c.Resolve<HSBuyAuctionSystem>(),
 

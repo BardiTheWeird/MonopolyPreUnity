@@ -40,7 +40,7 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<HSInputSystem>().AsSelf().SingleInstance();
             builder.RegisterType<HSTurnSystem>().AsSelf().SingleInstance();
             builder.RegisterType<HSBuyAuctionSystem>().AsSelf().SingleInstance();
-            builder.RegisterType<HSGetStatusSystem>().AsSelf().SingleInstance();
+            builder.RegisterType<HSPrintStatusSystem>().AsSelf().SingleInstance();
 
             // helpers
             builder.RegisterType<FormatOutput>().AsSelf().SingleInstance();

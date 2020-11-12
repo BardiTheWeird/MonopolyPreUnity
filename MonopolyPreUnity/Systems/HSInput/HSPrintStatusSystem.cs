@@ -9,13 +9,14 @@ using System.Text;
 
 namespace MonopolyPreUnity.Systems.HSInput
 {
-    class HSGetStatusSystem : ISystem
+    class HSPrintStatusSystem : ISystem
     {
         private readonly Context _context;
         private readonly MonopolyCommand[] _appropriateCommands =
         {
-            MonopolyCommand.GetPlayerStatus,
-            MonopolyCommand.GetGameStatus,
+            MonopolyCommand.PrintPlayerStatus,
+            MonopolyCommand.PrintGameStatus,
+            MonopolyCommand.PrintMap,
         };
 
         public void Execute()
@@ -25,11 +26,14 @@ namespace MonopolyPreUnity.Systems.HSInput
             {
                 switch (commandChoice.Command)
                 {
-                    case MonopolyCommand.GetPlayerStatus:
+                    case MonopolyCommand.PrintPlayerStatus:
                         _context.Add(new PrintPlayerStatus(commandChoice.PlayerId));
                         break;
-                    case MonopolyCommand.GetGameStatus:
+                    case MonopolyCommand.PrintGameStatus:
                         _context.Add(new PrintGameStatus());
+                        break;
+                    case MonopolyCommand.PrintMap:
+                        _context.Add(new PrintMap());
                         break;
                 }
                 _context.Remove<HSCommandChoice>(c => c.Command == commandChoice.Command);
@@ -37,7 +41,7 @@ namespace MonopolyPreUnity.Systems.HSInput
         }
 
         #region ctor
-        public HSGetStatusSystem(Context context) =>
+        public HSPrintStatusSystem(Context context) =>
             _context = context;
         #endregion
     }

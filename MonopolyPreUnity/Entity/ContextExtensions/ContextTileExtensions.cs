@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MonopolyPreUnity.Entity
@@ -30,6 +31,9 @@ namespace MonopolyPreUnity.Entity
         /// <returns>Tile</returns>
         public static Tile GetTilePosition(this Context context, int position) =>
             context.GetComponent<Tile>(t => t.MapPosition == position);
+
+        public static List<Tile> GetAllTiles(this Context context) =>
+            context.GetComponents<Tile>();
         #endregion
 
         #region Map
@@ -38,6 +42,9 @@ namespace MonopolyPreUnity.Entity
 
         public static int GetPosition(this Context context, int id) =>
             context.GetTileId(id).MapPosition;
+
+        public static List<Tile> GetMap(this Context context) =>
+            context.GetAllTiles().OrderBy(t => t.MapPosition).ToList();
         #endregion
 
         #region TileComponents

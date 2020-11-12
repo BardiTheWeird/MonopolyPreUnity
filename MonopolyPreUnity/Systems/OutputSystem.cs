@@ -50,6 +50,9 @@ namespace MonopolyPreUnity.Systems
                     case PrintGameStatus gameStatus:
                         PrintGameStatus();
                         break;
+                    case PrintMap printMap:
+                        PrintMap();
+                        break;
 
                     case ClearOutput clear:
                         ClearOutput();
@@ -93,6 +96,9 @@ namespace MonopolyPreUnity.Systems
 
         void PrintGameStatus() =>
             PrintLine("Printing Game Status is not implemented yed");
+
+        void PrintMap() =>
+            PrintLine("\n" + _formatOutput.GetMapString() + "\n");
 
         void ClearOutput()
         {
