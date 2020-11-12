@@ -51,7 +51,7 @@ namespace MonopolyPreUnity
             while (true)
             {
                 systemsBag.Execute();
-                await Task.Delay(50);
+                await Task.Delay(5);
             }
         }
     }
