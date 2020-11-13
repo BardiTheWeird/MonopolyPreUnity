@@ -42,7 +42,6 @@ namespace MonopolyPreUnity.Systems.HSInput
             {
                 case MonopolyCommand.ManageProperty:
                     state.Set(HSState.PropManageChooseProperty, player.Id);
-                    Debug.WriteLine("Used up ManageProperty");
                     break;
 
                 case MonopolyCommand.MakeMove:

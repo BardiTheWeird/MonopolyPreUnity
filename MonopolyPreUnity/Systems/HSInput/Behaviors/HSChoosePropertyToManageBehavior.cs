@@ -1,6 +1,7 @@
 ﻿using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Request;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Utitlity;
@@ -24,7 +25,13 @@ namespace MonopolyPreUnity.Systems.HSInput
             if (propertyChoice == null)
             {
                 if (!_context.ContainsComponent<HSPropertyChoiceRequest>())
+                {
+                    _context.Add(new PrintLine("Choose property to manage", OutputStream.HSInputLog));
+                    _context.Add(new PrintProperties(player.Properties.ToList(), OutputStream.HSInputLog));
+                    _context.Add(new PrintLine("Print -1 to cancel", OutputStream.HSInputLog));
+
                     _context.Add(new HSPropertyChoiceRequest(player.Id, player.Properties.ToList()));
+                }
                 return;
             }
 
@@ -33,6 +40,7 @@ namespace MonopolyPreUnity.Systems.HSInput
             {
                 _context.Remove<HSPropertyChoice>();
                 state.CurState = HSState.TurnChoice;
+                return;
             }
 
             // if player is willing to force himself to manage his dreaded property

@@ -1,11 +1,13 @@
 ﻿using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput.Property;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonopolyPreUnity.Systems.HSInput.Behaviors
@@ -23,10 +25,14 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
             // if command isn't chosen
             if (commandChoice == null)
             {
-                var avilableCommands = _context.GetAvailablePropertyActions(player, propId);
-                avilableCommands.Add(MonopolyCommand.CancelAction);
+                if (!_context.ContainsComponent<HSCommandChoiceRequest>())
+                {
+                    var avilableCommands = _context.GetAvailablePropertyActions(player, propId);
+                    avilableCommands.Add(MonopolyCommand.CancelAction);
 
-                _context.Add(new HSCommandChoiceRequest(avilableCommands, player.Id));
+                    _context.Add(new PrintCommands(avilableCommands));
+                    _context.Add(new HSCommandChoiceRequest(avilableCommands, player.Id));
+                }
                 return;
             }
 
@@ -47,6 +53,7 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
 
                 case MonopolyCommand.CancelAction:
                     state.CurState = HSState.PropManageChooseProperty;
+                    _context.Remove<HSPropertyChoice>();
                     break;
             }
             _context.Remove<HSCommandChoice>();

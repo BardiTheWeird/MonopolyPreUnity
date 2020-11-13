@@ -44,6 +44,9 @@ namespace MonopolyPreUnity.Systems
                     case PrintAction printAction:
                         str = GetActionString(printAction.Action, printAction.Preface);
                         break;
+                    case PrintProperties printProperties:
+                        str = GetPropertiesString(printProperties);
+                        break;
 
                     case PrintCashCharge cashCharge:
                         str = GetCashChargeString(cashCharge);
@@ -111,6 +114,9 @@ namespace MonopolyPreUnity.Systems
 
         string GetMap() =>
             "\n" + _formatOutput.GetMapString() + "\n";
+
+        string GetPropertiesString(List<int> propId) =>
+            _formatOutput.GetStringOfListOfItems(propId, _formatOutput.GetPropertyString, true);
 
         void ClearOutput(OutputStream outputStream)
         {

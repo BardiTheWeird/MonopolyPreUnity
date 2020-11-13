@@ -22,7 +22,7 @@ namespace MonopolyPreUnity.Behaviors.Rent
             var prop = _context.GetTileComponent<Property>(tileId);
 
             var owner = _context.GetPlayer(ownerId);
-            if (_context.IsPropertySetOwned(owner, prop.SetId))
+            if (_context.FullSetOwned(owner, prop.SetId))
                 rentChoice += 1 + dev.HousesBuilt;
             return dev.RentList[rentChoice];
         }

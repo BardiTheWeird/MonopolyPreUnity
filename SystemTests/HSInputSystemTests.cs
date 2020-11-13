@@ -1,7 +1,9 @@
 ﻿using Autofac;
+using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
 using MonopolyPreUnity.Entity;
+using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Initialization;
 using MonopolyPreUnity.Systems;
 using MonopolyPreUnity.Utitlity;
@@ -20,12 +22,16 @@ namespace SystemTests
         public HSInputSystemTests()
         {
             context = new Context();
+            context.Add(new Player(1, "Joshua"));
             inputSystem = DiContainer.CreateDiContainer(context).Resolve<HSInputSystem>();
         }
 
         [Fact]
         public void Test1()
         {
+            var state = context.HSInputState();
+            state.Set(HSState.TurnChoice, 1);
+
             var commandList = new List<MonopolyCommand>()
             {
                 MonopolyCommand.ManageProperty,
@@ -38,9 +44,8 @@ namespace SystemTests
             inputSystem.Execute();
 
             Assert.Equal("", context.InputString);
-            Assert.True(context.ContainsComponent<HSCommandChoice>());
             Assert.False(context.ContainsComponent<HSCommandChoiceRequest>());
-            Assert.Equal(MonopolyCommand.MakeMove, context.GetComponent<HSCommandChoice>().Command);
+            Assert.False(context.ContainsComponent<HSCommandChoice>());
         }
     }
 }

@@ -13,14 +13,16 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
     {
         #region Property sets
         public static HashSet<int> GetPropertySet(this Context context, int setId) =>
-            context
-            .GetEntities<Tile>()
-            .GetEntities<Property>()
-            .Select(e => e.GetComponent<Property>().SetId)
-            .Where(id => id == setId)
+            context.GetEntities<Tile>()
+            .Where(t => t.ContainsComponent<Property>())
+            .Where(e => e.GetComponent<Property>().SetId == setId)
+            .Select(t => t.GetComponent<Tile>().Id)
             .ToHashSet();
 
-        public static bool IsPropertySetOwned(this Context context, Player player, int setId)
+        public static HashSet<int> GetPropertySetPropId(this Context context, int propId) =>
+            context.GetPropertySet(context.GetTileComponent<Property>(propId).SetId);
+
+        public static bool FullSetOwned(this Context context, Player player, int setId)
         {
             HashSet<int> set = context.GetPropertySet(setId);
             var intersection = player.Properties.Intersect(set);
@@ -83,7 +85,7 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             if (prop.IsMortgaged)
                 return false;
             // if player owns a full set
-            if (!context.IsPropertySetOwned(player, prop.SetId))
+            if (!context.FullSetOwned(player, prop.SetId))
                 return false;
             return true;
         }
@@ -95,11 +97,11 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
 
             // if maximum difference between two HousesBuilt after building a house is <= 1
             var dev = context.GetTileComponent<PropertyDevelopment>(propId);
-            var minHousesInSet = context.GetPropertySet(propId)
+            var minHousesInSet = context.GetPropertySetPropId(propId)
                 .Select(id => context.GetTileComponent<PropertyDevelopment>(id))
                 .Min(dev => dev.HousesBuilt);
 
-            if (dev.HousesBuilt > minHousesInSet && dev.HousesBuilt == dev.HouseCap)
+            if (dev.HousesBuilt > minHousesInSet || dev.HousesBuilt == dev.HouseCap)
                 return false;
             return true;
         }
@@ -111,7 +113,7 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
 
             // if maximum difference between two HousesBuilt after building a house is <= 1
             var devHouses = context.GetTileComponent<PropertyDevelopment>(propId).HousesBuilt;
-            var maxHousesInSet = context.GetPropertySet(propId)
+            var maxHousesInSet = context.GetPropertySetPropId(propId)
                 .Select(id => context.GetTileComponent<PropertyDevelopment>(id))
                 .Max(dev => dev.HousesBuilt);
 

@@ -21,6 +21,11 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
 
         #endregion
 
+        #region remove player(s)
+        public static void RemovePlayer(this Context context, int playerId) =>
+            context.Remove<Player>(p => p.Id == playerId);
+        #endregion
+
         #region available commands
         public static List<MonopolyCommand> GetAvailableTurnCommands(this Context context, Player player)
         {

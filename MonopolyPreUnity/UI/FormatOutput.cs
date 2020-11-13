@@ -309,6 +309,9 @@ namespace MonopolyPreUnity.UI
         #endregion
 
         #region Property
+        public string GetPropertyString(int tileId) =>
+            GetPropertyString(tileId, true);
+
         public string GetPropertyString(int tileId, bool printOwner = true)
         {
             var prop = GetPropComponentString(_context.GetTileComponent<Property>(tileId), printOwner);
