@@ -30,12 +30,17 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
                     var avilableCommands = _context.GetAvailablePropertyActions(player, propId);
                     avilableCommands.Add(MonopolyCommand.CancelAction);
 
+                    _context.Add(new ClearOutput());
+                    _context.Add(new PrintLine("Chosen property:", OutputStream.HSInputLog));
+                    _context.Add(new PrintProperties(propId, OutputStream.HSInputLog, indexate: false));
+
                     _context.Add(new PrintCommands(avilableCommands));
                     _context.Add(new HSCommandChoiceRequest(avilableCommands, player.Id));
                 }
                 return;
             }
 
+            _context.Add(new ClearOutput());
             switch (commandChoice.Command)
             {
                 case MonopolyCommand.MortgageProperty:

@@ -17,7 +17,7 @@
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height=".1*"/>
+            <RowDefinition Height=".15*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -37,7 +37,7 @@
         </customcontrols:ScrollingTextBox>
 
         <TextBox x:Name="HSInput"
-                 Grid.Row="1" Grid.Column="1" Margin="10,0,10,0"
+                 Grid.Row="1" Grid.Column="1" Margin="10"
                  AcceptsReturn="True"
                  Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}">
         </TextBox>

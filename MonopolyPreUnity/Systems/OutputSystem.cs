@@ -107,16 +107,16 @@ namespace MonopolyPreUnity.Systems
             _formatOutput.GetCashGiveString(give.PlayerId, give.Amount, give.Message);
 
         string GetPlayerStatus(int playerId) =>
-            _formatOutput.GetPlayerString(playerId);
+            _formatOutput.GetPlayerString(playerId) + "\n";
 
         string GetGameStatus() =>
-            "Printing Game Status is not implemented yed";
+            "Printing Game Status is not implemented yet\n";
 
         string GetMap() =>
-            "\n" + _formatOutput.GetMapString() + "\n";
+            _formatOutput.GetMapString() + "\n";
 
-        string GetPropertiesString(List<int> propId) =>
-            _formatOutput.GetStringOfListOfItems(propId, _formatOutput.GetPropertyString, true);
+        string GetPropertiesString(PrintProperties print) =>
+            _formatOutput.GetStringOfListOfItems(print.Properties, _formatOutput.GetPropertyString, print.Indexate);
 
         void ClearOutput(OutputStream outputStream)
         {

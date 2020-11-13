@@ -94,6 +94,9 @@ namespace SystemTests
 
             Assert.True(context.CanSellHouse(player, 3));
             Assert.False(context.CanBuildHouse(player, 3));
+
+            player.Cash = 0;
+            Assert.False(context.CanBuildHouse(player, 3));
         }
 
         [Fact]

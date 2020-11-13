@@ -38,6 +38,7 @@ namespace MonopolyPreUnity.Systems.HSInput
             // if player canceled
             if (!propertyChoice.PropId.HasValue)
             {
+                _context.Add(new ClearOutput());
                 _context.Remove<HSPropertyChoice>();
                 state.CurState = HSState.TurnChoice;
                 return;
@@ -47,7 +48,9 @@ namespace MonopolyPreUnity.Systems.HSInput
             state.CurState = HSState.PropManageChooseAction;
         }
 
+        #region ctor
         public HSChoosePropertyToManageBehavior(Context context) =>
             _context = context;
+        #endregion
     }
 }

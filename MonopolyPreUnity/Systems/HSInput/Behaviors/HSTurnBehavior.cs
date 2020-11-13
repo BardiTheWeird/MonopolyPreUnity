@@ -38,6 +38,7 @@ namespace MonopolyPreUnity.Systems.HSInput
                 return;
             }
 
+            _context.Add(new ClearOutput());
             switch (commandChoice.Command)
             {
                 case MonopolyCommand.ManageProperty:

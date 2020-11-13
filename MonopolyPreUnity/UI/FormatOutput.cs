@@ -148,7 +148,10 @@ namespace MonopolyPreUnity.UI
                 {
                     sb.AppendLine("Properties:");
                     foreach (var prop in player.Properties)
-                        sb.AppendLine(GetPropertyString(prop, printOwner: false).AddTwoSpacesAtNewLine());
+                    {
+                        sb.AppendLine(_context.GetTileId(prop).Name);
+                        sb.Append(GetPropertyString(prop, printOwner: false).AddTwoSpacesAtNewLine());
+                    }
                 }
             }
             return sb.ToString().Trim();
@@ -314,6 +317,7 @@ namespace MonopolyPreUnity.UI
 
         public string GetPropertyString(int tileId, bool printOwner = true)
         {
+            var identity = GetTileComponentString(_context.GetTileId(tileId));
             var prop = GetPropComponentString(_context.GetTileComponent<Property>(tileId), printOwner);
             var dev = GetTileComponentString(_context.GetTileComponent<PropertyDevelopment>(tileId));
             var station = GetTileComponentString(_context.GetTileComponent<TrainStation>(tileId));

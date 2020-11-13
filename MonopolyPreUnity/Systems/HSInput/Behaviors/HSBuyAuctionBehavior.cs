@@ -1,5 +1,6 @@
 ﻿using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput.Property;
 using MonopolyPreUnity.Components.SystemRequest.PlayerState;
 using MonopolyPreUnity.Entity;
@@ -23,6 +24,7 @@ namespace MonopolyPreUnity.Systems.HSInput
             if (commandChoice == null)
                 return;
 
+            _context.Add(new ClearOutput());
             var player = _context.GetPlayer(state.PlayerId.Value);
             switch (commandChoice.Command)
             {

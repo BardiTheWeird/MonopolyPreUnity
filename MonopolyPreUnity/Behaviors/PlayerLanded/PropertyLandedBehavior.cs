@@ -32,8 +32,8 @@ namespace MonopolyPreUnity.Behaviors
             {
                 _context.Add(new CollectRent(player.Id));
             }
-            //else
-            //    _context.Add(new PrintLine("It's their own property"));
+            else
+                _context.Add(new PrintLine("It's their own property", OutputStream.GameLog));
         }
 
         #endregion
