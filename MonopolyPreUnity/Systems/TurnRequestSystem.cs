@@ -26,6 +26,8 @@ namespace MonopolyPreUnity.Systems
                 return;
             if (!_context.HSInputState().IsNull)
                 return;
+            if (_context.AuctionInfo() != null)
+                return;
 
             var curTurnPlayerId = _context.TurnInfo().CurTurnPlayerId;
             //_context.Add(new PrintFormattedLine($"|player:{curTurnPlayerId}| makes a move"));

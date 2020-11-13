@@ -12,6 +12,7 @@ namespace MonopolyPreUnity.Components
         public List<int> BidOrder { get; set; }
         public int CurBidder { get; set; }
         public int CurBidderId => BidOrder[CurBidder];
+        public int BiddersLeft => BidOrder.Count;
 
         public AuctionInfo(int propertyOnAuctionId, int amountBid, List<int> bidOrder, int curBidder)
         {

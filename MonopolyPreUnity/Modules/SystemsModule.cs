@@ -22,6 +22,7 @@ namespace MonopolyPreUnity.Modules
 
             // property systems
             builder.RegisterType<AuctionStartSystem>().AsSelf().SingleInstance();
+            builder.RegisterType<AuctionSystem>().AsSelf().SingleInstance();
             builder.RegisterType<BuyPropertySystem>().AsSelf().SingleInstance();
             builder.RegisterType<PropertyTransferSystem>().AsSelf().SingleInstance();
             builder.RegisterType<PropertyActionsSystem>().AsSelf().SingleInstance();

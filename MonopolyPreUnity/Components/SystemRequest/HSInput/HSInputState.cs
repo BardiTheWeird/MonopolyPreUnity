@@ -14,6 +14,8 @@ namespace MonopolyPreUnity.Components.SystemRequest.HSInput
 
         PropManageChooseProperty,
         PropManageChooseAction,
+
+        AuctionBidChoice,
     }
 
     class HSInputState : IEntityComponent, INotifyPropertyChanged

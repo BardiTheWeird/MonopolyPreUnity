@@ -9,6 +9,7 @@ using MonopolyPreUnity.UI;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonopolyPreUnity.Systems
@@ -31,7 +32,7 @@ namespace MonopolyPreUnity.Systems
             _index[state.CurState.Value].Run(state);
         }
 
-        #region main commands
+        #region parsing input
         void ParseInput()
         {
             var request = _context.GetComponentInterface<IHSRequest>();
@@ -49,16 +50,20 @@ namespace MonopolyPreUnity.Systems
                 case HSPropertyChoiceRequest propertyChoiceRequest:
                     success = TryGetPropertyId(propertyChoiceRequest);
                     break;
+                case HSIntRequest intRequest:
+                    success = TryGetInt(intRequest);
+                    break;
             }
 
             if (success)
+            {
                 _context.Remove(request);
+                Debug.WriteLine($"Request of type {request.GetType().ShortTypeString()} was removed");
+            }
 
             _context.InputString = "";
         }
-        #endregion
 
-        #region parsing input
         bool TryGetCommand(HSCommandChoiceRequest commandChoiceRequest)
         {
             var commands = commandChoiceRequest.Commands;
@@ -76,6 +81,17 @@ namespace MonopolyPreUnity.Systems
 
             var propId = index == -1 ? null : (int?)props[index];
             _context.Add(new HSPropertyChoice(propertyChoiceRequest.PlayerId, propId));
+            return true;
+        }
+
+        bool TryGetInt(HSIntRequest intRequest)
+        {
+            if (!_inputParser.TryParse<int>(x => intRequest.LowerBound <= x && x <= intRequest.UpperBound,
+                out var val, $"Value should be betwen {intRequest.LowerBound} and {intRequest.UpperBound}"))
+                return false;
+
+            _context.Add(new HSIntChoice(intRequest.PlayerId, val));
+            Debug.WriteLine("Int choice was added");
             return true;
         }
         #endregion

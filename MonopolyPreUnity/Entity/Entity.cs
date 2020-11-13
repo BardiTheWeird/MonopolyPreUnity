@@ -47,9 +47,9 @@ namespace MonopolyPreUnity.Entity
         public override string ToString()
         {
             if (Components.Count == 1)
-                return Components[0].GetType().GetShortTypeString() + " Entity";
+                return Components[0].GetType().ShortTypeString() + " Entity";
             if (ContainsComponent<Tile>())
-                return GetComponent<Tile>().GetType().GetShortTypeString() + " Entity";
+                return GetComponent<Tile>().GetType().ShortTypeString() + " Entity";
 
             return $"Entity, Components.Count=\"{Components.Count}\"";
         }

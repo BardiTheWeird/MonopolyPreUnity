@@ -24,7 +24,7 @@ namespace MonopolyPreUnity.UI
         public static string AddTwoSpacesAtNewLine(this string str) =>
             "  " + Regex.Replace(str, @"\n", "\n  ");
 
-        public static string GetShortTypeString(this Type type)
+        public static string ShortTypeString(this Type type)
         {
             var typeString = type.ToString();
             var lastDotIndex = typeString.LastIndexOf('.');
@@ -184,7 +184,7 @@ namespace MonopolyPreUnity.UI
         #region Actions
         public string GetActionString<T>(T action, string preface = "") where T : IMonopolyAction
         {
-            var name = action.GetType().GetShortTypeString();
+            var name = action.GetType().ShortTypeString();
             var desc = GetActionDescription(action);
 
             if (preface.Length > 0)
@@ -210,7 +210,7 @@ namespace MonopolyPreUnity.UI
                 case GoToTileIdAction tileId:
                     break;
                 case GoToTileComponentAction tileComponent:
-                    var compTypeName = tileComponent.ComponentType.GetShortTypeString();
+                    var compTypeName = tileComponent.ComponentType.ShortTypeString();
                     desc = $"Send player to tile with {compTypeName}";
                     break;
                 case JailCardAction jailCard:
@@ -272,7 +272,7 @@ namespace MonopolyPreUnity.UI
                 case Jail jail:
                     return "";
             }
-            return ($"COULD NOT GET A STRING FOR {component.GetType().GetShortTypeString()}");
+            return ($"COULD NOT GET A STRING FOR {component.GetType().ShortTypeString()}");
         }
 
         public string GetPropComponentString(Property prop, bool printOwner = true)

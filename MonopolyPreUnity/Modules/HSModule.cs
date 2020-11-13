@@ -24,7 +24,6 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<HSTurnScenario>().Keyed<IHSRequestScenario>(typeof(TurnRequest));
 
             // Systems
-            //builder.RegisterType<HSTurnScenario>().AsSelf().SingleInstance();
             builder.RegisterType<HSInputSystem>().AsSelf().SingleInstance();
 
             // State Behaviors
@@ -34,6 +33,7 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<HSChoosePropertyActionBehavior>().Keyed<IHSStateBehavior>(HSState.PropManageChooseAction);
 
             builder.RegisterType<HSBuyAuctionBehavior>().Keyed<IHSStateBehavior>(HSState.BuyAuctionChoice);
+            builder.RegisterType<HSAuctionBidBehavior>().Keyed<IHSStateBehavior>(HSState.AuctionBidChoice);
         }
     }
 }

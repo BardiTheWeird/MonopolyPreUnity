@@ -16,5 +16,8 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
 
         public static GameConfig GameConfig(this Context context) =>
             context.GetComponent<GameConfig>();
+
+        public static AuctionInfo AuctionInfo(this Context context) =>
+            context.GetComponent<AuctionInfo>();
     }
 }

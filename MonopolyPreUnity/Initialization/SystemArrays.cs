@@ -25,6 +25,7 @@ namespace MonopolyPreUnity.Initialization
 
                 c.Resolve<BuyPropertySystem>(),
                 c.Resolve<AuctionStartSystem>(),
+                c.Resolve<AuctionSystem>(),
 
                 c.Resolve<PlayerCashSystem>(), // cash
 

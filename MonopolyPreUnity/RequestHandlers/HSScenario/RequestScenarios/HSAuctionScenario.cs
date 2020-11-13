@@ -1,11 +1,16 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest.HSInput;
+using MonopolyPreUnity.Components.SystemRequest.HSInput.Request;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
+using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonopolyPreUnity.RequestHandlers.HSScenario
@@ -18,16 +23,15 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
 
         public void RunScenario(IRequest requestIn, Player player)
         {
-            //var maxBidAmount = player.Cash - _auctionInfo.AmountBid;
+            Debug.WriteLine("So we're chilling in the RunScenario for AuctionScenario atm");
+            var auctionInfo = _context.AuctionInfo();
+            var maxBidAmount = player.Cash - auctionInfo.AmountBid;
 
-            //_consoleUI.Print("Write an amount to bid (0 to resign from the auction):");
-            //var amount = _consoleUI.InputValue<int>(x => 0 <= x && x <= maxBidAmount, 
-            //    $"Amount should be between 0 and {maxBidAmount}");
+            _context.Add(new PrintFormattedLine($"|player:{player.Id}|, " +
+                $"choose an mount to bid (write 0 to withdraw from the auction)", OutputStream.HSInputLog));
 
-            //if (amount == 0)
-            //    _auctionManager.ResignFromAuction();
-            //else
-            //    _auctionManager.Bid(amount);
+            _context.HSInputState().Set(HSState.AuctionBidChoice, player.Id);
+            _context.Add(new HSIntRequest(player.Id, 0, maxBidAmount));
         }
 
         #region ctor
