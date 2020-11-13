@@ -26,7 +26,7 @@ namespace MonopolyPreUnity.UI
             }
             catch
             {
-                _context.Add(new PrintLine("Invalid input. Try again"));
+                _context.Add(new PrintLine("Invalid input. Try again", OutputStream.HSInputLog));
                 return false;
             }
         }
@@ -38,7 +38,7 @@ namespace MonopolyPreUnity.UI
 
             if (!pred(val))
             {
-                _context.Add(new PrintLine(errorMessage + ". Try again"));
+                _context.Add(new PrintLine(errorMessage + ". Try again", OutputStream.HSInputLog));
                 return false;
             }
             return true;

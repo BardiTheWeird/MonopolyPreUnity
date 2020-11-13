@@ -15,7 +15,7 @@ namespace MonopolyPreUnity.Behaviors.PlayerLanded
         #endregion
 
         public void PlayerLanded(Player player, IEntityComponent component) =>
-            _context.Add(new PrintLine("Just visiting"));
+            _context.Add(new PrintLine("Just visiting", OutputStream.GameLog));
 
         public JailLandedBehavior(Context context) =>
             _context = context;

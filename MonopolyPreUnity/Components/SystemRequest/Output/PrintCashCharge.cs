@@ -11,21 +11,20 @@ namespace MonopolyPreUnity.Components.SystemRequest.Output
         public int PlayerChargedId { get; set; }
         public int? PlayerChargerId { get; set; }
         public string Message { get; set; }
+        public OutputStream OutputStream { get; set; }
 
-        public PrintCashCharge(int amount, int playerChargedId, int? playerChargerId, string message)
+        public PrintCashCharge(int amount, int playerChargedId, int? playerChargerId, string message,
+            OutputStream outputStream = OutputStream.GameLog)
         {
             Amount = amount;
             PlayerChargedId = playerChargedId;
             PlayerChargerId = playerChargerId;
             Message = message;
+            OutputStream = outputStream;
         }
 
-        public PrintCashCharge(ChargeCash chargeCash)
-        {
-            Amount = chargeCash.Amount;
-            PlayerChargedId = chargeCash.PlayerChargedId;
-            PlayerChargerId = chargeCash.PlayerChargerId;
-            Message = chargeCash.Message;
-        }
+        public PrintCashCharge(ChargeCash chargeCash) : 
+            this(chargeCash.Amount, chargeCash.PlayerChargedId, 
+                chargeCash.PlayerChargerId, chargeCash.Message) { }
     }
 }

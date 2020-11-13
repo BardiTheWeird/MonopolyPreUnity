@@ -17,6 +17,7 @@
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height=".1*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -24,19 +25,25 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <customcontrols:ScrollingTextBox x:Name="OutputWindow"
-                 Grid.Row="0" Grid.Column="0" Margin="10"
-                 Text="{Binding Context.OutputString}" IsReadOnly="True">
+        <customcontrols:ScrollingTextBox x:Name="GameLog"
+                 Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="10"
+                 Text="{Binding Context.GameLogString}" IsReadOnly="True">
         </customcontrols:ScrollingTextBox>
 
-        <TextBox x:Name="InputWindow" Margin="10"
-                 Grid.Row="0" Grid.Column="1"
+        <customcontrols:ScrollingTextBox x:Name="HSLog" Margin="10"
+                 Grid.Row="0" Grid.Column="1" 
+                 AcceptsReturn="True" IsReadOnly="True"
+                 Text="{Binding Context.HSLogString, UpdateSourceTrigger=PropertyChanged}">
+        </customcontrols:ScrollingTextBox>
+
+        <TextBox x:Name="HSInput"
+                 Grid.Row="1" Grid.Column="1" Margin="10,0,10,0"
                  AcceptsReturn="True"
                  Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}">
         </TextBox>
 
         <Button x:Name="SendInput"
-                Grid.Row="1" Grid.Column="1" Margin="10"
+                Grid.Row="2" Grid.Column="1" Margin="10"
                 Command="{Binding SendInputCommand}">
             Send Input
         </Button>

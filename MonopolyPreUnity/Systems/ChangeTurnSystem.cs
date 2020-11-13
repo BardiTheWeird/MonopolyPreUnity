@@ -4,6 +4,7 @@ using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonopolyPreUnity.Systems
@@ -26,7 +27,7 @@ namespace MonopolyPreUnity.Systems
 
             _context.Add(new ClearOutput());
             _context.Add(new PrintFormattedLine
-                ($"Next turn. It's time for |player:{turnInfo.CurTurnPlayerId}| to make a move!"));
+                ($"Next turn. It's time for |player:{turnInfo.CurTurnPlayerId}| to make a move!", OutputStream.GameLog));
 
             _context.Remove<EndTurn>();
         }

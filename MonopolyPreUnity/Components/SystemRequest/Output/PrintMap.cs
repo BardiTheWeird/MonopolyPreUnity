@@ -6,5 +6,11 @@ namespace MonopolyPreUnity.Components.SystemRequest.Output
 {
     class PrintMap : IOutputRequest
     {
+        public OutputStream OutputStream { get; set; }
+
+        public PrintMap(OutputStream outputStream = OutputStream.HSInputLog)
+        {
+            OutputStream = outputStream;
+        }
     }
 }

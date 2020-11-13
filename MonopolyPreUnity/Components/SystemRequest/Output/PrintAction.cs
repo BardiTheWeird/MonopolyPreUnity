@@ -10,11 +10,14 @@ namespace MonopolyPreUnity.Components.SystemRequest.Output
     {
         public IMonopolyAction Action { get; set; }
         public string Preface { get; set; }
+        public OutputStream OutputStream { get; set; }
 
-        public PrintAction(IMonopolyAction action, string preface = null)
+        public PrintAction(IMonopolyAction action, string preface = null, 
+            OutputStream outputStream = OutputStream.GameLog)
         {
             Action = action;
             Preface = preface;
+            OutputStream = outputStream;
         }
     }
 }

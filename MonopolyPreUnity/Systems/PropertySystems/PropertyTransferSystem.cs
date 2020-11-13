@@ -23,7 +23,8 @@ namespace MonopolyPreUnity.Systems.PropertySystems
                 newOwner.Properties.Add(transfer.PropertyId);
                 prop.OwnerId = newOwner.Id;
 
-                _context.Add(new PrintFormattedLine($"|player:{newOwner.Id}| is the new owner of |tile:{transfer.PropertyId}|"));
+                _context.Add(new PrintFormattedLine($"|player:{newOwner.Id}| is the new owner of |tile:{transfer.PropertyId}|", 
+                    OutputStream.GameLog));
             }
             _context.Remove<PropertyTransferRequest>();
         }

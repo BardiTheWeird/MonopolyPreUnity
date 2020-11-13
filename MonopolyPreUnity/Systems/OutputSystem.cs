@@ -19,92 +19,111 @@ namespace MonopolyPreUnity.Systems
         {
             foreach (var print in _context.GetComponentsInterface<IOutputRequest>())
             {
+                if (print is ClearOutput clear)
+                {
+                    ClearOutput(clear.OutputStream);
+                    continue;
+                }
+
+                var str = "";
                 switch (print)
                 {
                     case PrintLine line:
-                        PrintLine(line);
+                        str = line;
                         break;
                     case PrintFormattedLine formattedLine:
-                        PrintFormattedLine(formattedLine);
+                        str = GetFormattedLine(formattedLine);
                         break;
 
                     case PrintCommands commands:
-                        PrintCommands(commands);
+                        str = GetCommandsString(commands);
                         break;
                     case PrintTile printTile:
-                        PrintTile(printTile.TileId);
+                        str = GetTileString(printTile.TileId);
                         break;
                     case PrintAction printAction:
-                        PrintAction(printAction.Action, printAction.Preface);
+                        str = GetActionString(printAction.Action, printAction.Preface);
                         break;
 
                     case PrintCashCharge cashCharge:
-                        PrintCashCharge(cashCharge);
+                        str = GetCashChargeString(cashCharge);
                         break;
                     case PrintCashGive cashGive:
-                        PrintCashGive(cashGive);
+                        str = GetCashGiveString(cashGive);
                         break;
 
                     case PrintPlayerStatus playerStatus:
-                        PrintPlayerStatus(playerStatus);
+                        str = GetPlayerStatus(playerStatus);
                         break;
                     case PrintGameStatus gameStatus:
-                        PrintGameStatus();
+                        str = GetGameStatus();
                         break;
                     case PrintMap printMap:
-                        PrintMap();
-                        break;
-
-                    case ClearOutput clear:
-                        ClearOutput();
+                        str = GetMap();
                         break;
                 }
+
+                if (str != "")
+                    PrintLine(str, print.OutputStream);
             }
             _context.RemoveInterface<IOutputRequest>();
         }
 
         #region methods
-        void PrintLine(string line)
+        void PrintLine(string line, OutputStream outputStream)
         {
-            _context.OutputString += line + "\n";
-            _context.Logger.AppendLine(line + "\n");
+            if (outputStream == OutputStream.GameLog)
+            {
+                _context.GameLogString += line + "\n";
+                _context.Logger.AppendLine(line + "\n");
+            }
+            else if (outputStream == OutputStream.HSInputLog)
+            {
+                _context.HSLogString += line + "\n";
+                _context.Logger.AppendLine("> " + line + "\n");
+            }
         }
 
-        void PrintFormattedLine(string formattedLine) =>
-            PrintLine(_formatOutput.FormattedString(formattedLine));
+        string GetFormattedLine(string formattedLine) =>
+            _formatOutput.FormattedString(formattedLine);
 
-        void PrintCommands(List<MonopolyCommand> commands)
+        string GetCommandsString(List<MonopolyCommand> commands) =>
+            "Choose a command:\n" + _formatOutput.GetStringOfListOfItems(commands, _formatOutput.CommandName, true);
+
+        string GetTileString(int tileId) =>
+            _formatOutput.GetTileString(tileId);
+
+        string GetActionString(IMonopolyAction action, string preface) =>
+            _formatOutput.GetActionString(action, preface);
+
+        string GetCashChargeString(PrintCashCharge charge) =>
+            _formatOutput.GetCashChargeString(
+                charge.PlayerChargedId, charge.PlayerChargerId, charge.Amount, charge.Message);
+
+        string GetCashGiveString(PrintCashGive give) =>
+            _formatOutput.GetCashGiveString(give.PlayerId, give.Amount, give.Message);
+
+        string GetPlayerStatus(int playerId) =>
+            _formatOutput.GetPlayerString(playerId);
+
+        string GetGameStatus() =>
+            "Printing Game Status is not implemented yed";
+
+        string GetMap() =>
+            "\n" + _formatOutput.GetMapString() + "\n";
+
+        void ClearOutput(OutputStream outputStream)
         {
-            PrintLine("Choose a command");
-            PrintLine(_formatOutput.GetStringOfListOfItems(commands, _formatOutput.CommandName, true));
-        }
-
-        void PrintTile(int tileId) =>
-            PrintLine(_formatOutput.GetTileString(tileId));
-
-        void PrintAction(IMonopolyAction action, string preface) =>
-            PrintLine(_formatOutput.GetActionString(action, preface));
-
-        void PrintCashCharge(PrintCashCharge charge) =>
-            PrintLine(_formatOutput.GetCashChargeString(
-                charge.PlayerChargedId, charge.PlayerChargerId, charge.Amount, charge.Message));
-
-        void PrintCashGive(PrintCashGive give) =>
-            PrintLine(_formatOutput.GetCashGiveString(give.PlayerId, give.Amount, give.Message));
-
-        void PrintPlayerStatus(int playerId) =>
-            PrintLine(_formatOutput.GetPlayerString(playerId));
-
-        void PrintGameStatus() =>
-            PrintLine("Printing Game Status is not implemented yed");
-
-        void PrintMap() =>
-            PrintLine("\n" + _formatOutput.GetMapString() + "\n");
-
-        void ClearOutput()
-        {
-            _context.OutputString = "";
-            _context.Logger.AppendLine("\n##SCREEN CLEARED##\n\n");
+            if (outputStream == OutputStream.GameLog)
+            {
+                _context.GameLogString = "";
+                _context.Logger.AppendLine("\n##GAME LOG CLEARED##\n\n");
+            }
+            else if (outputStream == OutputStream.HSInputLog)
+            {
+                _context.HSLogString = "";
+                _context.Logger.AppendLine("\n> ##HSINPUTLOG CLEARED##\n\n");
+            }
         }
         #endregion
 

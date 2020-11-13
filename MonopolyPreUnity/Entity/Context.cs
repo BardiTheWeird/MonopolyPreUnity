@@ -15,17 +15,29 @@ namespace MonopolyPreUnity.Entity
         public Logger Logger { get; set; }
 
         #region I/O strings
-        string _outputString = "";
-        public string OutputString
+        string _gameLogString = "";
+        public string GameLogString
         {
-            get => _outputString;
+            get => _gameLogString;
             set
             {
-                if (value != _outputString)
-                {
-                    _outputString = value;
-                    RaisePropertyChanged(nameof(OutputString));
-                }
+                if (value == _gameLogString)
+                    return;
+                _gameLogString = value;
+                RaisePropertyChanged(nameof(GameLogString));
+            }
+        }
+
+        string _hsLogString = "";
+        public string HSLogString
+        {
+            get => _hsLogString;
+            set
+            {
+                if (value == _hsLogString)
+                    return;
+                _hsLogString = value;
+                RaisePropertyChanged(nameof(HSLogString));
             }
         }
 
@@ -122,7 +134,7 @@ namespace MonopolyPreUnity.Entity
         #region ctor
         public Context(List<Entity> entities, string output, string input) : this(entities)
         {
-            OutputString = output;
+            HSLogString = output;
             InputString = input;
         }
 

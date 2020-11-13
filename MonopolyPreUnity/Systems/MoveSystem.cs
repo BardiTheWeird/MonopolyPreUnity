@@ -93,7 +93,7 @@ namespace MonopolyPreUnity.Systems
             if (dice.IsPair && moveDice.MoveAgainAllowed)
             {
                 player.CanMove = true;
-                _context.Add(new PrintLine("You got a pair, so you can move again"));
+                _context.Add(new PrintLine("You got a pair, so you can move again", OutputStream.GameLog));
             }
             MoveBySteps(player, dice.Sum, moveDice.CountGoPassed);
         }
@@ -120,7 +120,7 @@ namespace MonopolyPreUnity.Systems
                     return;
                 }
             }
-            _context.Add(new PrintLine("No tile found for a given predicate"));
+            _context.Add(new PrintLine("No tile found for a given predicate", OutputStream.GameLog));
         }
         #endregion
 

@@ -16,7 +16,7 @@ namespace MonopolyPreUnity.Behaviors.PlayerLanded
         #endregion
 
         public void PlayerLanded(Player player, IEntityComponent component) =>
-            _context.Add(new PrintLine("It's free parking, so you don't get to do nothing"));
+            _context.Add(new PrintLine("It's free parking, so you don't get to do nothing", OutputStream.GameLog));
 
         public FreeParkingBehavior(Context context) =>
             _context = context;

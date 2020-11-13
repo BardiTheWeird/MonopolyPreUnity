@@ -7,13 +7,14 @@ namespace MonopolyPreUnity.Components.SystemRequest.Output
     class PrintLine : IOutputRequest
     {
         public string OutString { get; set; }
+        public OutputStream OutputStream { get; set; }
 
-        public PrintLine(string outString)
+        public PrintLine(string outString, OutputStream outputStream)
         {
             OutString = outString;
+            OutputStream = outputStream;
         }
 
         public static implicit operator string(PrintLine printLine) => printLine.OutString;
-        // public static implicit operator PrintLine(string str) => new PrintLine(str);
     }
 }

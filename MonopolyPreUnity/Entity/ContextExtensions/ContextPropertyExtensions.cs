@@ -144,7 +144,7 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             prop.IsMortgaged = true;
             var mortgageMoney = (int)(prop.BasePrice * context.GameConfig().MortgageCommission);
 
-            context.Add(new PrintFormattedLine($"|player:{player.Id}| mortgaged |tile:{propId}|"));
+            context.Add(new PrintFormattedLine($"|player:{player.Id}| mortgaged |tile:{propId}|", OutputStream.GameLog));
             context.Add(new GiveCash(mortgageMoney, player.Id, "mortgaging property"));
         }
 
@@ -156,7 +156,7 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             prop.IsMortgaged = false;
             var unmortgagePrice = (int)(prop.BasePrice * config.MortgageFee * (1 + config.MortgageCommission));
 
-            context.Add(new PrintFormattedLine($"|player:{player.Id}| unmortgaged |tile:{propId}|"));
+            context.Add(new PrintFormattedLine($"|player:{player.Id}| unmortgaged |tile:{propId}|", OutputStream.GameLog));
             context.Add(new ChargeCash(unmortgagePrice, player.Id, message: "unmortgaging property"));
         }
 
@@ -165,7 +165,8 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             var dev = context.GetTileComponent<PropertyDevelopment>(propId);
             dev.HousesBuilt++;
 
-            context.Add(new PrintFormattedLine($"|player:{player.Id}| built a house on |tile:{propId}|. Number of houses: {dev.HousesBuilt}"));
+            context.Add(new PrintFormattedLine($"|player:{player.Id}| built a house on |tile:{propId}|. Number of houses: {dev.HousesBuilt}",
+                OutputStream.GameLog));
             context.Add(new ChargeCash(dev.HouseBuyPrice, player.Id, message: "building a house"));
         }
 
@@ -174,7 +175,8 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             var dev = context.GetTileComponent<PropertyDevelopment>(propId);
             dev.HousesBuilt--;
 
-            context.Add(new PrintFormattedLine($"|player:{player.Id}| sold a house on |tile:{propId}|. Number of houses: {dev.HousesBuilt}"));
+            context.Add(new PrintFormattedLine($"|player:{player.Id}| sold a house on |tile:{propId}|. Number of houses: {dev.HousesBuilt}",
+                OutputStream.GameLog));
             context.Add(new GiveCash(dev.HouseSellPrice, player.Id, message: "selling a house"));
         }
         #endregion

@@ -6,5 +6,11 @@ namespace MonopolyPreUnity.Components.SystemRequest.Output
 {
     class ClearOutput : IOutputRequest
     {
+        public OutputStream OutputStream {get; set;}
+
+        public ClearOutput(OutputStream outputStream = OutputStream.HSInputLog)
+        {
+            OutputStream = outputStream;
+        }
     }
 }

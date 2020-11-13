@@ -22,8 +22,8 @@ namespace MonopolyPreUnity.Systems
             foreach (var playerLanded in _context.GetComponents<PlayerLanded>())
             {
                 var player = _context.GetPlayer(playerLanded.PlayerId);
-                _context.Add(new PrintFormattedLine($"|player:{player.Id}| landed on a tile:"));
-                _context.Add(new PrintTile(player.CurTileId));
+                _context.Add(new PrintFormattedLine($"|player:{player.Id}| landed on a tile:", OutputStream.GameLog));
+                _context.Add(new PrintTile(player.CurTileId, OutputStream.GameLog));
 
                 foreach (var component in _context.GetTileComponents(player.CurTileId))
                 {

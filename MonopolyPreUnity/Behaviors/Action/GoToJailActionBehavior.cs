@@ -22,7 +22,7 @@ namespace MonopolyPreUnity.Behaviors.Action
             var mapInfo = _context.MapInfo();
             if (mapInfo.JailId == null)
             {
-                _context.Add(new PrintLine("No Jail present"));
+                _context.Add(new PrintLine("No Jail present", OutputStream.GameLog));
                 return;
             }
 

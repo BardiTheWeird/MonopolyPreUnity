@@ -20,7 +20,7 @@ namespace MonopolyPreUnity.Systems.PropertySystems
             if (startAuction == null)
                 return;
 
-            _context.Add(new PrintLine("Auction isn't yet implemented, so you get a property for free"));
+            _context.Add(new PrintLine("Auction isn't yet implemented, so you get a property for free", OutputStream.GameLog));
 
             var player = _context.GetPlayer(_context.TurnInfo().CurTurnPlayerId);
 

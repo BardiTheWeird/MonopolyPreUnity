@@ -19,9 +19,9 @@ namespace MonopolyPreUnity.Systems
                 var dice = _context.Dice();
                 dice.Throw();
 
-                _context.Add(new PrintLine($"The dice were thrown. Values: {dice.Die1}, {dice.Die2}"));
+                _context.Add(new PrintLine($"The dice were thrown. Values: {dice.Die1}, {dice.Die2}", OutputStream.GameLog));
                 if (dice.IsPair)
-                    _context.Add(new PrintLine($"It's a pair!"));
+                    _context.Add(new PrintLine($"It's a pair!", OutputStream.GameLog));
             }
             _context.Remove<ThrowDice>();
         }

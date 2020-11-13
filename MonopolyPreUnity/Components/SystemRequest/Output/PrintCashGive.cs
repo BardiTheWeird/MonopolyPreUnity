@@ -9,12 +9,15 @@ namespace MonopolyPreUnity.Components.SystemRequest.Output
         public int PlayerId { get; set; }
         public int Amount { get; set; }
         public string Message { get; set; }
+        public OutputStream OutputStream { get; set; }
 
-        public PrintCashGive(int playerId, int amount, string message = "")
+        public PrintCashGive(int playerId, int amount, string message = "",
+            OutputStream outputStream = OutputStream.GameLog)
         {
             PlayerId = playerId;
             Amount = amount;
             Message = message;
+            OutputStream = outputStream;
         }
     }
 }
