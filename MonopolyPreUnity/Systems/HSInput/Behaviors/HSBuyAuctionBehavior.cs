@@ -15,21 +15,12 @@ namespace MonopolyPreUnity.Systems.HSInput
 {
     class HSBuyAuctionBehavior : IHSStateBehavior
     {
-        #region fields
         private readonly Context _context;
-        private readonly MonopolyCommand[] _appropiateCommands =
-        {
-            MonopolyCommand.BuyProperty,
-            MonopolyCommand.AuctionProperty
-        };
-        #endregion
 
         public void Run(HSInputState state)
         {
             var commandChoice = _context.GetComponent<HSCommandChoice>();
             if (commandChoice == null)
-                return;
-            if (!_appropiateCommands.Contains(commandChoice.Command))
                 return;
 
             var player = _context.GetPlayer(state.PlayerId.Value);

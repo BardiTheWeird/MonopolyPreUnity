@@ -1,6 +1,7 @@
 ﻿using Autofac.Features.Indexed;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
+using MonopolyPreUnity.Components.SystemRequest.HSInput.Request;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Systems.HSInput;
@@ -45,6 +46,9 @@ namespace MonopolyPreUnity.Systems
                 case HSCommandChoiceRequest commandChoiceRequest:
                     success = TryGetCommand(commandChoiceRequest);
                     break;
+                case HSPropertyChoiceRequest propertyChoiceRequest:
+                    success = TryGetPropertyId(propertyChoiceRequest);
+                    break;
             }
 
             if (success)
@@ -61,6 +65,17 @@ namespace MonopolyPreUnity.Systems
             if (!_inputParser.TryParseIndex(commands, out var i))
                 return false;
             _context.Add(new HSCommandChoice(commands[i], commandChoiceRequest.PlayerId));
+            return true;
+        }
+
+        bool TryGetPropertyId(HSPropertyChoiceRequest propertyChoiceRequest)
+        {
+            var props = propertyChoiceRequest.Properties;
+            if (!_inputParser.TryParseIndex(props, out var index, canCancel: true))
+                return false;
+
+            var propId = index == -1 ? null : (int?)props[index];
+            _context.Add(new HSPropertyChoice(propertyChoiceRequest.PlayerId, propId));
             return true;
         }
         #endregion

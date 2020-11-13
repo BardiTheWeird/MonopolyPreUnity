@@ -12,6 +12,7 @@ using MonopolyPreUnity.Systems;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -20,22 +21,6 @@ namespace MonopolyPreUnity.Systems.HSInput
     class HSTurnBehavior : IHSStateBehavior
     {
         private readonly Context _context;
-        private readonly MonopolyCommand[] _appropriateCommands =
-        {
-            MonopolyCommand.MakeMove,
-            MonopolyCommand.EndTurn,
-
-            MonopolyCommand.PayJailFine,
-            MonopolyCommand.JailRollDice,
-            MonopolyCommand.UseJailCard,
-
-            MonopolyCommand.PrintPlayerStatus,
-            MonopolyCommand.PrintGameStatus,
-            MonopolyCommand.PrintMap,
-
-            //MonopolyCommand.EndGame,
-            //MonopolyCommand.FileBankruptcy
-        };
 
         public void Run(HSInputState state)
         {
@@ -44,53 +29,54 @@ namespace MonopolyPreUnity.Systems.HSInput
             var commandChoice = _context.GetComponent<HSCommandChoice>();
             if (commandChoice == null)
             {
-                var commands = GetAvailableCommands(player);
-                _context.Add(new PrintCommands(commands));
-                _context.Add(new HSCommandChoiceRequest(commands, player.Id));
+                if (!_context.ContainsComponent<HSCommandChoiceRequest>())
+                {
+                    var commands = GetAvailableCommands(player);
+                    _context.Add(new PrintCommands(commands));
+                    _context.Add(new HSCommandChoiceRequest(commands, player.Id));
+                }
                 return;
             }
 
-            if (_appropriateCommands.Contains(commandChoice.Command))
+            switch (commandChoice.Command)
             {
-                switch (commandChoice.Command)
-                {
-                    case MonopolyCommand.ManageProperty:
-                        state.Set(HSState.PropManageChooseProperty, player.Id);
-                        break;
+                case MonopolyCommand.ManageProperty:
+                    state.Set(HSState.PropManageChooseProperty, player.Id);
+                    Debug.WriteLine("Used up ManageProperty");
+                    break;
 
-                    case MonopolyCommand.MakeMove:
-                        _context.Add(new ThrowDice());
-                        _context.Add(new MoveDice(player.Id));
-                        state.Nullify();
-                        break;
-                    case MonopolyCommand.EndTurn:
-                        _context.Add(new EndTurn());
-                        state.Nullify();
-                        break;
+                case MonopolyCommand.MakeMove:
+                    _context.Add(new ThrowDice());
+                    _context.Add(new MoveDice(player.Id));
+                    state.Nullify();
+                    break;
+                case MonopolyCommand.EndTurn:
+                    _context.Add(new EndTurn());
+                    state.Nullify();
+                    break;
 
-                    case MonopolyCommand.PrintPlayerStatus:
-                        _context.Add(new PrintPlayerStatus(commandChoice.PlayerId));
-                        break;
-                    case MonopolyCommand.PrintGameStatus:
-                        _context.Add(new PrintGameStatus());
-                        break;
-                    case MonopolyCommand.PrintMap:
-                        _context.Add(new PrintMap());
-                        break;
+                case MonopolyCommand.PrintPlayerStatus:
+                    _context.Add(new PrintPlayerStatus(commandChoice.PlayerId));
+                    break;
+                case MonopolyCommand.PrintGameStatus:
+                    _context.Add(new PrintGameStatus());
+                    break;
+                case MonopolyCommand.PrintMap:
+                    _context.Add(new PrintMap());
+                    break;
 
-                    case MonopolyCommand.PayJailFine:
-                        _context.Add(new JailPayFine(player.Id));
-                        break;
-                    case MonopolyCommand.JailRollDice:
-                        _context.Add(new ThrowDice());
-                        _context.Add(new JailDiceRoll(player.Id));
-                        break;
-                    case MonopolyCommand.UseJailCard:
-                        _context.Add(new JailUseCard(player.Id));
-                        break;
-                }
-                _context.Remove<HSCommandChoice>(c => c.Command == commandChoice.Command);
+                case MonopolyCommand.PayJailFine:
+                    _context.Add(new JailPayFine(player.Id));
+                    break;
+                case MonopolyCommand.JailRollDice:
+                    _context.Add(new ThrowDice());
+                    _context.Add(new JailDiceRoll(player.Id));
+                    break;
+                case MonopolyCommand.UseJailCard:
+                    _context.Add(new JailUseCard(player.Id));
+                    break;
             }
+            _context.Remove<HSCommandChoice>(c => c.Command == commandChoice.Command);
         }
 
         public List<MonopolyCommand> GetAvailableCommands(Player player)

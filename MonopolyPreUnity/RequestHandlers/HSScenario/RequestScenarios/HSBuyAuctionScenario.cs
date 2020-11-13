@@ -24,7 +24,7 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
         public void RunScenario(IRequest requestIn, Player player)
         {
             var state = _context.HSInputState();
-            state.Set(HSState.TurnChoice, player.Id);
+            state.Set(HSState.BuyAuctionChoice, player.Id);
 
             var request = requestIn as BuyAuctionRequest;
             var availableActions = _context.GetBuyAuctionCommands(player, request.PropertyId);
