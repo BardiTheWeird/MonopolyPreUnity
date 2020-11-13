@@ -1,7 +1,10 @@
 ﻿using Autofac;
+using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.RequestHandlers.HSScenario;
 using MonopolyPreUnity.Requests;
+using MonopolyPreUnity.Systems;
 using MonopolyPreUnity.Systems.HSInput;
+using MonopolyPreUnity.Systems.HSInput.Behaviors;
 using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
@@ -21,8 +24,16 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<HSTurnScenario>().Keyed<IHSRequestScenario>(typeof(TurnRequest));
 
             // Systems
-            builder.RegisterType<HSTurnScenario>().AsSelf().SingleInstance();
-            builder.RegisterType<HSBuyAuctionSystem>().AsSelf().SingleInstance();
+            //builder.RegisterType<HSTurnScenario>().AsSelf().SingleInstance();
+            builder.RegisterType<HSInputSystem>().AsSelf().SingleInstance();
+
+            // State Behaviors
+            builder.RegisterType<HSTurnBehavior>().Keyed<IHSStateBehavior>(HSState.TurnChoice);
+            
+            builder.RegisterType<HSChoosePropertyToManageBehavior>().Keyed<IHSStateBehavior>(HSState.PropManageChooseProperty);
+            builder.RegisterType<HSChoosePropertyActionBehavior>().Keyed<IHSStateBehavior>(HSState.PropManageChooseAction);
+
+            builder.RegisterType<HSBuyAuctionBehavior>().Keyed<IHSStateBehavior>(HSState.BuyAuctionChoice);
         }
     }
 }

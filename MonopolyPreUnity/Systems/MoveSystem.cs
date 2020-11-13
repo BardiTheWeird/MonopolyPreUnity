@@ -38,7 +38,7 @@ namespace MonopolyPreUnity.Systems
                 }
                 _context.Add(new PlayerLanded(player.Id));
             }
-            _context.RemoveEntitiesInterface<IMoveRequest>();
+            _context.RemoveInterface<IMoveRequest>();
         }
 
         #region GoPassed

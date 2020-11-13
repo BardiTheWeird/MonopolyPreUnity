@@ -24,6 +24,7 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<AuctionStartSystem>().AsSelf().SingleInstance();
             builder.RegisterType<BuyPropertySystem>().AsSelf().SingleInstance();
             builder.RegisterType<PropertyTransferSystem>().AsSelf().SingleInstance();
+            builder.RegisterType<PropertyActionsSystem>().AsSelf().SingleInstance();
 
             // rest (not api)
             builder.RegisterType<ActionsSystem>().AsSelf().SingleInstance();
@@ -38,10 +39,9 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<OnGoPassedSystem>().AsSelf().SingleInstance();
 
             // HS input
-            builder.RegisterType<HSInputSystem>().AsSelf().SingleInstance();
-            builder.RegisterType<HSTurnSystem>().AsSelf().SingleInstance();
-            builder.RegisterType<HSBuyAuctionSystem>().AsSelf().SingleInstance();
-            builder.RegisterType<HSPrintStatusSystem>().AsSelf().SingleInstance();
+            //builder.RegisterType<HSInputSystem>().AsSelf().SingleInstance();
+            //builder.RegisterType<HSTurnBehavior>().AsSelf().SingleInstance();
+            //builder.RegisterType<HSBuyAuctionBehavior>().AsSelf().SingleInstance();
 
             // helpers
             builder.RegisterType<FormatOutput>().AsSelf().SingleInstance();

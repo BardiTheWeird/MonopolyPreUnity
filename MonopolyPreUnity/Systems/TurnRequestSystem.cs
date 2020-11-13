@@ -22,14 +22,14 @@ namespace MonopolyPreUnity.Systems
             if (!_context.ContainsComponent<TurnInfo>())
                 return;
 
-            var containsHSRequest = _context.ContainsComponentInterface<IHSRequest>();
-            if (_context.ContainsComponent<PlayerInputRequest>() || containsHSRequest)
+            if (_context.ContainsComponent<PlayerInputRequest>())
+                return;
+            if (!_context.HSInputState().IsNull)
                 return;
 
             var curTurnPlayerId = _context.TurnInfo().CurTurnPlayerId;
             //_context.Add(new PrintFormattedLine($"|player:{curTurnPlayerId}| makes a move"));
             _context.Add(new PlayerInputRequest(curTurnPlayerId, new TurnRequest()));
-            Debug.WriteLine($"Added PlayerInputRequest at TurnRequestSystem. containsHSRequest=\"{containsHSRequest}\"");
         }
 
         #region ctor

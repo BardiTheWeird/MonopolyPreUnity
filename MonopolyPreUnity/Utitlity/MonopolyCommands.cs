@@ -22,6 +22,7 @@ namespace MonopolyPreUnity.Utitlity
         UnmortgageProperty,
         BuyHouse,
         SellHouse,
+        CancelManagagingProperty,
 
         BuyProperty,
         AuctionProperty,

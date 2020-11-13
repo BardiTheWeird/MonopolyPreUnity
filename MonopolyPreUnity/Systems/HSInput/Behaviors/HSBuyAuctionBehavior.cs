@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
+﻿using MonopolyPreUnity.Components.SystemRequest.HSInput;
+using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput.Property;
 using MonopolyPreUnity.Components.SystemRequest.PlayerState;
 using MonopolyPreUnity.Entity;
@@ -12,7 +13,7 @@ using System.Text;
 
 namespace MonopolyPreUnity.Systems.HSInput
 {
-    class HSBuyAuctionSystem : ISystem
+    class HSBuyAuctionBehavior : IHSStateBehavior
     {
         #region fields
         private readonly Context _context;
@@ -23,13 +24,15 @@ namespace MonopolyPreUnity.Systems.HSInput
         };
         #endregion
 
-        public void Execute()
+        public void Run(HSInputState state)
         {
             var commandChoice = _context.GetComponent<HSCommandChoice>();
-            if (commandChoice == null || !_appropiateCommands.Contains(commandChoice.Command))
+            if (commandChoice == null)
+                return;
+            if (!_appropiateCommands.Contains(commandChoice.Command))
                 return;
 
-            var player = _context.GetPlayer(commandChoice.PlayerId);
+            var player = _context.GetPlayer(state.PlayerId.Value);
             switch (commandChoice.Command)
             {
                 case MonopolyCommand.BuyProperty:
@@ -39,12 +42,13 @@ namespace MonopolyPreUnity.Systems.HSInput
                     _context.Add(new StartAuction(player.CurTileId));
                     break;
             }
-
             _context.Remove<HSCommandChoice>(c => c.Command == commandChoice.Command);
+
+            state.Nullify();
         }
 
         #region ctor
-        public HSBuyAuctionSystem(Context context)
+        public HSBuyAuctionBehavior(Context context)
         {
             _context = context;
         }

@@ -21,9 +21,7 @@ namespace MonopolyPreUnity.Initialization
 
                 c.Resolve<HSInputSystem>(),
 
-                c.Resolve<HSPrintStatusSystem>(),
-                c.Resolve<HSTurnSystem>(),
-                c.Resolve<HSBuyAuctionSystem>(),
+                c.Resolve<PropertyActionsSystem>(),
 
                 c.Resolve<BuyPropertySystem>(),
                 c.Resolve<AuctionStartSystem>(),
@@ -34,7 +32,6 @@ namespace MonopolyPreUnity.Initialization
                 c.Resolve<MoveSystem>(),
                 c.Resolve<OnGoPassedSystem>(),
 
-                
                 c.Resolve<PlayerCashSystem>(), // cash
 
                 c.Resolve<PlayerLandedSystem>(),

@@ -98,26 +98,8 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
 
         public void RunScenario(IRequest request, Player player)
         {
-            var commandList = new List<MonopolyCommand>
-                {
-                    MonopolyCommand.ManageProperty,
-                    MonopolyCommand.MakeDeal
-                };
-            var outputRequestCommands = new List<MonopolyCommand> 
-            { 
-                MonopolyCommand.PrintPlayerStatus, 
-                MonopolyCommand.PrintGameStatus,
-                MonopolyCommand.PrintMap,
-            };
-
-            commandList.AddRange(_context.GetAvailableTurnCommands(player));
-            commandList.AddRange(outputRequestCommands);
-
-            Debug.WriteLine("Have run an HSTurnScenario");
-
-            _context.Remove<PlayerInputRequest>();
-            _context.Add(new PrintCommands(commandList));
-            _context.Add(new HSCommandChoiceRequest(commandList, player.Id));
+            var state = _context.HSInputState();
+            state.Set(HSState.TurnChoice, player.Id);
         }
 
         #region ctor

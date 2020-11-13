@@ -160,7 +160,7 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             context.Add(new ChargeCash(unmortgagePrice, player.Id, message: "unmortgaging property"));
         }
 
-        public static void BuildHouse(this Context context, Player player, int propId)
+        public static void BuyHouse(this Context context, Player player, int propId)
         {
             var dev = context.GetTileComponent<PropertyDevelopment>(propId);
             dev.HousesBuilt++;

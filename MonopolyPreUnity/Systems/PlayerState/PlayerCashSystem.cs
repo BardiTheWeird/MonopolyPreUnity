@@ -29,7 +29,7 @@ namespace MonopolyPreUnity.Systems
                         break;
                 }
             }
-            _context.RemoveEntitiesInterface<ICashOperation>();
+            _context.RemoveInterface<ICashOperation>();
         }
 
         #region charge cash

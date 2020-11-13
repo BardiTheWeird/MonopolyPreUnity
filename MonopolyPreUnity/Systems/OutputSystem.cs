@@ -60,7 +60,7 @@ namespace MonopolyPreUnity.Systems
                         break;
                 }
             }
-            _context.RemoveEntitiesInterface<IOutputRequest>();
+            _context.RemoveInterface<IOutputRequest>();
         }
 
         #region methods

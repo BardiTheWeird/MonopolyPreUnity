@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Modules;
 using MonopolyPreUnity.RequestHandlers;
@@ -29,6 +30,7 @@ namespace MonopolyPreUnity.Initialization
         {
             var builder = new ContainerBuilder();
 
+            context.Add(new HSInputState());
             builder.RegisterInstance(context);
 
             RegisterPlayerScenarios(builder, context.GetComponents<Player>());
