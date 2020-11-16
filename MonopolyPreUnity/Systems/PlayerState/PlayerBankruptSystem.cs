@@ -19,7 +19,7 @@ namespace MonopolyPreUnity.Systems
             foreach (var bankrupt in _context.GetComponents<PlayerBankrupt>())
             {
                 var player = _context.GetPlayer(bankrupt.PlayerId);
-                _context.Add(new TransferAssets(bankrupt.CreditorId, player));
+                _context.Add(new AssetTransferRequest(bankrupt.CreditorId, player));
                 _context.Add(new RemovePlayerFromGame(player.Id));
             }
             _context.Remove<PlayerBankrupt>();

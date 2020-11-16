@@ -18,14 +18,14 @@ namespace MonopolyPreUnity.Systems
 
         public void Execute()
         {
-            foreach (var transfer in _context.GetComponents<TransferAssets>())
+            foreach (var transfer in _context.GetComponents<AssetTransferRequest>())
             {
                 if (transfer.ReceiverId != null)
                     TransferToPlayer(_context.GetPlayer((int)transfer.ReceiverId), transfer.Assets);
                 else
                     TransferToBank(transfer.Assets);
             }
-            _context.Remove<TransferAssets>();
+            _context.Remove<AssetTransferRequest>();
         }
 
         #region to bank

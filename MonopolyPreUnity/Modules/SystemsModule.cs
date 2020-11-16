@@ -38,11 +38,7 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<TurnRequestSystem>().AsSelf().SingleInstance();
             builder.RegisterType<ThrowDiceSystem>().AsSelf().SingleInstance();
             builder.RegisterType<OnGoPassedSystem>().AsSelf().SingleInstance();
-
-            // HS input
-            //builder.RegisterType<HSInputSystem>().AsSelf().SingleInstance();
-            //builder.RegisterType<HSTurnBehavior>().AsSelf().SingleInstance();
-            //builder.RegisterType<HSBuyAuctionBehavior>().AsSelf().SingleInstance();
+            builder.RegisterType<TradeValidationSystem>().AsSelf().SingleInstance();
 
             // helpers
             builder.RegisterType<FormatOutput>().AsSelf().SingleInstance();

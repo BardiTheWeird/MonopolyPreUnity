@@ -182,5 +182,28 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             context.Add(new GiveCash(dev.HouseSellPrice, player.Id, message: "selling a house"));
         }
         #endregion
+
+        #region trade 
+        public static bool IsTradable(this Context context, int propertyId) 
+        {
+            var prop = context.GetTileComponent<Property>(propertyId);
+            if (prop.IsMortgaged)
+                return false;
+
+            var dev = context.GetTileComponent<PropertyDevelopment>(propertyId);
+            if (dev != null)
+            {
+                if (dev.HousesBuilt != 0)
+                    return false;
+            }
+            return true;
+        }
+
+        public static List<int> TradableProperties(this Context context, int playerId) =>
+            context.GetPlayer(playerId)
+            .Properties
+            .Where(id => context.IsTradable(id))
+            .ToList();
+        #endregion
     }
 }

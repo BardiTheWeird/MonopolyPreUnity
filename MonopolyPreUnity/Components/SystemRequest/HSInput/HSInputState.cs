@@ -16,6 +16,16 @@ namespace MonopolyPreUnity.Components.SystemRequest.HSInput
         PropManageChooseAction,
 
         AuctionBidChoice,
+
+        TradeChoosePlayer,
+        TradeChooseAction,
+        TradeChangeAssets,
+        TradeChooseCash,
+        TradeChooseJailCards,
+        TradeChooseProperties,
+        TradeConfirm,
+
+        TradeValidation,
     }
 
     class HSInputState : IEntityComponent, INotifyPropertyChanged
@@ -36,6 +46,7 @@ namespace MonopolyPreUnity.Components.SystemRequest.HSInput
         }
         public int? PlayerId { get; set; }
         public bool IsNull => CurState == null;
+        public object MiscInfo { get; set; }
         #endregion
 
         #region property changed
@@ -49,20 +60,23 @@ namespace MonopolyPreUnity.Components.SystemRequest.HSInput
         {
             CurState = null;
             PlayerId = null;
+            MiscInfo = null;
         }
 
-        public void Set(HSState state, int playerId)
+        public void Set(HSState state, int playerId, object miscInfo = null)
         {
             CurState = state;
             PlayerId = playerId;
+            MiscInfo = miscInfo;
         }
         #endregion
 
         #region ctor
-        public HSInputState(HSState? curState, int curPlayerId)
+        public HSInputState(HSState? curState, int curPlayerId, object miscInfo = null)
         {
             CurState = curState;
             PlayerId = curPlayerId;
+            MiscInfo = miscInfo;
         }
 
         public HSInputState()

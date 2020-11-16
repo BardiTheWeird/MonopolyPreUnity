@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.Trade;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -19,5 +20,8 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
 
         public static AuctionInfo AuctionInfo(this Context context) =>
             context.GetComponent<AuctionInfo>();
+
+        public static TradeOffer TradeOffer(this Context context) =>
+            context.GetComponent<TradeOffer>();
     }
 }

@@ -5,6 +5,7 @@ using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.Systems;
 using MonopolyPreUnity.Systems.HSInput;
 using MonopolyPreUnity.Systems.HSInput.Behaviors;
+using MonopolyPreUnity.Systems.HSInput.Behaviors.Trade;
 using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,13 @@ namespace MonopolyPreUnity.Modules
 
             builder.RegisterType<HSBuyAuctionBehavior>().Keyed<IHSStateBehavior>(HSState.BuyAuctionChoice);
             builder.RegisterType<HSAuctionBidBehavior>().Keyed<IHSStateBehavior>(HSState.AuctionBidChoice);
+
+            builder.RegisterType<HSTradeChoosePlayerBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChoosePlayer);
+            builder.RegisterType<HSTradeChooseActionBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChooseAction);
+            builder.RegisterType<HSChangeAssetsBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChangeAssets);
+            builder.RegisterType<HSTradeChooseCashBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChooseCash);
+            builder.RegisterType<HSTradeChooseJailCardsBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChooseJailCards);
+            builder.RegisterType<HSTradeChoosePropertiesBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChooseProperties);
         }
     }
 }

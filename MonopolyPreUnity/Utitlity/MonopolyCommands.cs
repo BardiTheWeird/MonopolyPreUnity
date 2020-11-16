@@ -8,7 +8,7 @@ namespace MonopolyPreUnity.Utitlity
     {
         MakeMove,
         ManageProperty,
-        MakeDeal,
+        CreateTradeOffer,
         EndTurn,
         FileBankruptcy,
         EndGame,
@@ -28,7 +28,12 @@ namespace MonopolyPreUnity.Utitlity
         AuctionProperty,
 
         ChoosePlayer,
-        CreateTradeOffer,
+        ConfirmTrade,
+        ChangeReceiverAssets,
+        ChangeInitiatorAssets,
+        ChangeCashAmount,
+        ChangeJailCardsAmount,
+        ChangeProperties,
         ValidateTradeOffer,
 
         PayJailFine,

@@ -6,6 +6,7 @@ using MonopolyPreUnity.Components.SystemRequest.Move;
 using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput.InJail;
+using MonopolyPreUnity.Components.Trade;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Systems;
@@ -43,6 +44,13 @@ namespace MonopolyPreUnity.Systems.HSInput
             {
                 case MonopolyCommand.ManageProperty:
                     state.Set(HSState.PropManageChooseProperty, player.Id);
+                    break;
+
+                case MonopolyCommand.CreateTradeOffer:
+                    var offer = new TradeOffer();
+                    offer.InitiatorAssets.PlayerId = player.Id;
+                    _context.Add(offer);
+                    state.Set(HSState.TradeChooseAction, player.Id);
                     break;
 
                 case MonopolyCommand.MakeMove:
@@ -84,7 +92,7 @@ namespace MonopolyPreUnity.Systems.HSInput
             var commandList = new List<MonopolyCommand>
             {
                 MonopolyCommand.ManageProperty,
-                MonopolyCommand.MakeDeal
+                MonopolyCommand.CreateTradeOffer
             };
             var outputRequestCommands = new List<MonopolyCommand>
             {

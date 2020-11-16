@@ -35,7 +35,7 @@ namespace SystemTests
             var commandList = new List<MonopolyCommand>()
             {
                 MonopolyCommand.ManageProperty,
-                MonopolyCommand.MakeDeal,
+                MonopolyCommand.CreateTradeOffer,
                 MonopolyCommand.MakeMove
             };
             context.Add(new HSCommandChoiceRequest(commandList, 1));
