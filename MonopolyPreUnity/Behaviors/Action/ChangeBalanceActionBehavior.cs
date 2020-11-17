@@ -1,5 +1,7 @@
 ﻿using MonopolyPreUnity.Actions;
-using MonopolyPreUnity.Managers;
+using MonopolyPreUnity.Components.SystemRequest.Cash;
+using MonopolyPreUnity.Entity;
+
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -10,21 +12,21 @@ namespace MonopolyPreUnity.Behaviors.Action
     class ChangeBalanceActionBehavior : IActionBehavior
     {
         #region Dependencies
-        private readonly PlayerManager _playerManager;
+        private readonly Context _context;
         #endregion
 
         public void Execute(int playerId, IMonopolyAction actionIn)
         {
             var action = actionIn as ChangeBalanceAction;
             if (action.Amount < 0)
-                _playerManager.PlayerCashCharge(playerId, -action.Amount);
+                _context.Add(new ChargeCash(-action.Amount, playerId));
             else
-                _playerManager.PlayerCashGive(playerId, action.Amount);
+                _context.Add(new GiveCash(action.Amount, playerId));
         }
 
-        public ChangeBalanceActionBehavior(PlayerManager playerManager)
-        {
-            _playerManager = playerManager;
-        }
+        #region ctor
+        public ChangeBalanceActionBehavior(Context context) =>
+            _context = context;
+        #endregion
     }
 }

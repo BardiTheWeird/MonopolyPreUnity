@@ -1,0 +1,58 @@
+﻿<Window x:Class="GameInterface.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GameInterface" xmlns:customcontrols="clr-namespace:GameInterface.CustomControls"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Window.InputBindings>
+        <KeyBinding Key="Return" Modifiers="Ctrl" Command="{Binding SendInputCommand}"/>
+    </Window.InputBindings>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height=".15*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width=".5*"/>
+            <ColumnDefinition Width=".5*"/>
+        </Grid.ColumnDefinitions>
+
+        <customcontrols:ScrollingTextBox x:Name="GameLog"
+                 Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="10"
+                 Text="{Binding Context.GameLogString}" IsReadOnly="True">
+        </customcontrols:ScrollingTextBox>
+
+        <customcontrols:ScrollingTextBox x:Name="HSLog" Margin="10"
+                 Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                 AcceptsReturn="True" IsReadOnly="True"
+                 Text="{Binding Context.HSLogString, UpdateSourceTrigger=PropertyChanged}">
+        </customcontrols:ScrollingTextBox>
+
+        <TextBox x:Name="HSInput"
+                 Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="10"
+                 AcceptsReturn="True"
+                 Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}">
+        </TextBox>
+
+        <Button x:Name="SendInput"
+                Grid.Row="2" Grid.Column="1" Margin="10"
+                Command="{Binding SendInputCommand}">
+            Send Input
+        </Button>
+
+        <Button x:Name="UseCheatCode"
+                Grid.Row="2" Grid.Column="2" Margin="10"
+                Command="{Binding UseCheatCode}">
+            Use Cheat Code
+        </Button>
+    </Grid>
+</Window>

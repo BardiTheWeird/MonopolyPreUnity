@@ -1,5 +1,7 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest.Output;
+using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
@@ -10,17 +12,13 @@ namespace MonopolyPreUnity.Behaviors.PlayerLanded
     class FreeParkingBehavior : IPlayerLandedBehavior
     {
         #region Dependencies
-        private readonly ConsoleUI _consoleUI;
+        private readonly Context _context;
         #endregion
 
-        public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId)
-        {
-            _consoleUI.Print("It's free parking, so you don't get to do nothing");
-        }
+        public void PlayerLanded(Player player, IEntityComponent component) =>
+            _context.Add(new PrintLine("It's free parking, so you don't get to do nothing", OutputStream.GameLog));
 
-        public FreeParkingBehavior(ConsoleUI consoleUI)
-        {
-            _consoleUI = consoleUI;
-        }
+        public FreeParkingBehavior(Context context) =>
+            _context = context;
     }
 }

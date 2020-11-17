@@ -1,4 +1,6 @@
 ﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest.Output;
+using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;
@@ -9,17 +11,13 @@ namespace MonopolyPreUnity.Behaviors.PlayerLanded
     class JailLandedBehavior : IPlayerLandedBehavior
     {
         #region Dependencies
-        private readonly ConsoleUI _consoleUI;
+        private readonly Context _context;
         #endregion
 
-        public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId)
-        {
-            _consoleUI.Print("Just visiting");
-        }
+        public void PlayerLanded(Player player, IEntityComponent component) =>
+            _context.Add(new PrintLine("Just visiting", OutputStream.GameLog));
 
-        public JailLandedBehavior(ConsoleUI consoleUI)
-        {
-            _consoleUI = consoleUI;
-        }
+        public JailLandedBehavior(Context context) =>
+            _context = context;
     }
 }

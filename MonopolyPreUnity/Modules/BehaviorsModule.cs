@@ -18,16 +18,16 @@ namespace MonopolyPreUnity.Modules
         protected override void Load(ContainerBuilder builder)
         {
             // PropertyLanded
-            builder.RegisterType<ActionBoxBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(ActionBoxComponent));
-            builder.RegisterType<ActionTileBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(ActionTileComponent));
-            builder.RegisterType<PropertyLandedBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(PropertyComponent));
-            builder.RegisterType<FreeParkingBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(FreeParkingComponent));
-            builder.RegisterType<JailLandedBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(JailComponent));
+            builder.RegisterType<ActionBoxBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(ActionBox));
+            builder.RegisterType<ActionTileBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(ActionTile));
+            builder.RegisterType<PropertyLandedBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(Property));
+            builder.RegisterType<FreeParkingBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(FreeParking));
+            builder.RegisterType<JailLandedBehavior>().AsSelf().SingleInstance().Keyed<IPlayerLandedBehavior>(typeof(Jail));
 
             // Rent
-            builder.RegisterType<DevelopmentRentBehavior>().AsSelf().SingleInstance().Keyed<IRentBehavior>(typeof(PropertyDevelopmentComponent));
-            builder.RegisterType<TrainStationRentBehavior>().AsSelf().SingleInstance().Keyed<IRentBehavior>(typeof(TrainStationComponent));
-            builder.RegisterType<UtilityRentBehavior>().AsSelf().SingleInstance().Keyed<IRentBehavior>(typeof(UtilityComponent));
+            builder.RegisterType<DevelopmentRentBehavior>().AsSelf().SingleInstance().Keyed<IRentBehavior>(typeof(PropertyDevelopment));
+            builder.RegisterType<TrainStationRentBehavior>().AsSelf().SingleInstance().Keyed<IRentBehavior>(typeof(TrainStation));
+            builder.RegisterType<UtilityRentBehavior>().AsSelf().SingleInstance().Keyed<IRentBehavior>(typeof(UtilityProperty));
 
             // Action
             builder.RegisterType<ChangeBalanceActionBehavior>().AsSelf().SingleInstance().Keyed<IActionBehavior>(typeof(ChangeBalanceAction));

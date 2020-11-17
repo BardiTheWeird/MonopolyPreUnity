@@ -1,6 +1,8 @@
 ﻿using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
-using MonopolyPreUnity.Managers;
+using MonopolyPreUnity.Entity;
+using MonopolyPreUnity.Entity.ContextExtensions;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,27 +12,24 @@ namespace MonopolyPreUnity.Behaviors.Rent
     class TrainStationRentBehavior : IRentBehavior
     {
         #region Dependency
-        private readonly TileManager _tileManager;
-        private readonly PropertyManager _propertyManager;
+        private readonly Context _context;
         #endregion
 
-        public int GetRent(int renteeId, int ownerId, ITileComponent component, int tileId)
+        public int GetRent(int renteeId, int ownerId, IEntityComponent component, int tileId)
         {
-            var station = component as TrainStationComponent;
-            var property = _tileManager.GetTileComponent<PropertyComponent>(tileId);
+            var station = component as TrainStation;
+            var property = _context.GetTileComponent<Property>(tileId);
+            var owner = _context.GetPlayer(ownerId);
 
-            var ownedPropertyInSet = _propertyManager.OwnedPropertiesInSet(ownerId, property.SetId);
+            var ownedPropertyInSet = _context.OwnedPropertiesInSet(owner, property.SetId);
 
-            int rentValue = station.BaseRent * (int)(Math.Round(Math.Pow(2, ownedPropertyInSet.Count - 1)));
+            int rentValue = station.BaseRent * (int)Math.Round(Math.Pow(2, ownedPropertyInSet.Count - 1));
             return rentValue;
         }
 
         #region Constructor
-        public TrainStationRentBehavior(TileManager tileManager, PropertyManager propertyManager)
-        {
-            _tileManager = tileManager;
-            _propertyManager = propertyManager;
-        }
+        public TrainStationRentBehavior(Context context) =>
+            _context = context;
         #endregion
     }
 }

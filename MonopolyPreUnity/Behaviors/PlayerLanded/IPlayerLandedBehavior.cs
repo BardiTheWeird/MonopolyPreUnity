@@ -7,6 +7,6 @@ namespace MonopolyPreUnity.Behaviors
 {
     interface IPlayerLandedBehavior
     {
-        public void PlayerLanded(int playerId, ITileComponent tileComponent, int tileId);
+        public void PlayerLanded(Player player, IEntityComponent component);
     }
 }
