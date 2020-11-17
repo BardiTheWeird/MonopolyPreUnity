@@ -299,12 +299,11 @@ namespace MonopolyPreUnity.UI
 
             if (writeRentList)
             {
-                string rentList = $"Base: {dev.RentList[0]}\n" +
-                    $"Full set: {dev.RentList[1]}";
+                string rentList = $"Rent: {dev.RentList[0]}/{dev.RentList[1]}";
                 for (int i = 2; i < dev.RentList.Count; i++)
-                    rentList += $"\n{i - 1} houses: {dev.RentList[i]}";
+                    rentList += $"/{dev.RentList[i]}";
 
-                outStr += "\n" + rentList.AddTwoSpacesAtNewLine();
+                outStr += "\n" + rentList;
             }
 
             return outStr;
@@ -337,6 +336,31 @@ namespace MonopolyPreUnity.UI
         }
         #endregion
 
+        #region game status
+        public string GetGameStatusString()
+        {
+            var turnOrderString = GetTurnOrderString();
+
+            var playersString = "Players Info:\n" +
+            GetStringOfListOfItems(GetTurnOrder(), x => GetPlayerString(x), false).AddTwoSpacesAtNewLine() + "\n";
+
+            return turnOrderString + playersString;
+        }
+        
+        public string GetTurnOrderString()
+        {
+            var turnOrder = GetTurnOrder();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("Turn order:");
+            sb.AppendLine(GetStringOfListOfItems(turnOrder,
+                x => _context.GetPlayer(x).DisplayName, false).AddTwoSpacesAtNewLine());
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+        #endregion
+
         #region misc
         public string GetStringOfListOfItems<T>(List<T> list, Func<T, string> valToString, bool indexate)
         {
@@ -348,6 +372,15 @@ namespace MonopolyPreUnity.UI
                 sb.AppendLine(valToString(list[i]).Trim());
             }
             return sb.ToString().Trim();
+        }
+
+        public List<int> GetTurnOrder()
+        {
+            var turnInfo = _context.TurnInfo();
+            var turnOrder = turnInfo.TurnOrder.GetRange(turnInfo.CurTurnPlayer, turnInfo.PlayersLeft - turnInfo.CurTurnPlayer);
+            turnOrder.AddRange(turnInfo.TurnOrder.GetRange(0, turnInfo.CurTurnPlayer));
+
+            return turnOrder;
         }
         #endregion
 

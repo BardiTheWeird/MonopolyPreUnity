@@ -10,6 +10,7 @@ namespace MonopolyPreUnity.Components
         public List<int> TurnOrder { get; set; }
         public int CurTurnPlayer { get; set; }
         public int CurTurnPlayerId => TurnOrder[CurTurnPlayer];
+        public int PlayersLeft => TurnOrder.Count;
 
         public TurnInfo(List<int> turnOrder, int curTurnPlayer)
         {

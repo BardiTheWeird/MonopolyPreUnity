@@ -148,7 +148,7 @@ namespace MonopolyPreUnity.Systems
         }
 
         string GetGameStatus() =>
-            "Printing Game Status is not implemented yet\n";
+            _formatOutput.GetGameStatusString();
 
         string GetMap() =>
             _formatOutput.GetMapString() + "\n";

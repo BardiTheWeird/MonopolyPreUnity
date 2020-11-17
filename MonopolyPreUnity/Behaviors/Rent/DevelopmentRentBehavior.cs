@@ -15,17 +15,8 @@ namespace MonopolyPreUnity.Behaviors.Rent
         private readonly Context _context;
         #endregion
 
-        public int GetRent(int renteeId, int ownerId, IEntityComponent component, int tileId)
-        {
-            var dev = component as PropertyDevelopment;
-            var rentChoice = 0;
-            var prop = _context.GetTileComponent<Property>(tileId);
-
-            var owner = _context.GetPlayer(ownerId);
-            if (_context.FullSetOwned(owner, prop.SetId))
-                rentChoice += 1 + dev.HousesBuilt;
-            return dev.RentList[rentChoice];
-        }
+        public int GetRent(int renteeId, int ownerId, IEntityComponent component, int tileId) =>
+            _context.GetCurrentRentDev(tileId);
 
         #region Constructor
         public DevelopmentRentBehavior(Context context) => 

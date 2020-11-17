@@ -5,6 +5,7 @@ using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 
 namespace MonopolyPreUnity.Entity.ContextExtensions
@@ -204,6 +205,22 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             .Properties
             .Where(id => context.IsTradable(id))
             .ToList();
+        #endregion
+
+        #region rent
+        public static int GetCurrentRentDev(this Context context, int tileId)
+        {
+            var dev = context.GetTileComponent<PropertyDevelopment>(tileId);
+            var rentChoice = 0;
+            var prop = context.GetTileComponent<Property>(tileId);
+
+            if (prop.OwnerId.HasValue)
+            {
+                if (context.FullSetOwned(context.GetPlayer(prop.OwnerId.Value), prop.SetId)) 
+                    rentChoice += 1 + dev.HousesBuilt;
+            }
+            return dev.RentList[rentChoice];
+        }
         #endregion
     }
 }
