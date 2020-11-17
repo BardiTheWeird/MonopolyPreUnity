@@ -16,7 +16,7 @@ namespace MonopolyPreUnity.UI
         #endregion
 
         #region generic input
-        public bool TryParse<T>(out T outVal, string input = null) where T : IConvertible
+        public bool TryParse<T>(out T outVal, string input = null, bool printError = true) where T : IConvertible
         {
             outVal = default;
             try
@@ -27,27 +27,30 @@ namespace MonopolyPreUnity.UI
             }
             catch
             {
-                _context.Add(new PrintLine("Invalid input. Try again", OutputStream.HSInputLog));
+                if (printError)
+                    _context.Add(new PrintLine("Invalid input. Try again", OutputStream.HSInputLog));
                 return false;
             }
         }
 
-        public bool TryParse<T>(Func<T, bool> pred, out T val, string errorMessage, string input = null) where T : IConvertible
+        public bool TryParse<T>(Func<T, bool> pred, out T val, string errorMessage, string input = null, bool printError = true) where T : IConvertible
         {
-            if (!TryParse(out val, input))
+            if (!TryParse(out val, input, printError))
                 return false;
 
             if (!pred(val))
             {
-                _context.Add(new PrintLine(errorMessage + ". Try again", OutputStream.HSInputLog));
+                if (printError)
+                    _context.Add(new PrintLine(errorMessage + ". Try again", OutputStream.HSInputLog));
                 return false;
             }
             return true;
         }
 
-        public bool TryParseIndex<T>(IEnumerable<T> values, out int val, bool canCancel = false, string input = null)
+        public bool TryParseIndex<T>(IEnumerable<T> values, out int val, bool canCancel = false, string input = null, bool printError = true)
         {
-            if (TryParse(x => (1 <= x && x <= values.Count()) || (canCancel && x == -1), out val, "Index out of range", input))
+            if (TryParse(x => (1 <= x && x <= values.Count()) || (canCancel && x == -1), 
+                out val, "Index out of range", input, printError))
             {
                 val = val == -1 ? -1 : val - 1;
                 return true;
@@ -55,29 +58,29 @@ namespace MonopolyPreUnity.UI
             return false;
         }
 
-        public bool TryParseIndexMultiple<T>(IEnumerable<T> values, out List<int> outValues, string input = null)
+        public bool TryParseIndexMultiple<T>(IEnumerable<T> values, out HashSet<int> outValues, string input = null)
         {
             input = input ?? _context.InputString;
-            var nums = Regex.Matches(input, @"[0-9]+")
+            var nums = Regex.Matches(input, @"-?[0-9]+")
                 .Cast<Match>()
                 .Select(match => match.Value);
 
-            outValues = new List<int>();
-            var failedIds = new List<string>();
+            outValues = new HashSet<int>();
+            var failedNums = new List<string>();
             var success = true;
-            foreach (var num in nums)
+            foreach (var numString in nums)
             {
-                if (TryParseIndex(values, out var value, false, input))
+                if (TryParseIndex(values, out var value, false, numString, printError: false))
                     outValues.Add(value);
                 else
                 {
-                    failedIds.Add(num);
+                    failedNums.Add(numString);
                     success = false;
                 }
             }
 
             if (!success)
-                _context.Add(new PrintLine("Problematic values: " + string.Join(" ", nums), OutputStream.HSInputLog));
+                _context.Add(new PrintLine("Problematic values: " + string.Join(" ", failedNums), OutputStream.HSInputLog));
 
             return success;
         }

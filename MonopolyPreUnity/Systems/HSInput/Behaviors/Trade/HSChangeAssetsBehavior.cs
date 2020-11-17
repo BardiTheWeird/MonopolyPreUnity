@@ -28,13 +28,17 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
                     {
                         MonopolyCommand.ChooseCashAmount,
                         MonopolyCommand.ChooseJailCardsAmount,
-                        MonopolyCommand.CancelAction,
                     };
 
                     if (_context.TradableProperties(assets.PlayerId).Count > 0)
                         availableCommands.Add(MonopolyCommand.ChangeProperties);
 
+                    availableCommands.Add(MonopolyCommand.CancelAction);
+
+                    _context.Add(new PrintPlayerAssets(assets, OutputStream.HSInputLog));
+                    _context.Add(new PrintLine("", OutputStream.HSInputLog));
                     _context.Add(new PrintCommands(availableCommands));
+
                     _context.Add(new HSCommandChoiceRequest(availableCommands, state.PlayerId.Value));
                 }
                 return;
@@ -56,6 +60,7 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
                     break;
             }
 
+            _context.Add(new ClearOutput());
             _context.Remove(choice);
         }
 

@@ -47,6 +47,7 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
                 _context.TradeOffer().ReceiverAssets.PlayerId = choice.PlayerChoiceId.Value;
                 state.CurState = HSState.TradeChooseAction;
             }
+            _context.Add(new ClearOutput());
             _context.Remove(choice);
         }
 

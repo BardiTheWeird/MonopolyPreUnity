@@ -44,6 +44,7 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors.Trade
             }
 
             _context.Remove(choice);
+            _context.Add(new ClearOutput());
             state.Nullify();
         }
 

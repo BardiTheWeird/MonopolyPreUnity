@@ -35,6 +35,7 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors.Trade
             assets.JailCards = choice.Choice;
 
             state.CurState = HSState.TradeChangeAssets;
+            _context.Add(new ClearOutput());
             _context.Remove(choice);
         }
 

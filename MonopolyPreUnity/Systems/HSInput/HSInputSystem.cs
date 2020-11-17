@@ -10,6 +10,7 @@ using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace MonopolyPreUnity.Systems
@@ -92,10 +93,12 @@ namespace MonopolyPreUnity.Systems
 
         bool TryGetPropertiesMultiple(HSPropertyChoiceMultipleRequest propertiesMultiple)
         {
-            if (!_inputParser.TryParseIndexMultiple(propertiesMultiple.AvailableProperties, out var outVals))
+            var availableProperties = propertiesMultiple.AvailableProperties;
+            if (!_inputParser.TryParseIndexMultiple(availableProperties, out var outVals))
                 return false;
 
-            _context.Add(new HSPropertyChoiceMultiple(propertiesMultiple.PlayerId, outVals));
+            var ids = outVals.Select(i => availableProperties[i]).ToList();
+            _context.Add(new HSPropertyChoiceMultiple(propertiesMultiple.PlayerId, ids));
             return true;
         }
 

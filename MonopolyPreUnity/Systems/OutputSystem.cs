@@ -1,5 +1,7 @@
 ﻿using MonopolyPreUnity.Actions;
+using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components.SystemRequest.Output;
+using MonopolyPreUnity.Components.Trade;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.UI;
@@ -50,6 +52,12 @@ namespace MonopolyPreUnity.Systems
 
                     case PrintPlayers printPlayers:
                         str = GetPlayersString(printPlayers);
+                        break;
+                    case PrintPlayerAssets playerAssets:
+                        str = GetPlayerAssetsString(playerAssets);
+                        break;
+                    case PrintTradeOffer tradeOffer:
+                        str = GetTradeOfferString(tradeOffer);
                         break;
 
                     case PrintCashCharge cashCharge:
@@ -116,6 +124,29 @@ namespace MonopolyPreUnity.Systems
         string GetPlayersString(List<int> playersId) =>
             _formatOutput.GetStringOfListOfItems(playersId, _formatOutput.GetPlayerString, true);
 
+        string GetPlayerAssetsString(PlayerAssets playerAssets)
+        {
+            string player = _formatOutput.FormattedString($"Assets from |player:{playerAssets.PlayerId}|\n");
+            string cash = $"Cash: {playerAssets.Cash}\n";
+            string jailCards = $"Jail cards: {playerAssets.JailCards}\n";
+            string properties = "Properties:\n"
+                + GetPropertiesString(playerAssets.Properties, false).AddTwoSpacesAtNewLine();
+
+            return player + (cash + jailCards + properties).AddTwoSpacesAtNewLine();
+        }
+
+        string GetTradeOfferString(TradeOffer offer)
+        {
+            var initiator = offer.InitiatorAssets.PlayerId;
+            var receiver = offer.ReceiverAssets.PlayerId;
+
+            var str = _formatOutput.FormattedString($"Trade offer from |player:{initiator}| to |player:{receiver}|:\n")
+                + (GetPlayerAssetsString(offer.InitiatorAssets).Trim() + "\n"
+                + GetPlayerAssetsString(offer.ReceiverAssets)).AddTwoSpacesAtNewLine();
+
+            return str;
+        }
+
         string GetGameStatus() =>
             "Printing Game Status is not implemented yet\n";
 
@@ -123,7 +154,10 @@ namespace MonopolyPreUnity.Systems
             _formatOutput.GetMapString() + "\n";
 
         string GetPropertiesString(PrintProperties print) =>
-            _formatOutput.GetStringOfListOfItems(print.Properties, _formatOutput.GetPropertyString, print.Indexate);
+            GetPropertiesString(print.Properties, print.Indexate);
+
+        string GetPropertiesString(List<int> properties, bool indexate) =>
+            _formatOutput.GetStringOfListOfItems(properties, _formatOutput.GetPropertyString, indexate);
 
         void ClearOutput(OutputStream outputStream)
         {

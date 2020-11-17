@@ -36,6 +36,7 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors.Trade
             assets.Properties = choice.PropertiesChosen;
 
             state.CurState = HSState.TradeChangeAssets;
+            _context.Add(new ClearOutput());
             _context.Remove(choice);
         }
 

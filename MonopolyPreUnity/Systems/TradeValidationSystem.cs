@@ -34,6 +34,7 @@ namespace MonopolyPreUnity.Systems
                 // send validation request
                 _context.Add(new PlayerInputRequest(offer.ReceiverAssets.PlayerId,
                     new TradeValidationRequest(offer)));
+                _context.Add(new PrintTradeOffer(offer, OutputStream.GameLog));
 
                 return;
             }
@@ -50,7 +51,7 @@ namespace MonopolyPreUnity.Systems
             }
             else if (response is TradeRefuse)
             {
-                _context.Add(new PrintFormattedLine($"|player:{receiverId}| refused |player:{initiatorId}|'s trade offer",
+                _context.Add(new PrintFormattedLine($"|player:{receiverId}| declined |player:{initiatorId}|'s trade offer",
                     OutputStream.GameLog));
             }
 

@@ -31,7 +31,10 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
                         MonopolyCommand.CancelAction,
                     };
 
+                    _context.Add(new PrintTradeOffer(offer, OutputStream.HSInputLog));
+                    _context.Add(new PrintLine("", OutputStream.HSInputLog));
                     _context.Add(new PrintCommands(commands));
+
                     _context.Add(new HSCommandChoiceRequest(commands, state.PlayerId.Value));
                 }
                 return;
@@ -58,6 +61,7 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
                     break;
             }
 
+            _context.Add(new ClearOutput());
             _context.Remove<HSCommandChoice>();
         }
 
