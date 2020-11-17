@@ -2,10 +2,10 @@
 using MonopolyPreUnity.Components.SystemRequest;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
+using MonopolyPreUnity.Components.SystemRequest.Jail;
 using MonopolyPreUnity.Components.SystemRequest.Move;
 using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.SystemRequest.PlayerInput;
-using MonopolyPreUnity.Components.SystemRequest.PlayerInput.InJail;
 using MonopolyPreUnity.Components.Trade;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;

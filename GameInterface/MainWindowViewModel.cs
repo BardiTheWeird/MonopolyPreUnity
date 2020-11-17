@@ -63,7 +63,7 @@ namespace GameInterface
         public MainWindowViewModel()
         {
             // initialize
-            Context = MockContext.CreateMockDataSmallTest();
+            Context = MockContext.CreateMockDataJailTest();
             SysBag = new SystemsBag(SystemArrays.GetAllSystems(DiContainer.CreateDiContainer(Context)));
 
             SendInputCommand = new RelayCommand(x =>

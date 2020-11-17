@@ -2,6 +2,7 @@
 using MonopolyPreUnity.RequestHandlers.HSScenario;
 using MonopolyPreUnity.Systems;
 using MonopolyPreUnity.Systems.HSInput;
+using MonopolyPreUnity.Systems.PlayerState;
 using MonopolyPreUnity.Systems.PropertySystems;
 using MonopolyPreUnity.UI;
 using System;
@@ -39,6 +40,7 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<ThrowDiceSystem>().AsSelf().SingleInstance();
             builder.RegisterType<OnGoPassedSystem>().AsSelf().SingleInstance();
             builder.RegisterType<TradeValidationSystem>().AsSelf().SingleInstance();
+            builder.RegisterType<JailSystem>().AsSelf().SingleInstance();
 
             // helpers
             builder.RegisterType<FormatOutput>().AsSelf().SingleInstance();

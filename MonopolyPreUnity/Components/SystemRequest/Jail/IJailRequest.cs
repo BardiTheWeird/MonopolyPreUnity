@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Components.SystemRequest.PlayerInput.InJail
+namespace MonopolyPreUnity.Components.SystemRequest.Jail
 {
-    interface IInJailInput : IEntityComponent
+    interface IJailRequest : IEntityComponent
     {
         public int PlayerId { get; set; }
     }

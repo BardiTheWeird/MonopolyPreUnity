@@ -36,23 +36,24 @@ namespace MonopolyPreUnity.Initialization
         public static Context CreateMockDataSmallTest() =>
             CreateMockDataSmallTest(GameConfigMaker.DefaultGameConfig());
 
-        //public static GameData CreateMockDataJailTest(GameConfig gameConfig)
-        //{
-        //    var mockData = new MockDataMaker(gameConfig);
+        public static Context CreateMockDataJailTest(GameConfig gameConfig)
+        {
+            var mockData = new MockContextMaker(gameConfig);
 
-        //    var startTile = mockData.AddTile("Go to jail", new ActionTile(new GoToJailAction()));
-        //    //mockData.AddTile("Give Jail Card", new ActionTileComponent(new JailCardAction()));
-        //    mockData.AddTile("Go to jail", new ActionTile(new GoToJailAction()));
-        //    mockData.AddTile("Go to jail", new ActionTile(new GoToJailAction()));
-        //    mockData.AddTile("Jail", new Jail());
+            mockData.AddTile("Go to jail", new ActionTile(new GoToJailAction()));
+            mockData.AddTile("Give Jail Card", new ActionTile(new JailCardAction()));
+            mockData.AddTile("Go to jail", new ActionTile(new GoToJailAction()));
+            mockData.AddTile("Go to jail", new ActionTile(new GoToJailAction()));
+            mockData.AddTile("Jail", new Jail());
 
-        //    mockData.AddPlayer("John", cash: 200);
-        //    //mockData.AddPlayer("Jake", cash: 200);
+            mockData.AddPlayer("John", cash: 200);
+            //mockData.AddPlayer("Jake", cash: 200);
 
-        //    mockData.SetStartTile(startTile);
+            return mockData.GetContext();
+        }
 
-        //    return mockData.GetGameData();
-        //}
+        public static Context CreateMockDataJailTest() =>
+    CreateMockDataJailTest(GameConfigMaker.DefaultGameConfig());
         #endregion
     }
 }

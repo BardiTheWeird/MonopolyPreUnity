@@ -1,5 +1,5 @@
 ﻿using MonopolyPreUnity.Actions;
-using MonopolyPreUnity.Components.SystemRequest.PlayerState;
+using MonopolyPreUnity.Components.SystemRequest.Jail;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.UI;

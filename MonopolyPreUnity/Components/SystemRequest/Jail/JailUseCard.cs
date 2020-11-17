@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Components.SystemRequest.PlayerInput.InJail
+namespace MonopolyPreUnity.Components.SystemRequest.Jail
 {
-    class JailPayFine : IInJailInput
+    class JailUseCard : IJailRequest
     {
         public int PlayerId { get; set; }
 
-        public JailPayFine(int playerId)
+        public JailUseCard(int playerId)
         {
             PlayerId = playerId;
         }

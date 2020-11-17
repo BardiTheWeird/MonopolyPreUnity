@@ -37,7 +37,7 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
                 else
                     commandList.Add(MonopolyCommand.EndTurn);
             }
-            else if (!player.RolledJailDiceThisTurn)
+            else if (!player.RolledJailDiceThisTurn && player.CanMove)
                 commandList.AddRange(context.GetAvailableJailCommands(player));
             else
                 commandList.Add(MonopolyCommand.EndTurn);

@@ -8,13 +8,15 @@ namespace MonopolyPreUnity.Components.SystemRequest.Move
     {
         public int PlayerId { get; set; }
         public bool CountGoPassed { get; set; }
+        public bool CountPlayerLanded { get; set; }
         public int Steps { get; set; }
 
-        public MoveSteps(int playerId, bool countGoPassed, int steps)
+        public MoveSteps(int playerId, bool countGoPassed, int steps, bool countPlayerLanded = true)
         {
             PlayerId = playerId;
             CountGoPassed = countGoPassed;
             Steps = steps;
+            CountPlayerLanded = countPlayerLanded;
         }
     }
 }

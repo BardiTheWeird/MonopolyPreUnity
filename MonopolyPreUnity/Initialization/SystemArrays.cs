@@ -2,6 +2,7 @@
 using Autofac.Core;
 using MonopolyPreUnity.Systems;
 using MonopolyPreUnity.Systems.HSInput;
+using MonopolyPreUnity.Systems.PlayerState;
 using MonopolyPreUnity.Systems.PropertySystems;
 using System;
 using System.Collections.Generic;
@@ -27,9 +28,11 @@ namespace MonopolyPreUnity.Initialization
                 c.Resolve<AuctionStartSystem>(),
                 c.Resolve<AuctionSystem>(),
 
+                c.Resolve<ThrowDiceSystem>(),
+                c.Resolve<JailSystem>(),
+
                 c.Resolve<PlayerCashSystem>(), // cash
 
-                c.Resolve<ThrowDiceSystem>(),
                 c.Resolve<MoveSystem>(),
                 c.Resolve<OnGoPassedSystem>(),
 

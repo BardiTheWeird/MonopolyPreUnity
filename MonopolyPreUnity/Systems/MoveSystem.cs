@@ -36,7 +36,8 @@ namespace MonopolyPreUnity.Systems
                         MoveType(player, moveType);
                         break;
                 }
-                _context.Add(new PlayerLanded(player.Id));
+                if (request.CountPlayerLanded)
+                    _context.Add(new PlayerLanded(player.Id));
             }
             _context.RemoveInterface<IMoveRequest>();
         }
