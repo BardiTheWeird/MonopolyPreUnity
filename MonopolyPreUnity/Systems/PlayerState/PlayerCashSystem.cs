@@ -88,10 +88,8 @@ namespace MonopolyPreUnity.Systems
                 var prop = _context.GetTileComponent<Property>(propId);
                 var dev = _context.GetTileComponent<PropertyDevelopment>(propId);
 
-                var mortgageFee = _context.GameConfig().MortgageFee;
-
                 if (!prop.IsMortgaged)
-                    sum += (int)(prop.BasePrice * mortgageFee);
+                    sum += (int)(prop.BasePrice * _context.GameConfig().MortgageFee);
 
                 if (dev != null)
                     sum += dev.HousesBuilt * dev.HouseSellPrice;

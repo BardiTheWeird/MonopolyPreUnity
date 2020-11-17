@@ -144,7 +144,7 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             var prop = context.GetTileComponent<Property>(propId);
 
             prop.IsMortgaged = true;
-            var mortgageMoney = (int)(prop.BasePrice * context.GameConfig().MortgageCommission);
+            var mortgageMoney = (int)(prop.BasePrice * context.GameConfig().MortgageFee);
 
             context.Add(new PrintFormattedLine($"|player:{player.Id}| mortgaged |tile:{propId}|", OutputStream.GameLog));
             context.Add(new GiveCash(mortgageMoney, player.Id, "mortgaging property"));

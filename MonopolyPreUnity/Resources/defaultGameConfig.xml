@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GameConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <CashPerLap>-100</CashPerLap>
+  <CashPerLap>200</CashPerLap>
   <MaxTurnsInJail>2</MaxTurnsInJail>
   <MaxDicePairThrows>2</MaxDicePairThrows>
   <MortgageFee>0.5</MortgageFee>
