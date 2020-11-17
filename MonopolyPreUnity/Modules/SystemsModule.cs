@@ -41,6 +41,8 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<OnGoPassedSystem>().AsSelf().SingleInstance();
             builder.RegisterType<TradeValidationSystem>().AsSelf().SingleInstance();
             builder.RegisterType<JailSystem>().AsSelf().SingleInstance();
+            builder.RegisterType<GameOverSystem>().AsSelf().SingleInstance();
+            builder.RegisterType<GameStartSystem>().AsSelf().SingleInstance();
 
             // helpers
             builder.RegisterType<FormatOutput>().AsSelf().SingleInstance();

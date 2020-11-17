@@ -16,6 +16,8 @@ namespace MonopolyPreUnity.Initialization
         {
             ISystem[] systems =
             {
+                c.Resolve<GameStartSystem>(),
+
                 c.Resolve<PlayerInputSystem>(),
 
                 c.Resolve<OutputSystem>(),
@@ -48,9 +50,11 @@ namespace MonopolyPreUnity.Initialization
 
                 c.Resolve<PropertyTransferSystem>(),
                 c.Resolve<PlayerDebtSystem>(),
-                c.Resolve<PlayerBankruptSystem>(),
                 c.Resolve<AssetTransferSystem>(),
-                
+                c.Resolve<PlayerBankruptSystem>(),
+
+                c.Resolve<GameOverSystem>(),
+
                 c.Resolve<ChangeTurnSystem>(),
                 c.Resolve<TurnRequestSystem>(),
             };

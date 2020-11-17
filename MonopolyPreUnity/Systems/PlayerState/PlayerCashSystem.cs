@@ -51,7 +51,8 @@ namespace MonopolyPreUnity.Systems
                     Debug.WriteLine($"{player.DisplayName} is bankrupt");
                     _context.Add(new PrintLine($"{player.DisplayName} is bankrupt", OutputStream.GameLog));
 
-                    _context.Add(new PlayerBankrupt(player.Id, charge.PlayerChargerId));
+                    _context.Add(new AssetTransferRequest(charge.PlayerChargerId, player));
+                    _context.Add(new PlayerBankrupt(player.Id));
                 }
                 else
                 {

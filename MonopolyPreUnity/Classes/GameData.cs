@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
-
-using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Behaviors;
 using MonopolyPreUnity.Utitlity;
 using MonopolyPreUnity.Components;

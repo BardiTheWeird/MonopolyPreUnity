@@ -6,7 +6,6 @@ using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
-using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.UI;
 using MonopolyPreUnity.Utitlity;

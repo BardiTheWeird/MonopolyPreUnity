@@ -1,7 +1,7 @@
 ﻿using MonopolyPreUnity.Actions;
 using MonopolyPreUnity.Components.SystemRequest.Jail;
 using MonopolyPreUnity.Entity;
-using MonopolyPreUnity.Managers;
+
 using MonopolyPreUnity.UI;
 using System;
 using System.Collections.Generic;

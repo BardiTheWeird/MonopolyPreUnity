@@ -3,7 +3,6 @@ using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest.PlayerState;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
-using MonopolyPreUnity.Managers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,9 +19,8 @@ namespace MonopolyPreUnity.Systems
         {
             foreach (var transfer in _context.GetComponents<AssetTransferRequest>())
             {
-                var receiver = _context.GetPlayer(transfer.ReceiverId.Value);
                 if (transfer.ReceiverId.HasValue)
-                    TransferToPlayer(receiver, transfer.Assets);
+                    TransferToPlayer(_context.GetPlayer(transfer.ReceiverId.Value), transfer.Assets);
                 else
                     TransferToBank(transfer.Assets);
             }

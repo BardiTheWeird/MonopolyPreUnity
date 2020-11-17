@@ -3,7 +3,7 @@ using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest.Cash;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
-using MonopolyPreUnity.Managers;
+
 using System;
 using System.Collections.Generic;
 using System.Text;

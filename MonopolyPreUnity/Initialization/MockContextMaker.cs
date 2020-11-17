@@ -1,4 +1,5 @@
 ﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemState;
 using MonopolyPreUnity.Entity;
 using System;
 using System.Collections.Generic;
@@ -80,7 +81,7 @@ namespace MonopolyPreUnity.Classes
             var mapInfo = CreateMapInfo();
             SetStartTile(mapInfo.GoId ?? 1);
 
-            Context.AddEntities(CreateTurnInfo(), mapInfo, CreateDice());
+            Context.AddEntities(CreateTurnInfo(), mapInfo, CreateDice(), new GameStart());
             return Context;
         }
         #endregion

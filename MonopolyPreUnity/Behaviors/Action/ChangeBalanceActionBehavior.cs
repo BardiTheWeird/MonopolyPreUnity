@@ -1,7 +1,7 @@
 ﻿using MonopolyPreUnity.Actions;
 using MonopolyPreUnity.Components.SystemRequest.Cash;
 using MonopolyPreUnity.Entity;
-using MonopolyPreUnity.Managers;
+
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;

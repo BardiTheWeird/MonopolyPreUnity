@@ -7,14 +7,10 @@ namespace MonopolyPreUnity.Components.SystemRequest.PlayerState
     class PlayerBankrupt : IEntityComponent
     {
         public int PlayerId { get; set; }
-        public int? CreditorId { get; set; }
 
-        public PlayerBankrupt(int playerId, int? creditorId = null)
+        public PlayerBankrupt(int playerId)
         {
             PlayerId = playerId;
-            CreditorId = creditorId;
         }
-
-        public PlayerBankrupt(PlayerDebt debt) : this(debt.DebtorId, debt.CreditorId) { }
     }
 }
