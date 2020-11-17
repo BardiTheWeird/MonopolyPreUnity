@@ -18,6 +18,8 @@ namespace MonopolyPreUnity.Components.Trade
 
         public TradeOffer()
         {
+            InitiatorAssets = new PlayerAssets();
+            ReceiverAssets = new PlayerAssets();
         }
     }
 }

@@ -7,6 +7,7 @@ using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Requests;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonopolyPreUnity.Systems
@@ -33,6 +34,8 @@ namespace MonopolyPreUnity.Systems
                 // send validation request
                 _context.Add(new PlayerInputRequest(offer.ReceiverAssets.PlayerId,
                     new TradeValidationRequest(offer)));
+
+                return;
             }
 
             var initiatorId = offer.InitiatorAssets.PlayerId;

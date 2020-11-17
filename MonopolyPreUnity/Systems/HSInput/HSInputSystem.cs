@@ -50,8 +50,14 @@ namespace MonopolyPreUnity.Systems
                 case HSPropertyChoiceRequest propertyChoiceRequest:
                     success = TryGetPropertyId(propertyChoiceRequest);
                     break;
+                case HSPropertyChoiceMultipleRequest propertyMultiple:
+                    success = TryGetPropertiesMultiple(propertyMultiple);
+                    break;
                 case HSIntRequest intRequest:
                     success = TryGetInt(intRequest);
+                    break;
+                case HSPlayerChoiceRequest playerRequest:
+                    success = TryGetPlayer(playerRequest);
                     break;
             }
 
@@ -84,6 +90,15 @@ namespace MonopolyPreUnity.Systems
             return true;
         }
 
+        bool TryGetPropertiesMultiple(HSPropertyChoiceMultipleRequest propertiesMultiple)
+        {
+            if (!_inputParser.TryParseIndexMultiple(propertiesMultiple.AvailableProperties, out var outVals))
+                return false;
+
+            _context.Add(new HSPropertyChoiceMultiple(propertiesMultiple.PlayerId, outVals));
+            return true;
+        }
+
         bool TryGetInt(HSIntRequest intRequest)
         {
             if (!_inputParser.TryParse<int>(x => intRequest.LowerBound <= x && x <= intRequest.UpperBound,
@@ -92,6 +107,17 @@ namespace MonopolyPreUnity.Systems
 
             _context.Add(new HSIntChoice(intRequest.PlayerId, val));
             Debug.WriteLine("Int choice was added");
+            return true;
+        }
+
+        bool TryGetPlayer(HSPlayerChoiceRequest playerRequest)
+        {
+            var players = playerRequest.AvailablePlayers;
+            if (!_inputParser.TryParseIndex(players, out var index, canCancel: true))
+                return false;
+
+            var chosenPlayer = index == -1 ? null : (int?)players[index];
+            _context.Add(new HSPlayerChoice(playerRequest.PlayerId, chosenPlayer));
             return true;
         }
         #endregion

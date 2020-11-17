@@ -3,6 +3,7 @@ using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Requests;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonopolyPreUnity.RequestHandlers.HSScenario
@@ -12,8 +13,10 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
         private readonly IIndex<Type, IHSRequestScenario> _index;
         private readonly Player _player;
 
-        public void HandleRequest(IRequest request) =>
+        public void HandleRequest(IRequest request)
+        {
             _index[request.GetType()].RunScenario(request, _player);
+        }
 
         public HSScenario(IIndex<Type, IHSRequestScenario> index, Player player)
         {

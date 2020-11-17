@@ -42,6 +42,7 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<HSTradeChooseCashBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChooseCash);
             builder.RegisterType<HSTradeChooseJailCardsBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChooseJailCards);
             builder.RegisterType<HSTradeChoosePropertiesBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChooseProperties);
+            builder.RegisterType<HSTradeValidationBehavior>().Keyed<IHSStateBehavior>(HSState.TradeValidation);
         }
     }
 }

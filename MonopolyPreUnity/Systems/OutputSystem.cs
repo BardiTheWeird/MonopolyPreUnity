@@ -48,6 +48,10 @@ namespace MonopolyPreUnity.Systems
                         str = GetPropertiesString(printProperties);
                         break;
 
+                    case PrintPlayers printPlayers:
+                        str = GetPlayersString(printPlayers);
+                        break;
+
                     case PrintCashCharge cashCharge:
                         str = GetCashChargeString(cashCharge);
                         break;
@@ -108,6 +112,9 @@ namespace MonopolyPreUnity.Systems
 
         string GetPlayerStatus(int playerId) =>
             _formatOutput.GetPlayerString(playerId) + "\n";
+
+        string GetPlayersString(List<int> playersId) =>
+            _formatOutput.GetStringOfListOfItems(playersId, _formatOutput.GetPlayerString, true);
 
         string GetGameStatus() =>
             "Printing Game Status is not implemented yet\n";

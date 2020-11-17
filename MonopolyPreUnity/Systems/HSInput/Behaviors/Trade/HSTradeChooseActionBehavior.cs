@@ -1,5 +1,6 @@
 ﻿using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Utitlity;
@@ -30,6 +31,7 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
                         MonopolyCommand.CancelAction,
                     };
 
+                    _context.Add(new PrintCommands(commands));
                     _context.Add(new HSCommandChoiceRequest(commands, state.PlayerId.Value));
                 }
                 return;

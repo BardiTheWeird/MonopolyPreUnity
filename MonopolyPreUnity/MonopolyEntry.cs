@@ -13,6 +13,7 @@ using MonopolyPreUnity.RequestHandlers;
 using MonopolyPreUnity.RequestHandlers.HSScenario;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -50,8 +51,15 @@ namespace MonopolyPreUnity
         {
             while (true)
             {
-                systemsBag.Execute();
-                await Task.Delay(1);
+                try
+                {
+                    systemsBag.Execute();
+                    await Task.Delay(1);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
             }
         }
     }

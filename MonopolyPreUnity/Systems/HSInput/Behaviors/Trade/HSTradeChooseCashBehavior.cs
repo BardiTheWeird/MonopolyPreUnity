@@ -3,6 +3,7 @@ using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Request;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Utitlity;
@@ -26,6 +27,8 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors.Trade
                 if (!_context.ContainsComponent<HSIntRequest>())
                 {
                     var playerCash = _context.GetPlayer(assets.PlayerId).Cash;
+
+                    _context.Add(new PrintLine($"Choose an amount of cash (up to {playerCash}):", OutputStream.HSInputLog));
                     _context.Add(new HSIntRequest(state.PlayerId.Value, 0, playerCash));
                 }
                 return;

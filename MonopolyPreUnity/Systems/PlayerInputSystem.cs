@@ -4,6 +4,7 @@ using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.RequestHandlers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonopolyPreUnity.Systems
@@ -16,7 +17,9 @@ namespace MonopolyPreUnity.Systems
         public void Execute()
         {
             foreach (var request in _context.GetComponents<PlayerInputRequest>())
+            {
                 _scenarioIndex[request.PlayerId].HandleRequest(request.Request);
+            }
             _context.Remove<PlayerInputRequest>();
         }
 

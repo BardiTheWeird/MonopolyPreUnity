@@ -2,6 +2,7 @@
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Request;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using System;
@@ -24,6 +25,9 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors.Trade
                 if (!_context.ContainsComponent<HSPropertyChoiceMultipleRequest>())
                 {
                     var tradableProperties = _context.TradableProperties(assets.PlayerId);
+
+                    _context.Add(new PrintLine("Choose properties from the list:", OutputStream.HSInputLog));
+                    _context.Add(new PrintProperties(tradableProperties, OutputStream.HSInputLog, indexate: true));
                     _context.Add(new HSPropertyChoiceMultipleRequest(assets.PlayerId, tradableProperties));
                 }
                 return;

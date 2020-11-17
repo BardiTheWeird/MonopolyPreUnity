@@ -1,5 +1,7 @@
 ﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Entity;
+using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Managers;
 using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.UI;
@@ -17,16 +19,7 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
 
         public void RunScenario(IRequest request, Player player)
         {
-            //var offer = (request as TradeValidationRequest).tradeOffer;
-
-            //_consoleUI.Print("Choose whether to accept a following trade offer");
-            //_consoleUI.PrintTradeOffer(offer);
-
-            //_consoleUI.Print("1: Accept\n" +
-            //    "2: Decline");
-            //var answer = _consoleUI.InputValue<int>(x => x == 1 || x == 2, "Invalid value");
-
-            //_tradeManager.ValidateTrade(offer, !Convert.ToBoolean(answer - 1));
+            _context.HSInputState().Set(HSState.TradeValidation, player.Id);
         }
 
         #region ctor

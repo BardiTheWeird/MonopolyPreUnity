@@ -1,6 +1,9 @@
-﻿using MonopolyPreUnity.Components.SystemRequest.HSInput;
+﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Entity;
+using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -14,6 +17,8 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
 
         public void Run(HSInputState state)
         {
+            var assets = (PlayerAssets)state.MiscInfo;
+
             var choice = _context.GetComponent<HSCommandChoice>();
             if (choice == null)
             {
@@ -21,12 +26,15 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
                 {
                     var availableCommands = new List<MonopolyCommand>
                     {
-                        MonopolyCommand.ChangeCashAmount,
-                        MonopolyCommand.ChangeJailCardsAmount,
-                        MonopolyCommand.ChangeProperties,
+                        MonopolyCommand.ChooseCashAmount,
+                        MonopolyCommand.ChooseJailCardsAmount,
                         MonopolyCommand.CancelAction,
                     };
 
+                    if (_context.TradableProperties(assets.PlayerId).Count > 0)
+                        availableCommands.Add(MonopolyCommand.ChangeProperties);
+
+                    _context.Add(new PrintCommands(availableCommands));
                     _context.Add(new HSCommandChoiceRequest(availableCommands, state.PlayerId.Value));
                 }
                 return;
@@ -34,10 +42,10 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
 
             switch (choice.Command)
             {
-                case MonopolyCommand.ChangeCashAmount:
+                case MonopolyCommand.ChooseCashAmount:
                     state.CurState = HSState.TradeChooseCash;
                     break;
-                case MonopolyCommand.ChangeJailCardsAmount:
+                case MonopolyCommand.ChooseJailCardsAmount:
                     state.CurState = HSState.TradeChooseJailCards;
                     break;
                 case MonopolyCommand.ChangeProperties:

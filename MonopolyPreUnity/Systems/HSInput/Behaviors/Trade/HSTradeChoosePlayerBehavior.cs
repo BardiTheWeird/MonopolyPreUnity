@@ -1,6 +1,7 @@
 ﻿using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Choice;
 using MonopolyPreUnity.Components.SystemRequest.HSInput.Request;
+using MonopolyPreUnity.Components.SystemRequest.Output;
 using MonopolyPreUnity.Components.Trade;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
@@ -27,23 +28,26 @@ namespace MonopolyPreUnity.Systems.HSInput.Behaviors
                         .Where(id => id != state.PlayerId.Value)
                         .ToList();
 
+                    _context.Add(new PrintLine("Choose a player to trade with:", OutputStream.HSInputLog));
+                    _context.Add(new PrintPlayers(availablePlayers, OutputStream.HSInputLog));
+                    _context.Add(new PrintLine("Write -1 to cancel", OutputStream.HSInputLog));
                     _context.Add(new HSPlayerChoiceRequest(state.PlayerId.Value, availablePlayers));
                 }
                 return;
             }
 
-            _context.Remove(choice);
-            
             // if player canceled his choice
             if (!choice.PlayerChoiceId.HasValue)
             {
                 _context.Remove<TradeOffer>();
                 state.Nullify();
-                return;
             }
-
-            _context.TradeOffer().ReceiverAssets.PlayerId = choice.PlayerChoiceId.Value;
-            state.CurState = HSState.TradeChooseAction;
+            else
+            {
+                _context.TradeOffer().ReceiverAssets.PlayerId = choice.PlayerChoiceId.Value;
+                state.CurState = HSState.TradeChooseAction;
+            }
+            _context.Remove(choice);
         }
 
         public HSTradeChoosePlayerBehavior(Context context)

@@ -23,7 +23,6 @@ namespace MonopolyPreUnity.Components.SystemRequest.HSInput
         TradeChooseCash,
         TradeChooseJailCards,
         TradeChooseProperties,
-        TradeConfirm,
 
         TradeValidation,
     }

@@ -116,7 +116,7 @@ namespace MonopolyPreUnity.UI
         }
         #endregion
 
-        #region PlayerStatus
+        #region Player(s)
         public string GetPlayerString(int playerId)
         {
             var player = _context.GetPlayer(playerId);

@@ -50,7 +50,7 @@ namespace MonopolyPreUnity.Systems.HSInput
                     var offer = new TradeOffer();
                     offer.InitiatorAssets.PlayerId = player.Id;
                     _context.Add(offer);
-                    state.Set(HSState.TradeChooseAction, player.Id);
+                    state.Set(HSState.TradeChoosePlayer, player.Id);
                     break;
 
                 case MonopolyCommand.MakeMove:
