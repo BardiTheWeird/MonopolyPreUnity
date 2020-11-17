@@ -20,8 +20,9 @@ namespace MonopolyPreUnity.Systems
         {
             foreach (var transfer in _context.GetComponents<AssetTransferRequest>())
             {
-                if (transfer.ReceiverId != null)
-                    TransferToPlayer(_context.GetPlayer((int)transfer.ReceiverId), transfer.Assets);
+                var receiver = _context.GetPlayer(transfer.ReceiverId.Value);
+                if (transfer.ReceiverId.HasValue)
+                    TransferToPlayer(receiver, transfer.Assets);
                 else
                     TransferToBank(transfer.Assets);
             }
@@ -46,16 +47,22 @@ namespace MonopolyPreUnity.Systems
         #endregion
 
         #region to player
-        void TransferToPlayer(Player player, PlayerAssets assets)
+        void TransferToPlayer(Player receiver, PlayerAssets assets)
         {
-            player.Cash += assets.Cash;
-            player.JailCards += assets.JailCards;
-            
+            var sender = _context.GetPlayer(assets.PlayerId);
+
+            receiver.Cash += assets.Cash;
+            sender.Cash -= assets.Cash;
+
+            receiver.JailCards += assets.JailCards;
+            sender.JailCards -= assets.JailCards;
+
             foreach (var propId in assets.Properties)
             {
                 var prop = _context.GetTileComponent<Property>(propId);
-                prop.OwnerId = player.Id;
-                player.Properties.Add(propId);
+                prop.OwnerId = receiver.Id;
+                receiver.Properties.Add(propId);
+                sender.Properties.Remove(propId);
             }
         }
         #endregion
