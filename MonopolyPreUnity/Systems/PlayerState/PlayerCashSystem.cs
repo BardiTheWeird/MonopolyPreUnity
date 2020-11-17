@@ -43,15 +43,22 @@ namespace MonopolyPreUnity.Systems
             else
             {
                 Debug.WriteLine($"{player.DisplayName} doesn't have enough money to pay, so now he's got a debt");
+                _context.Add(new PrintLine($"{player.DisplayName} doesn't have enough money to pay, so now he's got a debt",
+                    OutputStream.GameLog));
 
                 if (!EnoughPropertyToPayOff(player, charge.Amount))
                 {
                     Debug.WriteLine($"{player.DisplayName} is bankrupt");
+                    _context.Add(new PrintLine($"{player.DisplayName} is bankrupt", OutputStream.GameLog));
+
                     _context.Add(new PlayerBankrupt(player.Id, charge.PlayerChargerId));
                 }
                 else
                 {
                     Debug.WriteLine($"{player.DisplayName} has enough property to pay off so now he has to do just that");
+                    _context.Add(new PrintLine($"{player.DisplayName} has enough property to pay off so now he has to do just that",
+                        OutputStream.GameLog));
+
                     _context.Add(new PlayerDebt(player.Id, charge.Amount, charge.PlayerChargerId));
                 }
             }

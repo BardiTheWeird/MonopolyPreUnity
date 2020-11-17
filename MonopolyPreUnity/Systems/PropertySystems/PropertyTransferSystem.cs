@@ -20,6 +20,9 @@ namespace MonopolyPreUnity.Systems.PropertySystems
                 var newOwner = _context.GetPlayer(transfer.NewOwnerId);
                 var prop = _context.GetTileComponent<Property>(transfer.PropertyId);
 
+                if (prop.OwnerId.HasValue)
+                    _context.GetPlayer(prop.OwnerId.Value).Properties.Remove(transfer.PropertyId);
+
                 newOwner.Properties.Add(transfer.PropertyId);
                 prop.OwnerId = newOwner.Id;
 
