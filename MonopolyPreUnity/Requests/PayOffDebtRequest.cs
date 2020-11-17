@@ -4,11 +4,11 @@ using System.Text;
 
 namespace MonopolyPreUnity.Requests
 {
-    class BankruptcyRequest : IRequest
+    class PayOffDebtRequest : IRequest
     {
         public int DebtAmount { get; set; }
 
-        public BankruptcyRequest(int debtAmount)
+        public PayOffDebtRequest(int debtAmount)
         {
             DebtAmount = debtAmount;
         }

@@ -1,59 +1,41 @@
-﻿using MonopolyPreUnity.Components;
+﻿using MonopolyPreUnity.Components.SystemRequest;
+using MonopolyPreUnity.Components.SystemRequest.Cash;
 using MonopolyPreUnity.Components.SystemRequest.PlayerState;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
+using MonopolyPreUnity.Requests;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.Systems
+namespace MonopolyPreUnity.Systems.PlayerState
 {
     class PlayerDebtSystem : ISystem
     {
-        #region dependencies
         private readonly Context _context;
-        #endregion
 
         public void Execute()
         {
-            foreach (var debt in _context.GetComponents<PlayerDebt>())
+            var debt = _context.GetComponent<PlayerDebt>();
+            if (debt == null)
+                return;
+
+            var paidOff = _context.GetComponent<PaidOffDebt>();
+            if (paidOff == null)
             {
-                var debtor = _context.GetPlayer(debt.DebtorId);
-                if (!EnoughPropertyToPayOff(debtor, debt.DebtAmount))
-                    _context.Add(new PlayerBankrupt(debt));
-                else
-                    _context.Add(new PlayerHasToPayOffDebt(debt));
+                if (!_context.ContainsComponent<PlayerInputRequest>() && _context.HSInputState().IsNull)
+                    _context.Add(new PlayerInputRequest(debt.DebtorId, new PayOffDebtRequest(debt.DebtAmount)));
+                return;
             }
-            _context.Remove<PlayerDebt>();
+
+            _context.Add(new ChargeCash(debt.DebtAmount, debt.DebtorId, debt.CreditorId, "paying off debt"));
+            _context.Remove(debt);
+            _context.Remove(paidOff);
         }
 
-        #region Methods
-        bool EnoughPropertyToPayOff(Player player, int debtAmount)
+        public PlayerDebtSystem(Context context)
         {
-            var playerProperty = player.Properties;
-            int sum = 0;
-            foreach (int propId in playerProperty)
-            {
-                var prop = _context.GetTileComponent<Property>(propId);
-                var dev = _context.GetTileComponent<PropertyDevelopment>(propId);
-
-                var mortgageFee = _context.GameConfig().MortgageFee;
-
-                if (!prop.IsMortgaged)
-                    sum += (int)(prop.BasePrice * mortgageFee);
-
-                if (dev != null)
-                    sum += dev.HousesBuilt * dev.HouseSellPrice; 
-            }
-            if (sum + player.Cash > debtAmount)
-                return true;
-            return false;
-        }
-        #endregion
-
-        #region ctor
-        public PlayerDebtSystem(Context context) =>
             _context = context;
-        #endregion
+        }
     }
 }

@@ -25,6 +25,10 @@ namespace MonopolyPreUnity.Components.SystemRequest.HSInput
         TradeChooseProperties,
 
         TradeValidation,
+
+        Debt,
+        DebtChooseProperty,
+        DebtChoosePropertyAction,
     }
 
     class HSInputState : IEntityComponent, INotifyPropertyChanged

@@ -24,6 +24,8 @@ namespace MonopolyPreUnity.Utitlity
         SellHouse,
         CancelManagagingProperty,
 
+        PayDebt,
+
         BuyProperty,
         AuctionProperty,
 

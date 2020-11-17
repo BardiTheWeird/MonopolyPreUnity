@@ -5,6 +5,7 @@ using MonopolyPreUnity.Requests;
 using MonopolyPreUnity.Systems;
 using MonopolyPreUnity.Systems.HSInput;
 using MonopolyPreUnity.Systems.HSInput.Behaviors;
+using MonopolyPreUnity.Systems.HSInput.Behaviors.Debt;
 using MonopolyPreUnity.Systems.HSInput.Behaviors.Trade;
 using MonopolyPreUnity.UI;
 using System;
@@ -19,7 +20,7 @@ namespace MonopolyPreUnity.Modules
         {
             // Request Scenarios
             builder.RegisterType<HSAuctionScenario>().Keyed<IHSRequestScenario>(typeof(AuctionBidRequest));
-            builder.RegisterType<HSBankruptcyScenario>().Keyed<IHSRequestScenario>(typeof(BankruptcyRequest));
+            builder.RegisterType<HSDebtScenario>().Keyed<IHSRequestScenario>(typeof(PayOffDebtRequest));
             builder.RegisterType<HSBuyAuctionScenario>().Keyed<IHSRequestScenario>(typeof(BuyAuctionRequest));
             builder.RegisterType<HSTradeValidationScenario>().Keyed<IHSRequestScenario>(typeof(TradeValidationRequest));
             builder.RegisterType<HSTurnScenario>().Keyed<IHSRequestScenario>(typeof(TurnRequest));
@@ -43,6 +44,10 @@ namespace MonopolyPreUnity.Modules
             builder.RegisterType<HSTradeChooseJailCardsBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChooseJailCards);
             builder.RegisterType<HSTradeChoosePropertiesBehavior>().Keyed<IHSStateBehavior>(HSState.TradeChooseProperties);
             builder.RegisterType<HSTradeValidationBehavior>().Keyed<IHSStateBehavior>(HSState.TradeValidation);
+
+            builder.RegisterType<HSDebtBehavior>().Keyed<IHSStateBehavior>(HSState.Debt);
+            builder.RegisterType<HSDebtChoosePropertyBehavior>().Keyed<IHSStateBehavior>(HSState.DebtChooseProperty);
+            builder.RegisterType<HSDebtChoosePropertyActionBehavior>().Keyed<IHSStateBehavior>(HSState.DebtChoosePropertyAction);
         }
     }
 }
