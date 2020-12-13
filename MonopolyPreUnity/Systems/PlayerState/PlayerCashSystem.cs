@@ -42,8 +42,8 @@ namespace MonopolyPreUnity.Systems
             }
             else
             {
-                Debug.WriteLine($"{player.DisplayName} doesn't have enough money to pay, so now he's got a debt");
-                _context.Add(new PrintLine($"{player.DisplayName} doesn't have enough money to pay, so now he's got a debt",
+                Debug.WriteLine($"{player.DisplayName} doesn't have enough money to pay, so now they've got a debt");
+                _context.Add(new PrintLine($"{player.DisplayName} doesn't have enough money to pay, so now they've got a debt",
                     OutputStream.GameLog));
 
                 if (!EnoughPropertyToPayOff(player, charge.Amount))

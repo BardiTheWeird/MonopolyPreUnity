@@ -9,6 +9,6 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
 {
     interface IAIRequestScenario
     {
-        public void RunScenario(IRequest request, Player player, AiInfo aIInfo);
+        public void RunScenario(IRequest request, Player player, AiInfo aiInfo);
     }
 }

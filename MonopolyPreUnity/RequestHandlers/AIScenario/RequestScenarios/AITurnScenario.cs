@@ -53,6 +53,7 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
                 return;
 
             _context.AddCommand(MonopolyCommand.EndTurn, player);
+            aiInfo.Nullify();
         }
 
         void PropertyActions(Player player, AiInfo aiInfo)

@@ -4,6 +4,7 @@ using MonopolyPreUnity.Components.SystemRequest;
 using MonopolyPreUnity.Components.SystemRequest.Jail;
 using MonopolyPreUnity.Components.SystemRequest.Move;
 using MonopolyPreUnity.Entity;
+using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,17 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario
 {
     static class AIExtensions
     {
+        public static int PropertyAcquisitionSetWeight(this Context context, Player player, int setId)
+        {
+            var set = context.GetPropertySet(setId);
+            var intersection = player.Properties.Intersect(set);
+
+            if (intersection.Count() == 0)
+                return 0;
+
+            return 5 + (intersection.Count() - 1) * 10;
+        }
+
         public static int PriceCashPow(this int price, int cash, int powerBase = 2) =>
             (int)Math.Pow(powerBase, cash / price);
 

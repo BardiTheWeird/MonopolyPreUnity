@@ -204,16 +204,9 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
         #region trade 
         public static bool IsTradable(this Context context, int propertyId) 
         {
-            var prop = context.GetTileComponent<Property>(propertyId);
-            if (prop.IsMortgaged)
-                return false;
-
             var dev = context.GetTileComponent<PropertyDevelopment>(propertyId);
-            if (dev != null)
-            {
-                if (dev.HousesBuilt != 0)
-                    return false;
-            }
+            if (dev != null && dev.HousesBuilt > 0)
+                return false;
             return true;
         }
 

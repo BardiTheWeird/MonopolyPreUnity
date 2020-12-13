@@ -10,6 +10,12 @@ namespace MonopolyPreUnity.Classes
         public bool DidPropertyActionsThisTurn { get; set; }
         public List<int> TradedWithThisTurn { get; set; }
 
+        public void Nullify()
+        {
+            DidPropertyActionsThisTurn = false;
+            TradedWithThisTurn.Clear();
+        }
+
         public AiInfo(ChaosFactor chaosFactor)
         {
             ChaosFactor = chaosFactor;
