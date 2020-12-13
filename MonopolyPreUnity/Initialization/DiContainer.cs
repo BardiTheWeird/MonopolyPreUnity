@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace MonopolyPreUnity.Initialization
@@ -20,24 +21,59 @@ namespace MonopolyPreUnity.Initialization
     static class DiContainer
     {
         #region register scenarios
-        public static void RegisterPlayerScenarios(ContainerBuilder builder, IEnumerable<(Player, ChaosFactor)> players)
+        //public static void RegisterPlayerScenarios(ContainerBuilder builder, IEnumerable<(Player, ChaosFactor)> players)
+        //{
+        //    foreach (var player in players)
+        //    {
+        //        if (player.Item2 == null)
+        //        {
+        //            builder.RegisterType<HSScenario>().Keyed<IPlayerScenario>(player.Item1.Id)
+        //                .WithParameter(new TypedParameter(typeof(Player), player.Item1));
+        //        }
+        //        else
+        //        {
+        //            var parameters = new List<Autofac.Core.Parameter> 
+        //            {
+        //                new TypedParameter(typeof(Player), player.Item1),
+        //                new TypedParameter(typeof(AiInfo), new AiInfo(player.Item2))
+        //            };
+        //            builder.RegisterType<AIScenario>().Keyed<IPlayerScenario>(player.Item1.Id)
+        //                .WithParameters(parameters);
+        //        }
+        //    }
+        //}
+
+        public static void RegisterPlayerScenarios(ContainerBuilder builder, Context context)
         {
-            foreach (var player in players)
+            var regexAINameMatch = @"AIPlayer\d+\sChaos:(\d+)";
+            var groupsToRegister = context.GetComponents<Player>()
+                .GroupBy(player => Regex.IsMatch(player.DisplayName, regexAINameMatch));
+
+            foreach (var group in groupsToRegister)
             {
-                if (player.Item2 == null)
+                // if human players
+                if (group.Key == false)
                 {
-                    builder.RegisterType<HSScenario>().Keyed<IPlayerScenario>(player.Item1.Id)
-                        .WithParameter(new TypedParameter(typeof(Player), player.Item1));
-                }
-                else
-                {
-                    var parameters = new List<Autofac.Core.Parameter> 
+                    foreach (var player in group)
                     {
-                        new TypedParameter(typeof(Player), player.Item1),
-                        new TypedParameter(typeof(AiInfo), new AiInfo(player.Item2))
-                    };
-                    builder.RegisterType<AIScenario>().Keyed<IPlayerScenario>(player.Item1.Id)
-                        .WithParameters(parameters);
+                        builder.RegisterType<HSScenario>().Keyed<IPlayerScenario>(player.Id)
+                            .WithParameter(new TypedParameter(typeof(Player), player));
+                    }
+                }
+                else // if AI
+                {
+                    foreach (var player in group)
+                    {
+                        var chaosFactor = new ChaosFactor(Convert.ToInt32(
+                                Regex.Match(player.DisplayName, regexAINameMatch).Groups[1].Value));
+                        var parameters = new List<Autofac.Core.Parameter>
+                        {
+                            new TypedParameter(typeof(Player), player),
+                            new TypedParameter(typeof(AiInfo), new AiInfo(chaosFactor))
+                        };
+                        builder.RegisterType<AIScenario>().Keyed<IPlayerScenario>(player.Id)
+                            .WithParameters(parameters);
+                    }
                 }
             }
         }
@@ -50,12 +86,7 @@ namespace MonopolyPreUnity.Initialization
             context.Add(new HSInputState());
             builder.RegisterInstance(context);
 
-            var playersToRegister = context.GetComponents<Player>()
-                .Select<Player, (Player, ChaosFactor)>(x => (x, null)).ToList();
-
-            var chaosFactors = new List<ChaosFactor> { new ChaosFactor(0), new ChaosFactor(0) };
-
-            RegisterPlayerScenarios(builder, playersToRegister.Concat(AddAIPlayers(context, chaosFactors)));
+            RegisterPlayerScenarios(builder, context);
 
             builder.RegisterModule<BehaviorsModule>();
             builder.RegisterModule<HSModule>();

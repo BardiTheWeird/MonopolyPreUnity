@@ -28,7 +28,8 @@ namespace MonopolyPreUnity.Initialization
                         new List<int> { 5, 10, 30, 100, 300, 400, 550 }));
 
             mock.AddPlayer("John", cash: 200);
-            mock.AddPlayer("Jake", cash: 200);
+            mock.AddPlayer("AIPlayer1 Chaos:0", cash: 200);
+            // mock.AddPlayer("Jake", cash: 200);
 
             return mock.GetContext();
         }

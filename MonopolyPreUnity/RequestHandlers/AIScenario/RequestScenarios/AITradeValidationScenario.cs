@@ -47,11 +47,10 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
             }
 
             int isPositive = Convert.ToInt32(weight > 0);
-            weight = Math.Abs(weight);
             var weights = new List<(MonopolyCommand, int)>
             {
                 (MonopolyCommand.AcceptOffer, isPositive * weight),
-                (MonopolyCommand.DeclineOffer, (1 - isPositive) * weight)
+                (MonopolyCommand.DeclineOffer, -(1 - isPositive) * weight)
             };
 
             if (weights.ChaosChoice(aiInfo.ChaosFactor) == MonopolyCommand.AcceptOffer)
