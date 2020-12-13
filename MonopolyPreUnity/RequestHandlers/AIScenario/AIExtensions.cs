@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using Weighted_Randomizer;
 
 namespace MonopolyPreUnity.RequestHandlers.AIScenario
 {
@@ -33,20 +32,31 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario
 
         public static T ChaosChoice<T>(this List<(T, int)> commandsWeight, ChaosFactor factor) 
         {
+            // if the bot is not random
             if (factor == 0)
             {
                 var maxWeight = commandsWeight.Max(x => x.Item2);
                 return commandsWeight.First(x => x.Item2 == maxWeight).Item1;
             }
 
+            // calculating the biased weights
             var mean = commandsWeight.Sum(x => x.Item2) / (double)commandsWeight.Count;
             var ratio = Math.Max(factor / 10d, 0.95d);
             var correctedWeights = commandsWeight.Select(x => (x.Item1, x.Item2 + (int)((mean - x.Item2) * ratio)));
 
-            var weightedRand = new StaticWeightedRandomizer<T>(Guid.NewGuid().GetHashCode());
-            commandsWeight.ForEach(x => weightedRand.Add(x.Item1, x.Item2));
+            // choosing the weighted thing
+            var rand = new Random(Guid.NewGuid().GetHashCode());
+            var sum = commandsWeight.Sum(x => x.Item2);
+            var choice = rand.Next(sum);
+            
+            for (int i = 0; i < commandsWeight.Count; i++)
+            {
+                if (choice < commandsWeight[i].Item2)
+                    return commandsWeight[i].Item1;
+                choice -= commandsWeight[i].Item2;
+            }
 
-            return weightedRand.NextWithReplacement();
+            throw new Exception("Could not choose a random weighted value");
         }
 
         public static void AddCommand(this Context context, MonopolyCommand command, Player player)

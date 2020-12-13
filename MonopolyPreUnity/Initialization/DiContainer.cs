@@ -45,7 +45,7 @@ namespace MonopolyPreUnity.Initialization
 
         public static void RegisterPlayerScenarios(ContainerBuilder builder, Context context)
         {
-            var regexAINameMatch = @"AIPlayer\d+\sChaos:(\d+)";
+            var regexAINameMatch = @"(AIPlayer\d+)\sChaos:(\d+)";
             var groupsToRegister = context.GetComponents<Player>()
                 .GroupBy(player => Regex.IsMatch(player.DisplayName, regexAINameMatch));
 
@@ -64,8 +64,10 @@ namespace MonopolyPreUnity.Initialization
                 {
                     foreach (var player in group)
                     {
+                        var match = Regex.Match(player.DisplayName, regexAINameMatch);
                         var chaosFactor = new ChaosFactor(Convert.ToInt32(
-                                Regex.Match(player.DisplayName, regexAINameMatch).Groups[1].Value));
+                            match.Groups[2].Value));
+                        player.DisplayName = match.Groups[1].Value;
                         var parameters = new List<Autofac.Core.Parameter>
                         {
                             new TypedParameter(typeof(Player), player),
