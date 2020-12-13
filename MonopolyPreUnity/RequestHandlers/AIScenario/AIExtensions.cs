@@ -3,6 +3,7 @@ using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest;
 using MonopolyPreUnity.Components.SystemRequest.Jail;
 using MonopolyPreUnity.Components.SystemRequest.Move;
+using MonopolyPreUnity.Components.SystemRequest.PlayerInput;
 using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using MonopolyPreUnity.Utitlity;
@@ -27,8 +28,13 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario
             return 5 + (intersection.Count() - 1) * 10;
         }
 
-        public static int PriceCashPow(this int price, int cash, int powerBase = 2) =>
-            (int)Math.Pow(powerBase, cash / price);
+        public static int PriceCashPow(this int price, int cash, int powerBase = 2, int offset = 0)
+        {
+            if (Math.Log(int.MaxValue, powerBase) <= cash / price)
+                return int.MaxValue;
+
+            return (int)Math.Pow(powerBase, cash / price + offset);
+        }
 
         public static T ChaosChoice<T>(this List<(T, int)> commandsWeight, ChaosFactor factor) 
         {
@@ -79,6 +85,7 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario
                     context.Add(new MoveDice(player.Id));
                     break;
                 case MonopolyCommand.EndTurn:
+                    context.Add(new EndTurn());
                     break;
             }
         }

@@ -33,7 +33,7 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
                             return false;
                         return true;
                         })
-                    .OrderBy(group => group.Key);
+                    .OrderByDescending(group => group.Key);
 
                 // separate groups for withDev and without
                 foreach (var group in availableProperties)
@@ -50,8 +50,11 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
                             {
                                 _context.SellHouse(player, propId);
                                 debtLeft -= dev.HouseSellPrice;
-                                if (debtLeft < 0)
+                                if (debtLeft <= 0)
+                                {
                                     _context.Add(new PaidOffDebt(player.Id));
+                                    return;
+                                }
                             }
                         }
 
@@ -59,8 +62,11 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
                         {
                             _context.Mortgage(player, propId);
                             debtLeft -= (int)(prop.BasePrice * config.MortgageFee);
-                            if (debtLeft < 0)
+                            if (debtLeft <= 0)
+                            {
                                 _context.Add(new PaidOffDebt(player.Id));
+                                return;
+                            }
                         }
                     }
                 }

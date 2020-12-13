@@ -27,7 +27,7 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
                 return;
             }
 
-            var buyWeight = prop.BasePrice.PriceCashPow(player.Cash) 
+            var buyWeight = prop.BasePrice.PriceCashPow(player.Cash, offset: 1) 
                 + _context.PropertyAcquisitionSetWeight(player, prop.SetId);
 
             var weights = new List<(MonopolyCommand, int)>

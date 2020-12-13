@@ -10,6 +10,7 @@ using System.Text;
 using System.Linq;
 using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components.Trade;
+using System.Diagnostics;
 
 namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
 {
@@ -19,6 +20,7 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
 
         public void RunScenario(IRequest request, Player player, AiInfo aiInfo)
         {
+            Debug.WriteLine($"Running the AITurnScenario for {player.DisplayName}");
             var jailCommands = _context.GetAvailableJailCommands(player);
             if (jailCommands.Count > 0)
             {
@@ -52,6 +54,7 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
             if (ProposedTrade(player, aiInfo))
                 return;
 
+            Debug.WriteLine("Got to AddCommand(EndTurn)");
             _context.AddCommand(MonopolyCommand.EndTurn, player);
             aiInfo.Nullify();
         }
@@ -95,26 +98,32 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
             }
 
             // buyHouses
-            foreach (var propId in propIds)
+            var boughtHouses = false;
+            do
             {
-                if (!_context.CanBuildHouse(player, propId))
-                    continue;
-
-                var dev = _context.GetTileComponent<PropertyDevelopment>(propId);
-                if (dev.HouseBuyPrice > availableCash)
-                    continue;
-
-                var weights = new List<(MonopolyCommand, int)>
+                boughtHouses = false;
+                foreach (var propId in propIds)
                 {
-                    (MonopolyCommand.BuyHouse, dev.HouseBuyPrice.PriceCashPow(availableCash)),
-                    (MonopolyCommand.CancelAction, 15)
-                };
-                if (weights.ChaosChoice(aiInfo.ChaosFactor) == MonopolyCommand.CancelAction)
-                    continue;
+                    if (!_context.CanBuildHouse(player, propId))
+                        continue;
 
-                _context.BuyHouse(player, propId);
-                availableCash -= dev.HouseBuyPrice;
-            }
+                    var dev = _context.GetTileComponent<PropertyDevelopment>(propId);
+                    if (dev.HouseBuyPrice > availableCash)
+                        continue;
+
+                    var weights = new List<(MonopolyCommand, int)>
+                    {
+                        (MonopolyCommand.BuyHouse, dev.HouseBuyPrice.PriceCashPow(availableCash)),
+                        (MonopolyCommand.CancelAction, 15)
+                    };
+                    if (weights.ChaosChoice(aiInfo.ChaosFactor) == MonopolyCommand.CancelAction)
+                        continue;
+
+                    _context.BuyHouse(player, propId);
+                    availableCash -= dev.HouseBuyPrice;
+                    boughtHouses = true;
+                }
+            } while (boughtHouses);
 
             aiInfo.DidPropertyActionsThisTurn = true;
         }
