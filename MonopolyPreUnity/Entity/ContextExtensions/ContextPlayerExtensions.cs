@@ -45,15 +45,33 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             return commandList;
         }
 
+        public static List<MonopolyCommand> GetAvailableTurnMoveCommands(this Context context, Player player)
+        {
+            var commandList = new List<MonopolyCommand>();
+            if (player.TurnsInJail == null)
+            {
+                if (player.CanMove)
+                    commandList.Add(MonopolyCommand.MakeMove);
+                else
+                    commandList.Add(MonopolyCommand.EndTurn);
+            }
+            return commandList;
+        }
+
         public static List<MonopolyCommand> GetAvailableJailCommands(this Context context, Player player)
         {
+            var commands = new List<MonopolyCommand>();
+            if (!player.TurnsInJail.HasValue)
+                return commands;
+            if (player.RolledJailDiceThisTurn || !player.CanMove)
+                return commands;
+
             var config = context.GameConfig();
 
             var hasJailCard = player.JailCards > 0;
             var canRoll = !player.RolledJailDiceThisTurn && player.TurnsInJail < config.MaxTurnsInJail;
             var canPay = player.Cash >= config.JailFine;
 
-            var commands = new List<MonopolyCommand>();
             if (hasJailCard) commands.Add(MonopolyCommand.UseJailCard);
             if (canRoll) commands.Add(MonopolyCommand.JailRollDice);
             if (canPay || commands.Count == 0) commands.Add(MonopolyCommand.PayJailFine);

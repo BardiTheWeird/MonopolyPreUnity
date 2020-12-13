@@ -1,5 +1,6 @@
 ﻿
 using Autofac.Features.Indexed;
+using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios;
 using MonopolyPreUnity.Requests;
@@ -13,16 +14,16 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario
     {
         private readonly IIndex<Type, IAIRequestScenario> _index;
         private readonly Player _player;
-        private readonly ChaosFactor _chaosFactor;
+        private readonly AiInfo _aiInfo;
 
         public void HandleRequest(IRequest request) =>
-            _index[request.GetType()].RunScenario(request, _player, _chaosFactor);
+            _index[request.GetType()].RunScenario(request, _player, _aiInfo);
 
-        public AIScenario(IIndex<Type, IAIRequestScenario> index, Player player, ChaosFactor chaosFactor)
+        public AIScenario(IIndex<Type, IAIRequestScenario> index, Player player, AiInfo aiInfo)
         {
             _index = index;
             _player = player;
-            _chaosFactor = chaosFactor;
+            _aiInfo = aiInfo;
         }
     }
 }

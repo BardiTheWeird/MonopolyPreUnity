@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonopolyPreUnity.RequestHandlers.AIScenario
+namespace MonopolyPreUnity.Classes
 {
     class ChaosFactor
     {

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemRequest.HSInput;
 using MonopolyPreUnity.Entity;
@@ -33,7 +34,7 @@ namespace MonopolyPreUnity.Initialization
                     var parameters = new List<Autofac.Core.Parameter> 
                     {
                         new TypedParameter(typeof(Player), player.Item1),
-                        new TypedParameter(typeof(ChaosFactor), player.Item2)
+                        new TypedParameter(typeof(AiInfo), new AiInfo(player.Item2))
                     };
                     builder.RegisterType<AIScenario>().Keyed<IPlayerScenario>(player.Item1.Id)
                         .WithParameters(parameters);

@@ -1,4 +1,5 @@
-﻿using MonopolyPreUnity.Components;
+﻿using MonopolyPreUnity.Classes;
+using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Requests;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
 {
     class AIAuctionScenario : IAIRequestScenario
     {
-        public void RunScenario(IRequest request, Player player, ChaosFactor chaosFactor)
+        public void RunScenario(IRequest request, Player player, AiInfo aIInfo)
         {
             throw new NotImplementedException();
         }
