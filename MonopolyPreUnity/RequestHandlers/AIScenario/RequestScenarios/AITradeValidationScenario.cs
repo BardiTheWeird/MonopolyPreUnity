@@ -25,25 +25,31 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
 
             // the following is really anti-DRY
             // prop acquisition weights
-            var setsIn = offer.InitiatorAssets.Properties
-                .GroupBy(id => _context.GetTileComponent<Property>(id).SetId);
-            foreach (var set in setsIn)
+            if (offer.InitiatorAssets.Properties != null)
             {
-                var ownedSetCardinality = _context.OwnedPropertiesInSet(player, set.Key).Count();
-                var inCardinality = set.Count();
+                var setsIn = offer.InitiatorAssets.Properties
+                    .GroupBy(id => _context.GetTileComponent<Property>(id).SetId);
+                foreach (var set in setsIn)
+                {
+                    var ownedSetCardinality = _context.OwnedPropertiesInSet(player, set.Key).Count();
+                    var inCardinality = set.Count();
 
-                weight += SetWeightSum(ownedSetCardinality + 1, ownedSetCardinality + inCardinality);
+                    weight += SetWeightSum(ownedSetCardinality + 1, ownedSetCardinality + inCardinality);
+                }
             }
 
             // prop giving-away-for-free-to-stupid-players weight
-            var setsOut = offer.ReceiverAssets.Properties
-                .GroupBy(id => _context.GetTileComponent<Property>(id).SetId);
-            foreach (var set in setsOut)
+            if (offer.ReceiverAssets.Properties != null)
             {
-                var ownedSetCardinality = _context.OwnedPropertiesInSet(player, set.Key).Count();
-                var outCardinality = set.Count();
+                var setsOut = offer.ReceiverAssets.Properties
+                    .GroupBy(id => _context.GetTileComponent<Property>(id).SetId);
+                foreach (var set in setsOut)
+                {
+                    var ownedSetCardinality = _context.OwnedPropertiesInSet(player, set.Key).Count();
+                    var outCardinality = set.Count();
 
-                weight -= SetWeightSum(ownedSetCardinality - outCardinality + 1, ownedSetCardinality);
+                    weight -= SetWeightSum(ownedSetCardinality - outCardinality + 1, ownedSetCardinality);
+                }
             }
 
             int isPositive = Convert.ToInt32(weight > 0);
@@ -66,14 +72,17 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
             var cash = assets.Cash;
             cash += assets.JailCards * 50;
 
-            foreach (var propId in assets.Properties)
+            if (assets.Properties != null)
             {
-                var prop = _context.GetTileComponent<Property>(propId);
-                var price = prop.BasePrice;
-                if (prop.IsMortgaged)
-                    cash += (int)(prop.BasePrice * config.MortgageFee);
-                else
-                    cash += prop.BasePrice;
+                foreach (var propId in assets.Properties)
+                {
+                    var prop = _context.GetTileComponent<Property>(propId);
+                    var price = prop.BasePrice;
+                    if (prop.IsMortgaged)
+                        cash += (int)(prop.BasePrice * config.MortgageFee);
+                    else
+                        cash += prop.BasePrice;
+                }
             }
 
             return cash;

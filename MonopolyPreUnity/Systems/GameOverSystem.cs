@@ -8,6 +8,11 @@ using System.Text;
 
 namespace MonopolyPreUnity.Systems
 {
+    class GameOverException : Exception
+    {
+        public GameOverException() : base() { }
+    }
+
     class GameOverSystem : ISystem
     {
         private readonly Context _context;
@@ -31,8 +36,10 @@ namespace MonopolyPreUnity.Systems
                 winnerLine = "No winner is found though. Weird";
             }
 
-            _context.Add(new PrintLine("The game is over. " + winnerLine, OutputStream.GameLog));
+            _context.GameLogString += "The game is over. " + winnerLine + "\n";
+            //_context.Add(new PrintLine("The game is over. " + winnerLine, OutputStream.GameLog));
             _context.Remove(gameOver);
+            throw new GameOverException();
         }
 
         public GameOverSystem(Context context) =>

@@ -31,9 +31,11 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario
         public static int PriceCashPow(this int price, int cash, int powerBase = 2, int offset = 0)
         {
             if (Math.Log(int.MaxValue, powerBase) <= cash / price)
-                return int.MaxValue;
+                return int.MaxValue / 10;
 
-            return (int)Math.Pow(powerBase, cash / price + offset);
+            var result = (int)Math.Pow(powerBase, cash / price + offset);
+
+            return Math.Min(result, int.MaxValue / 10);
         }
 
         public static T ChaosChoice<T>(this IEnumerable<(T, int)> commandsWeights, ChaosFactor factor) 
@@ -65,7 +67,8 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario
                 choice -= pair.Item2;
             }
 
-            throw new Exception("Could not choose a random weighted value");
+            // if somehow the above does not work
+            return commandsWeights.Last().Item1;
         }
 
         public static void AddCommand(this Context context, MonopolyCommand command, Player player)
