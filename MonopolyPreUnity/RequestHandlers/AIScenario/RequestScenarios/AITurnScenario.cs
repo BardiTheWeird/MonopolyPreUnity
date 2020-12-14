@@ -136,7 +136,7 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
 
             var possibleTraders = _context.GetAllPlayers()
                 .Where(p => p.Id != player.Id)
-                .Where(p => !aiInfo.TradedWithThisTurn.Contains(p.Id));
+                .Where(p => !aiInfo.TradeCooldowns.ContainsKey(p.Id));
 
             foreach (var trader in possibleTraders)
             {
@@ -146,12 +146,34 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
                 if (interestingTradables.Count == 0)
                     continue;
 
+                var receiverAssetsSum = interestingTradables.Sum(x => _context.GetTileComponent<Property>(x).BasePrice);
+                if (0.75f * receiverAssetsSum > player.Cash)
+                    continue;
+
                 var receiverAssets = new PlayerAssets(trader.Id, interestingTradables, 0, 0);
-                var initiatorAssets = new PlayerAssets(player.Id, null, 0, 0); // need to work on this, lol
+                var weights = new List<(int, int)>(8);
+                weights.Add((-1, 70));
+
+                for (float coeff = 0.75f; coeff < 1.1f; coeff += 0.05f)
+                {
+                    var moneyGiven = receiverAssetsSum * coeff;
+                    if (moneyGiven > player.Cash)
+                        break;
+
+                    var weight = (int)((coeff - 1) * 120);
+                    weight += (int)(player.Cash / moneyGiven * 25);
+
+                    weights.Add(((int)(moneyGiven), weight));
+                }
+                var choice = weights.ChaosChoice(aiInfo.ChaosFactor);
+                if (choice == -1)
+                    continue;
+
+                var initiatorAssets = new PlayerAssets(player.Id, null, choice, 0);
                 var offer = new TradeOffer(initiatorAssets, receiverAssets);
 
                 _context.Add(offer);
-                aiInfo.TradedWithThisTurn.Add(trader.Id);
+                aiInfo.TradeCooldowns.Add(trader.Id, 4);
 
                 return true;
             }
