@@ -36,30 +36,33 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario
             return (int)Math.Pow(powerBase, cash / price + offset);
         }
 
-        public static T ChaosChoice<T>(this List<(T, int)> commandsWeight, ChaosFactor factor) 
+        public static T ChaosChoice<T>(this IEnumerable<(T, int)> commandsWeights, ChaosFactor factor) 
         {
             // if the bot is not random
             if (factor == 0)
             {
-                var maxWeight = commandsWeight.Max(x => x.Item2);
-                return commandsWeight.First(x => x.Item2 == maxWeight).Item1;
+                var maxWeight = commandsWeights.Max(x => x.Item2);
+                return commandsWeights.First(x => x.Item2 == maxWeight).Item1;
             }
 
             // calculating the biased weights
-            var mean = commandsWeight.Sum(x => x.Item2) / (double)commandsWeight.Count;
-            var ratio = Math.Max(factor / 10d, 0.95d);
-            var correctedWeights = commandsWeight.Select(x => (x.Item1, x.Item2 + (int)((mean - x.Item2) * ratio)));
+            if (factor > 1)
+            {
+                var mean = commandsWeights.Sum(x => x.Item2) / (double)commandsWeights.Count();
+                var ratio = Math.Min((factor - 1) / 10d, 0.85d);
+                commandsWeights = commandsWeights.Select(x => (x.Item1, x.Item2 + (int)((mean - x.Item2) * ratio)));
+            }
 
             // choosing the weighted thing
             var rand = new Random(Guid.NewGuid().GetHashCode());
-            var sum = commandsWeight.Sum(x => x.Item2);
-            var choice = rand.Next(sum);
+            var sum = commandsWeights.Sum(x => x.Item2);
             
-            for (int i = 0; i < commandsWeight.Count; i++)
+            var choice = rand.Next(sum);
+            foreach (var pair in commandsWeights)
             {
-                if (choice < commandsWeight[i].Item2)
-                    return commandsWeight[i].Item1;
-                choice -= commandsWeight[i].Item2;
+                if (choice < pair.Item2)
+                    return pair.Item1;
+                choice -= pair.Item2;
             }
 
             throw new Exception("Could not choose a random weighted value");
