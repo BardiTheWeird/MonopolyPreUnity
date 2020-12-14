@@ -10,6 +10,7 @@ using MonopolyPreUnity.Initialization;
 using MonopolyPreUnity.Modules;
 using MonopolyPreUnity.RequestHandlers;
 using MonopolyPreUnity.RequestHandlers.HSScenario;
+using MonopolyPreUnity.Systems;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,34 +27,21 @@ namespace MonopolyPreUnity
     {
         static void Main(string[] args)
         {
-            //var config = new GameConfig(@"..\..\..\Resources\defaultGameConfig.xml");
-            //var context = new Context();
-
-            //IContainer container;
-            //try
-            //{
-            //    container = DiContainer.CreateDiContainer(context);
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine($"Startup error:\n" + e);
-
-            //    Environment.Exit(-1);
-            //    return;
-            //}
-
-            //var gameManager = container.Resolve<GameManager>();
-            //gameManager.StartGame();
         }
 
         public static async Task RunSystemsContinuousAsync(SystemsBag systemsBag)
         {
+
             while (true)
             {
                 try
                 {
                     systemsBag.Execute();
                     await Task.Delay(1);
+                }
+                catch (GameOverException e)
+                {
+                    break;
                 }
                 catch (Exception e)
                 {

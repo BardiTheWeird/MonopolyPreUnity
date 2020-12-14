@@ -55,12 +55,15 @@ namespace MonopolyPreUnity.Systems
             receiver.JailCards += assets.JailCards;
             sender.JailCards -= assets.JailCards;
 
-            foreach (var propId in assets.Properties)
+            if (assets.Properties != null)
             {
-                var prop = _context.GetTileComponent<Property>(propId);
-                prop.OwnerId = receiver.Id;
-                receiver.Properties.Add(propId);
-                sender.Properties.Remove(propId);
+                foreach (var propId in assets.Properties)
+                {
+                    var prop = _context.GetTileComponent<Property>(propId);
+                    prop.OwnerId = receiver.Id;
+                    receiver.Properties.Add(propId);
+                    sender.Properties.Remove(propId);
+                }
             }
         }
         #endregion

@@ -102,81 +102,109 @@ namespace GameInterface
 
         void ExecuteCheatCode(string input)
         {
-            var codeMatch = Regex.Match(input, CheatCodeFormat);
-            var command = codeMatch.Groups[1].Value;
-            var parameter1 = codeMatch.Groups[2].Value;
-            var parameter2 = codeMatch.Groups[3].Value;
-
-            Context.Add(new PrintLine($"Cheat code to be executed: {command} {parameter1} {parameter2}",
-                OutputStream.GameLog));
-
-            string errorMessage = null;
-            var executed = false;
-
-            switch (command.ToLower())
+            foreach (var line in input.Split('\n'))
             {
-                case "givecash":
-                    var player = NameToPlayer(parameter1);
-                    if (player == null)
-                    {
-                        errorMessage = $"No player named {parameter1} found";
-                        break;
-                    }
-                    if (!int.TryParse(parameter2, out var amount))
-                    {
-                        errorMessage = $"Couldn't convert {parameter2} to integer";
-                        break;
-                    }
+                var codeMatch = Regex.Match(line, CheatCodeFormat);
+                var command = codeMatch.Groups[1].Value;
+                var parameter1 = codeMatch.Groups[2].Value;
+                var parameter2 = codeMatch.Groups[3].Value;
 
-                    Context.Add(new GiveCash(amount, player.Id, "cheetah"));
-                    executed = true;
-                    break;
+                Context.Add(new PrintLine($"Cheat code to be executed: {command} {parameter1} {parameter2}",
+                    OutputStream.GameLog));
 
-                case "chargecash":
-                    player = NameToPlayer(parameter1);
-                    if (player == null)
-                    {
-                        errorMessage = $"No player named {parameter1} found";
+                string errorMessage = null;
+                var executed = false;
+
+                switch (command.ToLower())
+                {
+                    case "givecash":
+                        var player = NameToPlayer(parameter1);
+                        if (player == null)
+                        {
+                            errorMessage = $"No player named {parameter1} found";
+                            break;
+                        }
+                        if (!int.TryParse(parameter2, out var amount))
+                        {
+                            errorMessage = $"Couldn't convert {parameter2} to integer";
+                            break;
+                        }
+
+                        Context.Add(new GiveCash(amount, player.Id, "cheetah"));
+                        executed = true;
                         break;
-                    }
-                    if (!int.TryParse(parameter2, out amount))
-                    {
-                        errorMessage = $"Couldn't convert {parameter2} to integer";
+
+                    case "chargecash":
+                        player = NameToPlayer(parameter1);
+                        if (player == null)
+                        {
+                            errorMessage = $"No player named {parameter1} found";
+                            break;
+                        }
+                        if (!int.TryParse(parameter2, out amount))
+                        {
+                            errorMessage = $"Couldn't convert {parameter2} to integer";
+                            break;
+                        }
+
+                        Context.Add(new ChargeCash(amount, player.Id, message: "cheetah"));
+                        Context.HSInputState().Nullify();
+                        Context.Add(new ClearOutput());
+                        Context.RemoveInterface<IHSRequest>();
+                        executed = true;
                         break;
-                    }
 
-                    Context.Add(new ChargeCash(amount, player.Id, message: "cheetah"));
-                    Context.HSInputState().Nullify();
-                    Context.Add(new ClearOutput());
-                    Context.RemoveInterface<IHSRequest>();
-                    executed = true;
-                    break;
+                    case "transferproperty":
+                        var tileId = NameToPropertyId(parameter1);
+                        if (!tileId.HasValue)
+                        {
+                            errorMessage = $"No property named {parameter1} found";
+                            break;
+                        }
+                        player = NameToPlayer(parameter2);
+                        if (player == null)
+                        {
+                            errorMessage = $"No player named {parameter2} found";
+                        }
 
-                case "transferproperty":
-                    var tileId = NameToPropertyId(parameter1);
-                    if (!tileId.HasValue) 
-                    {
-                        errorMessage = $"No property named {parameter1} found";
+                        Context.Add(new PropertyTransferRequest(tileId.Value, player.Id));
+                        executed = true;
                         break;
-                    }
-                    player = NameToPlayer(parameter2);
-                    if (player == null)
-                    {
-                        errorMessage = $"No player named {parameter2} found";
-                    }
 
-                    Context.Add(new PropertyTransferRequest(tileId.Value, player.Id));
-                    executed = true;
-                    break;
+                    case "buildhouses":
+                        var propId = NameToPropertyId(parameter1);
+                        if (!propId.HasValue)
+                        {
+                            errorMessage = $"No property named {parameter1} found";
+                            break;
+                        }
+                        var dev = Context.GetTileComponent<PropertyDevelopment>(propId.Value);
+                        if (dev == null)
+                        {
+                            errorMessage = $"{parameter1} doesn't contain a PropertyDevelopmentComponent";
+                            break;
+                        }
+                        if (!int.TryParse(parameter2, out var additionalHouses))
+                        {
+                            errorMessage = $"{parameter2} is not an integer";
+                            break;
+                        }
+                        dev.HousesBuilt = Math.Min(dev.HousesBuilt + additionalHouses, dev.HouseCap);
+
+                        executed = true;
+                        Context.Add(new PrintFormattedLine($"{additionalHouses} were built on |tile:{propId.Value}|; " +
+                            $"total houses built: {dev.HousesBuilt}", OutputStream.GameLog));
+                        break;
+                }
+
+                if (!executed)
+                {
+                    errorMessage = errorMessage ?? $"Command {command} not found";
+                    _context.Add(new PrintLine($"Code couldn't be executed: {errorMessage}", OutputStream.GameLog));
+                }
+                else
+                    _context.Add(new PrintLine($"Code executed", OutputStream.GameLog));
             }
-
-            if (!executed)
-            {
-                errorMessage = errorMessage ?? $"Command {command} not found";
-                _context.Add(new PrintLine($"Code couldn't be executed: {errorMessage}", OutputStream.GameLog));
-            }
-            else
-                _context.Add(new PrintLine($"Code executed", OutputStream.GameLog));
         }
 
         Player NameToPlayer(string name) =>

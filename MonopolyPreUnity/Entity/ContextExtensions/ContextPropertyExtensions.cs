@@ -36,6 +36,20 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             player.Properties
             .Intersect(context.GetPropertySet(setId))
             .ToHashSet();
+
+        public static HashSet<int> OwnedSets(this Context context, Player player) =>
+            player.Properties
+            .Select(id => context.GetTileComponent<Property>(id).SetId)
+            .Distinct()
+            .Where(setId => context.FullSetOwned(player, setId))
+            .ToHashSet();
+
+        public static HashSet<int> SetsMissingProperties(this Context context, Player player, int amount = 1) =>
+            player.Properties
+                .GroupBy(propId => context.GetTileComponent<Property>(propId).SetId)
+                .Where(group => context.GetPropertySet(group.Key).Count - group.Count() <= amount)
+                .Select(group => group.Key)
+                .ToHashSet();
         #endregion
 
         #region available actions
@@ -98,6 +112,9 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
 
             // if maximum difference between two HousesBuilt after building a house is <= 1
             var dev = context.GetTileComponent<PropertyDevelopment>(propId);
+            if (dev.HouseBuyPrice > player.Cash)
+                return false;
+
             var minHousesInSet = context.GetPropertySetPropId(propId)
                 .Select(id => context.GetTileComponent<PropertyDevelopment>(id))
                 .Min(dev => dev.HousesBuilt);
@@ -187,16 +204,9 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
         #region trade 
         public static bool IsTradable(this Context context, int propertyId) 
         {
-            var prop = context.GetTileComponent<Property>(propertyId);
-            if (prop.IsMortgaged)
-                return false;
-
             var dev = context.GetTileComponent<PropertyDevelopment>(propertyId);
-            if (dev != null)
-            {
-                if (dev.HousesBuilt != 0)
-                    return false;
-            }
+            if (dev != null && dev.HousesBuilt > 0)
+                return false;
             return true;
         }
 

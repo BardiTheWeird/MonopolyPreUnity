@@ -8,7 +8,7 @@ namespace MonopolyPreUnity.Components
     class Player : IIdentifiable
     {
         public int Id { get; }
-        public string DisplayName { get; }
+        public string DisplayName { get; set; }
         public int Cash { get; set; }
         public int JailCards { get; set; }
         public int? TurnsInJail { get; set; }

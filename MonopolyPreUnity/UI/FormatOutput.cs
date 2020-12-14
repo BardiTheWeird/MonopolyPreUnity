@@ -364,6 +364,9 @@ namespace MonopolyPreUnity.UI
         #region misc
         public string GetStringOfListOfItems<T>(List<T> list, Func<T, string> valToString, bool indexate)
         {
+            if (list == null)
+                return "";
+
             var sb = new StringBuilder();
             for (int i = 0; i < list.Count; i++)
             {
