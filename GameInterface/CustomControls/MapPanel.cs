@@ -16,11 +16,14 @@ namespace GameInterface.CustomControls
 
         protected override Size MeasureOverride(Size availableSize)
         {
-            return availableSize;
+            var minSide = Math.Min(availableSize.Width, availableSize.Height);
+            return new Size(minSide, minSide);
         }
 
         protected override Size ArrangeOverride(Size finalSize)
         {
+            var minSide = Math.Min(finalSize.Width, finalSize.Height);
+            finalSize = new Size(minSide, minSide);
             foreach (UIElement child in InternalChildren)
             {
                 child.Arrange(new Rect(new Point(0, 0), finalSize));
