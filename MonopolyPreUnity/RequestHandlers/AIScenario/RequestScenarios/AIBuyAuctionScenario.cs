@@ -17,7 +17,6 @@ namespace MonopolyPreUnity.RequestHandlers.AIScenario.RequestScenarios
 
         public void RunScenario(IRequest request, Player player, AiInfo aiInfo)
         {
-            var baRequest = request as BuyAuctionRequest;
             var propId = (request as BuyAuctionRequest).PropertyId;
             var prop = _context.GetTileComponent<Property>(propId);
 

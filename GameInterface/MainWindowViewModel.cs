@@ -195,6 +195,15 @@ namespace GameInterface
                         Context.Add(new PrintFormattedLine($"{additionalHouses} were built on |tile:{propId.Value}|; " +
                             $"total houses built: {dev.HousesBuilt}", OutputStream.GameLog));
                         break;
+
+                    case "printplayersleft":
+                        _context.Add(new ClearOutput());
+                        var choice = Convert.ToInt32(parameter1) == 0;
+                        if (choice)
+                            _context.Add(new PrintLine($"{_context.TurnInfo().PlayersLeft} players left", OutputStream.HSInputLog));
+                        else
+                            _context.Add(new PrintGameStatus());
+                        break;
                 }
 
                 if (!executed)

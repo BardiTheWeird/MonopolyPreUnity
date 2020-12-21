@@ -27,11 +27,8 @@ namespace MonopolyPreUnity.Initialization
             mock.AddTile("Property 4 Set 2", new Property(2, 90), new PropertyDevelopment(50,
                         new List<int> { 5, 10, 30, 100, 300, 400, 550 }));
 
-            //mock.AddPlayer("John", cash: 200);
-            mock.AddPlayer("AIPlayer1 Chaos:1", cash: 200);
+            mock.AddPlayer("John", cash: 200);
             mock.AddPlayer("AIPlayer2 Chaos:4", cash: 200);
-            mock.AddPlayer("AIPlayer3 Chaos:7", cash: 200);
-            // mock.AddPlayer("Jake", cash: 200);
 
             return mock.GetContext();
         }

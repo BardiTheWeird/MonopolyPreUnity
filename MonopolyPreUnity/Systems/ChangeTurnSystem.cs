@@ -25,7 +25,7 @@ namespace MonopolyPreUnity.Systems
             curTurnPlayer.CanMove = true;
             curTurnPlayer.RolledJailDiceThisTurn = false;
 
-            _context.Add(new ClearOutput());
+            //_context.Add(new ClearOutput());
             _context.Add(new PrintFormattedLine
                 ($"Next turn. It's time for |player:{turnInfo.CurTurnPlayerId}| to make a move!", OutputStream.GameLog));
 
