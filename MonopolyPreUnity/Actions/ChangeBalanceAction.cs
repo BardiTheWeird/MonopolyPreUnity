@@ -8,9 +8,14 @@ namespace MonopolyPreUnity.Actions
     {
         public int Amount { get; set; }
 
-        public ChangeBalanceAction(int amount)
+        public string Descsription { get; set; }
+
+        public ChangeBalanceAction(int amount) => Amount = amount;
+
+        public ChangeBalanceAction(int amount, string description)
         {
             Amount = amount;
+            Descsription = description;
         }
     }
 }

@@ -27,6 +27,8 @@ namespace MonopolyPreUnity
     {
         static void Main(string[] args)
         {
+            GameConfig gameConfig = GameConfigMaker.DefaultGameConfig();
+            MockContext.ParseDefaultMap(gameConfig, null);
         }
 
         public static async Task RunSystemsContinuousAsync(SystemsBag systemsBag)

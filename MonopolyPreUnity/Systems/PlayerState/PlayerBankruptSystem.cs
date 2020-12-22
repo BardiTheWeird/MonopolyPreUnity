@@ -32,6 +32,7 @@ namespace MonopolyPreUnity.Systems
             var turnInfo = _context.TurnInfo();
             int curTurnOrderPosition = turnInfo.TurnOrder.FindIndex(x => x == player.Id);
             turnInfo.TurnOrder.RemoveAt(curTurnOrderPosition);
+            _context.PlayerObservables.RemoveAt(curTurnOrderPosition);
 
             if (curTurnOrderPosition < turnInfo.CurTurnPlayer || curTurnOrderPosition == turnInfo.CurTurnPlayer)
             {

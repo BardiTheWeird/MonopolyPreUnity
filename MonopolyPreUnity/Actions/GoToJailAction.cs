@@ -6,5 +6,13 @@ namespace MonopolyPreUnity.Actions
 {
     class GoToJailAction : IMonopolyAction
     {
+        public string Descsription { get; set; }
+
+        public GoToJailAction() { }
+
+        public GoToJailAction(string description)
+        {
+            Descsription = description;
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using DataSaving;
+using MonopolyPreUnity.Classes;
 using MonopolyPreUnity.Components;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -13,6 +15,11 @@ namespace MonopolyPreUnity.Entity
         public List<Entity> Entities { get; set; }
 
         public Logger Logger { get; set; }
+
+        #region wpf connection
+        public ObservableCollection<PlayerObservable> PlayerObservables { get; set; } 
+            = new ObservableCollection<PlayerObservable>();
+        #endregion
 
         #region I/O strings
         string _gameLogString = "";
