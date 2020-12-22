@@ -6,5 +6,6 @@ namespace MonopolyPreUnity.Actions
 {
     interface IMonopolyAction
     {
+        public string Descsription { get; set; }
     }
 }
