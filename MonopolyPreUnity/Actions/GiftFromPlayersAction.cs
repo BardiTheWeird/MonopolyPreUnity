@@ -8,9 +8,13 @@ namespace MonopolyPreUnity.Actions
     {
         public int Amount { get; set; }
 
-        public GiftFromPlayersAction(int amount)
+        public string Descsription { get; set; }
+
+        public GiftFromPlayersAction(int amount, string description)
         {
             Amount = amount;
+            Descsription = description;
+
         }
     }
 }
