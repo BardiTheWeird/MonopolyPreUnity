@@ -14,4 +14,8 @@
     <ProjectReference Include="..\MonopolyPreUnity\MonopolyPreUnity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Themes\" />
+  </ItemGroup>
+
 </Project>

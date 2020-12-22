@@ -25,8 +25,7 @@ namespace DataSaving
         public void ClearOutputLog() =>
             File.WriteAllText(OutputLogPath + CurLogFileName, "");
 
-        public void AppendLine(string log) =>
-            File.AppendAllText(OutputLogPath + CurLogFileName, log);
+        public void AppendLine(string log) { }
         #endregion
 
         #region misc
@@ -49,8 +48,10 @@ namespace DataSaving
         #endregion
 
         #region ctor
+        /*
         public Logger() =>
             CurLogFileName = GetNextFilename(OutputLogPath, "Log", "txt");
+        */
         #endregion
     }
 }
