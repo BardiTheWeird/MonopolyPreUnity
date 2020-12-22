@@ -10,6 +10,8 @@ using System.Text;
 using System.Data;
 using LumenWorks.Framework.IO.Csv;
 using System.IO;
+using MonopolyPreUnity.Entity.ContextExtensions;
+using System.Collections.ObjectModel;
 
 namespace MonopolyPreUnity.Classes
 {
@@ -146,6 +148,14 @@ namespace MonopolyPreUnity.Classes
             SetStartTile(mapInfo.GoId ?? 1);
 
             Context.AddEntities(CreateTurnInfo(), mapInfo, CreateDice(), new GameStart());
+
+            Context.PlayerObservables = new ObservableCollection<PlayerObservable>(
+                Context
+                .TurnInfo()
+                .TurnOrder
+                .Select(x => Context.GetPlayer(x))
+                .Select(x => new PlayerObservable(x, false)));
+
             return Context;
         }
         #endregion

@@ -14,8 +14,6 @@ namespace MonopolyPreUnity.Components
         public int? TurnsInJail { get; set; }
         public int CurTileId { get; set; }
         public bool CanMove { get; set; }
-        public bool IsBankrupt { get; set; }
-        public bool IsWinner { get; set; }
         public bool RolledJailDiceThisTurn { get; set; }
         public HashSet<int> Properties { get; }
 

@@ -20,7 +20,11 @@ namespace MonopolyPreUnity.Systems
                 return;
 
             var turnInfo = _context.TurnInfo();
+            _context.PlayerObservables[turnInfo.CurTurnPlayer].IsCurTurn = false;
+
             turnInfo.CurTurnPlayer = (turnInfo.CurTurnPlayer + 1) % turnInfo.TurnOrder.Count;
+            _context.PlayerObservables[turnInfo.CurTurnPlayer].IsCurTurn = true;
+
             var curTurnPlayer = _context.GetPlayer(turnInfo.CurTurnPlayerId);
             curTurnPlayer.CanMove = true;
             curTurnPlayer.RolledJailDiceThisTurn = false;

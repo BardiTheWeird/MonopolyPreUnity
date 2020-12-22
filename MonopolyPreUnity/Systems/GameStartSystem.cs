@@ -23,6 +23,7 @@ namespace MonopolyPreUnity.Systems
 
             _context.Add(new PrintLine("Hooray! The game has started!", OutputStream.GameLog));
             _context.Add(new PrintFormattedLine($"|player:{turnInfo.CurTurnPlayerId}| begins the game", OutputStream.GameLog));
+            _context.PlayerObservables[turnInfo.CurTurnPlayer].IsCurTurn = true;
 
             _context.Remove(gameStart);
         }
