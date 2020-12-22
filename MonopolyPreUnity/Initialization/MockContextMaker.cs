@@ -1,11 +1,15 @@
 ﻿using MonopolyPreUnity.Components;
 using MonopolyPreUnity.Components.SystemState;
 using MonopolyPreUnity.Entity;
+using MonopolyPreUnity.Actions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Data;
+using LumenWorks.Framework.IO.Csv;
+using System.IO;
 
 namespace MonopolyPreUnity.Classes
 {
@@ -14,6 +18,66 @@ namespace MonopolyPreUnity.Classes
         Context Context { get; set; }
         GameConfig Config { get; set; }
         int MapSize { get; set; }
+
+        public static List<IMonopolyAction> GetActionBoxList(string path)
+        {
+            var actionsTable = new DataTable();
+            using (var csv = new CsvReader(new StreamReader(File.OpenRead(path)), false))
+            {
+                actionsTable.Load(csv);
+            }
+
+            var raw = new List<(string, string, string)>();
+            for (int i = 0; i < actionsTable.Rows.Count; i++)
+            {
+                string description = actionsTable.Rows[i][0].ToString().Trim().Replace(';', ',');
+                string keyword = actionsTable.Rows[i][1].ToString().Trim();
+                string additionalInfo = actionsTable.Rows[i][2].ToString().Trim();
+
+                raw.Add((description, keyword, additionalInfo));
+
+            }
+
+            var actionBoxList = new List<IMonopolyAction>();
+            foreach((string, string, string) action in raw)
+            {
+                switch(action.Item2)
+                {
+                    case "change_balance":
+                        actionBoxList.Add(new ChangeBalanceAction(int.Parse(action.Item3), action.Item1));
+                        break;
+
+                    case "gotojail":
+                        actionBoxList.Add(new GoToJailAction(action.Item1));
+                        break;
+
+                    case "gototileid":
+                        actionBoxList.Add(new GoToTileIdAction(int.Parse(action.Item3), action.Item1));
+                        break;
+
+                    case "giftfrompalyers":
+                        actionBoxList.Add(new GiftFromPlayersAction(int.Parse(action.Item3), action.Item1));
+                        break;
+
+                    case "freeparking":
+                        actionBoxList.Add(new GoToTileComponentAction(typeof(FreeParking), action.Item1));
+                        break;
+
+                    case "start":
+                        actionBoxList.Add(new GoToTileComponentAction(typeof(Go), action.Item1));
+                        break;
+
+                    case "jailcard":
+                        actionBoxList.Add(new JailCardAction(action.Item1));
+                        break;
+
+                    case "taxperhouse":
+                        actionBoxList.Add(new TaxPerHouseAction(int.Parse(action.Item2), action.Item1));
+                        break;
+                }
+            }
+            return actionBoxList;
+        }
 
         #region add stuff
         public void AddPlayer(string name, int cash = 600, int jailCards = 0, 

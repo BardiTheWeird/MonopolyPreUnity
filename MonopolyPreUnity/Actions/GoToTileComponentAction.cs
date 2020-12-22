@@ -9,9 +9,12 @@ namespace MonopolyPreUnity.Actions
     {
         public Type ComponentType { get; set; }
 
-        public GoToTileComponentAction(Type componentType)
+        public string Descsription { get; set; }
+
+        public GoToTileComponentAction(Type componentType, string description)
         {
             ComponentType = componentType;
+            Descsription = description;
         }
     }
 }
