@@ -17,7 +17,7 @@
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height=".15*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -26,10 +26,10 @@
             <ColumnDefinition Width="3.5*"/>
         </Grid.ColumnDefinitions>
 
-        <customcontrols:MapPanel Margin="10" 
+        <customcontrols:MapPanel Margin="-15" 
                                  Grid.Row="0" Grid.Column="0"
                                  Grid.RowSpan="3" Grid.ColumnSpan="1">
-            <customcontrols:Map >
+            <customcontrols:Map x:Name="Map">
             </customcontrols:Map>
         </customcontrols:MapPanel>
 
@@ -37,6 +37,11 @@
                  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="10"
                  Text="{Binding Context.GameLogString}" IsReadOnly="True">
         </customcontrols:ScrollingTextBox>-->
+
+        <customcontrols:CurTileView Grid.Row="0" Grid.Column="1"
+                                    PointClicked="{Binding ElementName=Map, Path=PointClicked, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ClickedTileId="{Binding ElementName=Map, Path=ClickedTileId, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+        </customcontrols:CurTileView>
 
         <customcontrols:ScrollingTextBox x:Name="HSLog" Margin="10"
                  Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="1"
