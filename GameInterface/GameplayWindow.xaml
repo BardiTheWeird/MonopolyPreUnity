@@ -38,7 +38,8 @@
                  Text="{Binding Context.GameLogString}" IsReadOnly="True">
         </customcontrols:ScrollingTextBox>-->
 
-        <customcontrols:CurTileView Grid.Row="0" Grid.Column="1"
+        <customcontrols:CurTileView Margin="10 0 0 0"
+                                    Grid.Row="0" Grid.Column="1"
                                     PointClicked="{Binding ElementName=Map, Path=PointClicked, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                     ClickedTileId="{Binding ElementName=Map, Path=ClickedTileId, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         </customcontrols:CurTileView>
