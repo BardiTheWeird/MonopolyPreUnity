@@ -39,7 +39,7 @@ namespace MonopolyPreUnity.Initialization
         }
 
 
-        public static Context ParseDefaultMap(GameConfig gameConfig,List<IMonopolyAction> actions)
+        public static MockContextMaker ParseDefaultMap(GameConfig gameConfig,List<IMonopolyAction> actions)
         {
             var commandTable = new DataTable();
             var mock = new MockContextMaker(gameConfig);
@@ -48,6 +48,7 @@ namespace MonopolyPreUnity.Initialization
                 commandTable.Load(csvReader);
             }
             int set = 0;
+            int price = 0;
             int pricePerHouse = 0;
             List<int> rent = null; 
 
@@ -56,7 +57,11 @@ namespace MonopolyPreUnity.Initialization
                 #region variables
                 string name = commandTable.Rows[i][0].ToString().Trim();
                 string type = commandTable.Rows[i][1].ToString().Trim();
-                int price = Convert.ToInt32(commandTable.Rows[i][2].ToString().Trim());
+                string temp_str = commandTable.Rows[i][2].ToString().Trim();
+                if (temp_str.Length > 0)
+                {
+                    price = Convert.ToInt32(commandTable.Rows[i][2].ToString().Trim());
+                }
                 if (type == "Dev") {
                     set = Convert.ToInt32(commandTable.Rows[i][3].ToString().Trim());
                     pricePerHouse = Convert.ToInt32(commandTable.Rows[i][4].ToString().Trim());
@@ -106,7 +111,7 @@ namespace MonopolyPreUnity.Initialization
                         break;
                 }
             }
-            return mock.GetContext();
+            return mock;
         }
 
 
