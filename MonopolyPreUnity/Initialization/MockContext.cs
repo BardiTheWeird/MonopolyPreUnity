@@ -15,7 +15,8 @@ namespace MonopolyPreUnity.Initialization
 
     static class MockContext
     {
-        private static readonly string csvFilePath = "MonTable.csv";
+        private static readonly string csvFilePath = @"..\..\..\..\MonopolyPreUnity\Resources\MonTable.csv";
+        private static readonly string csvActionsPath = @"..\..\..\..\MonopolyPreUnity\Resources\actions.csv";
         #region MockData
          
        
@@ -42,11 +43,11 @@ namespace MonopolyPreUnity.Initialization
         }
 
 
-        public static MockContextMaker ParseDefaultMap(GameConfig gameConfig,List<IMonopolyAction> actions)
+        public static MockContextMaker ParseDefaultMap(GameConfig gameConfig, List<IMonopolyAction> actions)
         {
             var commandTable = new DataTable();
             var mock = new MockContextMaker(gameConfig);
-            using (var csvReader = new CsvReader(new StreamReader(System.IO.File.OpenRead(csvFilePath)), true))
+            using (var csvReader = new CsvReader(new StreamReader(File.OpenRead(csvFilePath)), true))
             {
                 commandTable.Load(csvReader);
             }
@@ -117,7 +118,16 @@ namespace MonopolyPreUnity.Initialization
             return mock;
         }
 
+        public static Context CreateDefaultMapContext()
+        {
+            var actionList = MockContextMaker.GetActionBoxList(csvActionsPath);
+            var mock = ParseDefaultMap(GameConfigMaker.DefaultGameConfig(), actionList);
 
+            mock.AddPlayer("John", cash: 200);
+            mock.AddPlayer("AIPlayer2 Chaos:4", cash: 200);
+
+            return mock.GetContext();
+        }
 
         public static Context CreateMockDataSmallTest() =>
             CreateMockDataSmallTest(GameConfigMaker.DefaultGameConfig());

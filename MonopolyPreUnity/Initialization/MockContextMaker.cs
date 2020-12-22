@@ -72,7 +72,7 @@ namespace MonopolyPreUnity.Classes
                         break;
 
                     case "taxperhouse":
-                        actionBoxList.Add(new TaxPerHouseAction(int.Parse(action.Item2), action.Item1));
+                        actionBoxList.Add(new TaxPerHouseAction(int.Parse(action.Item3), action.Item1));
                         break;
                 }
             }

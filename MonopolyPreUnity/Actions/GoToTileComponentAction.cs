@@ -11,6 +11,8 @@ namespace MonopolyPreUnity.Actions
 
         public string Descsription { get; set; }
 
+        GoToTileComponentAction(Type componentType) => ComponentType = componentType;
+
         public GoToTileComponentAction(Type componentType, string description)
         {
             ComponentType = componentType;
