@@ -9,6 +9,7 @@ namespace MonopolyPreUnity.Classes
     {
         #region fields
         bool _playersMoved;
+        bool _houseChanged;
         #endregion
 
         #region properties
@@ -23,15 +24,19 @@ namespace MonopolyPreUnity.Classes
                 RaisePropertyChanged(nameof(PlayersMoved));
             }
         }
-        #endregion
 
-        public void Nullify()
+        public bool HouseChanged
         {
-            PlayersMoved = false;
+            get => _houseChanged;
+            set
+            {
+                if (value == _houseChanged)
+                    return;
+                _houseChanged = value;
+                RaisePropertyChanged(nameof(HouseChanged));
+            }
         }
-
-        public bool IsNull =>
-            PlayersMoved == false;
+        #endregion
 
         #region propertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

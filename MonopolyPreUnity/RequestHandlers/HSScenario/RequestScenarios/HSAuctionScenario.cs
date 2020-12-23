@@ -22,9 +22,9 @@ namespace MonopolyPreUnity.RequestHandlers.HSScenario
 
         public void RunScenario(IRequest requestIn, Player player)
         {
-            Debug.WriteLine("So we're chilling in the RunScenario for AuctionScenario atm");
+            //Debug.WriteLine("So we're chilling in the RunScenario for AuctionScenario atm");
             var auctionInfo = _context.AuctionInfo();
-            var maxBidAmount = player.Cash - auctionInfo.AmountBid;
+            var maxBidAmount = Math.Max(0, player.Cash - auctionInfo.AmountBid);
 
             _context.Add(new PrintFormattedLine($"|player:{player.Id}|, " +
                 $"choose an mount to bid (write 0 to withdraw from the auction)", OutputStream.HSInputLog));

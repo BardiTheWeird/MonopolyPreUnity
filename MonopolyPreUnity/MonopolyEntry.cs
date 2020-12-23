@@ -31,7 +31,7 @@ namespace MonopolyPreUnity
             MockContext.ParseDefaultMap(gameConfig, null);
         }
 
-        public static async Task RunSystemsContinuousAsync(SystemsBag systemsBag, RenderCommunications renderCommunications)
+        public static async Task RunSystemsContinuousAsync(SystemsBag systemsBag)
         {
 
             while (true)

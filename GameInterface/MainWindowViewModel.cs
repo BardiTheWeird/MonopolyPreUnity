@@ -23,7 +23,7 @@ namespace GameInterface
     class MainWindowViewModel : INotifyPropertyChanged
     {
         #region static fields
-        static string CheatCodeFormat = @"(\w+)\s+" + "\"" + @"([A-z0-9\s]+)" + "\"" + @"\s+" + "\"" + @"([A-z0-9\s]+)" + "\"";
+        static string CheatCodeFormat = @"(\w+)\s+" + "\"" + @"([A-z0-9\s\p{L}]+)" + "\"" + @"\s+" + "\"" + @"([A-z0-9\s]+)" + "\"";
         #endregion
 
         #region Properties
@@ -92,7 +92,7 @@ namespace GameInterface
             }, x => IsCheatCodeFormat(InputText));
 
             _backgroundWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
-            _backgroundWorker.DoWork += (x, y) => MonopolyEntry.RunSystemsContinuousAsync(SysBag, Context.RenderCommunications);
+            _backgroundWorker.DoWork += (x, y) => MonopolyEntry.RunSystemsContinuousAsync(SysBag);
             _backgroundWorker.RunWorkerAsync();
         }
         #endregion

@@ -94,7 +94,7 @@ namespace MonopolyPreUnity.Initialization
                         mock.AddTile(name, new ActionTile(new ChangeBalanceAction(price)));
                         break;
                     case "NoDev":
-                        mock.AddTile(name, new Property(set,price),new UtilityProperty());
+                        mock.AddTile(name, new Property(11,price),new UtilityProperty());
                         break;
                     case "ToJail":
                         mock.AddTile(name, new ActionTile(new GoToJailAction()));
@@ -106,7 +106,7 @@ namespace MonopolyPreUnity.Initialization
                         mock.AddTile(name, new Jail());
                         break;
                     case "Station":
-                        mock.AddTile(name, new TrainStation(price/4),new Property(set,price));
+                        mock.AddTile(name, new TrainStation(price/4),new Property(10,price));
                         break;
                     case "Chest":
                         mock.AddTile(name, new ActionBox(actions));
@@ -123,8 +123,8 @@ namespace MonopolyPreUnity.Initialization
             var actionList = MockContextMaker.GetActionBoxList(csvActionsPath);
             var mock = ParseDefaultMap(GameConfigMaker.DefaultGameConfig(), actionList);
 
-            mock.AddPlayer("John", cash: 200);
-            mock.AddPlayer("AIPlayer2 Chaos:4", cash: 200);
+            mock.AddPlayer("John", cash: 1000);
+            mock.AddPlayer("AIPlayer2 Chaos:4", cash: 1000);
 
             return mock.GetContext();
         }

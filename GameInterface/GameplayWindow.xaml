@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameInterface" xmlns:customcontrols="clr-namespace:GameInterface.CustomControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" WindowState="Maximized" WindowStyle="None">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
@@ -23,7 +23,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="9*"/>
             <ColumnDefinition Width="3.5*"/>
-            <ColumnDefinition Width="3.5*"/>
+            <ColumnDefinition Width="1.75*"/>
+            <ColumnDefinition Width="1.75*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Margin="-15" 
@@ -44,7 +45,8 @@
             <customcontrols:Map x:Name="Map"
                                 Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3"
                                 Context="{Binding Context}"
-                                PlayerMoved="{Binding Context.RenderCommunications.PlayersMoved, Mode=TwoWay}">
+                                PlayerMoved="{Binding Context.RenderCommunications.PlayersMoved}"
+                                HouseChanged="{Binding Context.RenderCommunications.HouseChanged}">
             </customcontrols:Map>
 
             <customcontrols:ScrollingTextBox x:Name="GameLog" Margin="50"
@@ -68,7 +70,7 @@
                                     ClickedTileId="{Binding ElementName=Map, Path=ClickedTileId, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         </customcontrols:CurTileView>
 
-        <ListView Grid.Row="0" Grid.Column="2"
+        <ListView Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"
                   ItemsSource="{Binding Context.PlayerObservables}">
             <ListView.View>
                 <GridView>
@@ -88,7 +90,7 @@
         </customcontrols:ScrollingTextBox>-->
 
         <customcontrols:ScrollingTextBox x:Name="HSLog" Margin="10"
-                 Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="1"
+                 Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
                  AcceptsReturn="True" IsReadOnly="True"
                  Text="{Binding Context.HSLogString, UpdateSourceTrigger=PropertyChanged}">
         </customcontrols:ScrollingTextBox>
@@ -103,6 +105,12 @@
                 Grid.Row="2" Grid.Column="2" Margin="10"
                 Command="{Binding SendInputCommand}">
             Send Input
+        </Button>
+
+        <Button x:Name="UseCheatCode"
+                Grid.Row="2" Grid.Column="3" Margin="10"
+                Command="{Binding UseCheatCode}">
+            Use Cheat Code
         </Button>
     </Grid>
 </Window>
