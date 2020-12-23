@@ -155,8 +155,8 @@ namespace GameInterface.CustomControls
         #region ctor
         public Map()
         {
-            //mapImageSource = new BitmapImage(new Uri(@"..\..\..\..\GameInterface\Images\map.png", UriKind.Relative));
-            mapImageSource = new BitmapImage(new Uri(@"D:\ImmaCodder\Kursach\MonopolyPreUnity\GameInterface\Images\map.png"));
+            mapImageSource = new BitmapImage(new Uri(@"..\..\..\..\GameInterface\Images\newmap.png", UriKind.Relative));
+            //mapImageSource = new BitmapImage(new Uri(@"D:\ImmaCodder\Kursach\MonopolyPreUnity\GameInterface\Images\newmap.png"));
             PointClicked = new Point();
             ClickedTileId = -1;
             MouseLeftButtonUp += Map_MouseLeftButtonUp;
