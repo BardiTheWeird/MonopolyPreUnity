@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameInterface" xmlns:customcontrols="clr-namespace:GameInterface.CustomControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" WindowState="Maximized" WindowStyle="None">
+        Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
@@ -47,7 +47,7 @@
                                 PlayerMoved="{Binding Context.RenderCommunications.PlayersMoved, Mode=TwoWay}">
             </customcontrols:Map>
 
-            <customcontrols:ScrollingTextBox x:Name="GameLog" Margin="20"
+            <customcontrols:ScrollingTextBox x:Name="GameLog" Margin="50"
                  Grid.Row="1" Grid.Column="1" Grid.RowSpan="1"
                  Text="{Binding Context.GameLogString}" IsReadOnly="True"
                  BorderThickness="0" FontSize="15">

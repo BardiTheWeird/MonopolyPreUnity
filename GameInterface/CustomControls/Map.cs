@@ -82,7 +82,6 @@ namespace GameInterface.CustomControls
             set 
             {
                 SetValue(PointClickedProperty, value);
-                Debug.WriteLine("the property was changed");
                 RaisePropertyChanged(nameof(PointClicked));
             }
         }
@@ -109,47 +108,61 @@ namespace GameInterface.CustomControls
             RaisePropertyChanged(nameof(PointClicked));
             RaisePropertyChanged(nameof(ClickedTileId));
         }
-
-        //private static void OnContextChangedCallBack(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        //{
-        //    Map c = sender as Map;
-        //    if (c != null)
-        //        c.OnContextChanged();
-        //}
-
-        //protected virtual void OnContextChanged()
-        //{
-        //    if (!renderEventSubscribedTo)
-        //    {
-        //        Debug.WriteLine("Render wired");
-        //        //Context.RenderCommunications.RenderChanged += RenderChangedEventHandler;
-        //        Context.RenderCommunications.PlayerMoved += OnPlayerMoved;
-        //        renderEventSubscribedTo = true;
-        //    }
-        //}
         #endregion
 
         #region field
         // (curTile, icon); id through index
-        List<(int, BitmapImage)> playerImages = new List<(int, BitmapImage)>();
-
-        bool renderEventSubscribedTo = false;
 
         int botRightIndex = 0;
         int botLeftIndex = 10;
         int topLeftIndex = 20;
         int topRightIndex = 30;
 
-        double imageSide = 6800;
-        Size tile = new Size(832, 578);
-        Size bigTile = new Size(815, 815);
+        double imageSide => tileImages[0].Width * 2 + tileImages[1].Width * 9;
+        double timeToActualRatio => ActualWidth / imageSide;
+        // double imageSide => mapImageSource.Width;
+        Size tile => new Size(tileImages[1].Height, tileImages[1].Width);
+        Size bigTile => new Size(tileImages[0].Height, tileImages[0].Width);
 
-        Size actualTileSize => new Size(RenderSize.Height * tile.Height / imageSide,
-            RenderSize.Height * tile.Width / imageSide);
-        Size actualBigTileSize => new Size(RenderSize.Height * bigTile.Height / imageSide,
-            RenderSize.Height * bigTile.Width / imageSide);
+        //Size actualTileSize => new Size(RenderSize.Height * tile.Height / imageSide,
+        //    RenderSize.Height * tile.Width / imageSide);
+        //Size actualBigTileSize => new Size(RenderSize.Height * bigTile.Height / imageSide,
+        //    RenderSize.Height * bigTile.Width / imageSide);
 
-        double tileWidth => ActualWidth - 2 * actualBigTileSize.Width;
+        Size actualTileSize => new Size(timeToActualRatio * tile.Height, timeToActualRatio * tile.Width );
+        Size actualBigTileSize => new Size(timeToActualRatio * bigTile.Height, timeToActualRatio * bigTile.Width);
+        #endregion
+
+        #region resources
+        List<BitmapImage> playerImages = new List<BitmapImage>();
+        List<BitmapImage> tileImages = new List<BitmapImage>(40);
+        List<Rect> tileRects = new List<Rect>(40);
+
+
+        void LoadResources()
+        {
+            // player icons
+            for (int i = 1; i <= 4; i++)
+            {
+                var uri = new Uri($@"..\..\..\..\GameInterface\Images\Players\{i}.png", UriKind.Relative);
+                playerImages.Add(new BitmapImage(uri));
+            }
+
+            // tiles
+            for (int i = 0; i < 40; i++)
+            {
+                var uri = new Uri($@"..\..\..\..\GameInterface\Images\tiles\mapIcons\{i}.png", UriKind.Relative);
+                var bitmapImage = new BitmapImage(uri);
+
+                // for columns
+                if (botLeftIndex < i && i < topLeftIndex)
+                    bitmapImage.Rotation = Rotation.Rotate270;
+                else if (topRightIndex < i)
+                    bitmapImage.Rotation = Rotation.Rotate90;
+
+                tileImages.Add(bitmapImage);
+            }
+        }
         #endregion
 
         #region ctor
@@ -161,13 +174,7 @@ namespace GameInterface.CustomControls
             ClickedTileId = -1;
             MouseLeftButtonUp += Map_MouseLeftButtonUp;
 
-            for (int i = 1; i <= 4; i++)
-            {
-                var uri = new Uri($@"..\..\..\..\GameInterface\Images\Players\{i}.png", UriKind.Relative);
-                playerImages.Add((0, new BitmapImage(uri)));
-            }
-
-            //RenderPlayers();
+            LoadResources();
         }
         #endregion
 
@@ -191,6 +198,15 @@ namespace GameInterface.CustomControls
                 rectangleGroup.Children.RemoveAt(0);
 
             var rect = GetTileRectangle(ClickedTileId);
+            if (ClickedTileId != -1)
+            {
+                Debug.WriteLine($"Clicked (id = {ClickedTileId}) rect:\n" +
+                    $"  Old method: {rect}\n" +
+                    $"  New method: {tileRects[ClickedTileId]}");
+                Debug.WriteLine($"ActualWidth: {ActualWidth}, ActualHeigh {ActualHeight};" +
+                    $"CalcAWidht: {imageSide * timeToActualRatio}");
+            }
+
             var geomDrawing = new GeometryDrawing(
                 new SolidColorBrush(Color.FromRgb(0, 0, 0)),
                 new Pen(Brushes.Black, 4),
@@ -275,60 +291,52 @@ namespace GameInterface.CustomControls
         #region mapRenderingMath
         Rect GetTileRectangle(int index)
         {
-            Point origin;
-            Size size;
-            bool invert = false;
+            if (index == -1)
+                return new Rect();
+            return tileRects[index];
+        }
 
-            if (index <= botLeftIndex) // bottom row
-            {
-                origin = new Point(0, ActualHeight - actualTileSize.Height);
+        void CalculateTileRects()
+        {
+            //Debug.WriteLine("ran CulculateTileRects");
+            var sizeBig = actualBigTileSize;
+            var sizeReg = actualTileSize;
+            var sizeRegRotated = new Size(sizeReg.Height, sizeReg.Width);
 
-                if (index != botLeftIndex)
-                {
-                    if (index == botRightIndex)
-                        origin.X = ActualWidth - actualBigTileSize.Width;
-                    else
-                    {
-                        origin.X += actualBigTileSize.Width;
-                        origin.X += actualTileSize.Width * (9 - index % 10);
-                    }
-                }
-            }
-            else if (index < topLeftIndex) // left column
+            var origin = new Point(0, 0);
+            // top row
+            tileRects[topLeftIndex] = new Rect(origin, sizeBig);
+            origin.X += sizeBig.Width;
+            for (int i = topLeftIndex + 1; i < topRightIndex; i++)
             {
-                invert = true;
-                origin = new Point(0, actualBigTileSize.Height);
-                origin.Y += actualTileSize.Width * (9 - index % 10);
+                tileRects[i] = new Rect(origin, sizeReg);
+                origin.X += sizeReg.Width;
             }
-            else if (index <= topRightIndex) // top row
+            tileRects[topRightIndex] = new Rect(origin, sizeBig);
+            // right column
+            origin.Y += sizeBig.Height;
+            for (int i = topRightIndex + 1; i < 40; i++)
             {
-                origin = new Point(0, 0);
-
-                if (index != topLeftIndex)
-                {
-                    if (index == topRightIndex)
-                        origin.X = ActualWidth - actualBigTileSize.Width;
-                    else
-                    {
-                        origin.X += actualBigTileSize.Width;
-                        origin.X += actualTileSize.Width * (index % 10 - 1);
-                    }
-                }
+                tileRects[i] = new Rect(origin, sizeRegRotated);
+                origin.Y += sizeReg.Width;
             }
-            else // right column
+            // bottom row
+            tileRects[botRightIndex] = new Rect(origin, sizeBig);
+            origin.X -= sizeReg.Width;
+            for (int i = botRightIndex + 1; i < botLeftIndex; i++)
             {
-                invert = true;
-                origin = new Point(ActualWidth - actualBigTileSize.Width, actualBigTileSize.Height);
-                origin.Y += actualTileSize.Width * (index % 10 - 1);
+                tileRects[i] = new Rect(origin, sizeReg);
+                origin.X -= sizeReg.Width;
             }
-
-            if (index % 10 == 0)
-                size = actualBigTileSize;
-            else if (invert)
-                size = new Size(actualTileSize.Height, actualTileSize.Width);
-            else
-                size = actualTileSize;
-            return new Rect(origin, size);
+            origin.X = 0;
+            tileRects[botLeftIndex] = new Rect(origin, sizeBig);
+            // left column
+            origin.Y -= sizeReg.Width;
+            for (int i = botLeftIndex + 1; i < topLeftIndex; i++)
+            {
+                tileRects[i] = new Rect(origin, sizeRegRotated);
+                origin.Y -= sizeReg.Width;
+            }
         }
         #endregion
 
@@ -347,7 +355,7 @@ namespace GameInterface.CustomControls
                 foreach (var player in tileGroup)
                 {
                     var tileRect = GetTileRectangle(player.CurTileId - 1);
-                    var imageDrawing = new ImageDrawing(playerImages[player.Id - 1].Item2, tileRect);
+                    var imageDrawing = new ImageDrawing(playerImages[player.Id - 1], tileRect);
                     drawings.Add(imageDrawing);
                 }
             }
@@ -356,11 +364,35 @@ namespace GameInterface.CustomControls
             //InvalidateVisual();
         }
         #endregion
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            //Debug.WriteLine("Yay, it works for size change!");
+            if (tileRects.Count < 40)
+            {
+                for (int i = tileRects.Count; i < 40; i++)
+                    tileRects.Add(default);
+            }
+            CalculateTileRects();
+            Debug.WriteLine($"The size of rect on [0]: ({tileRects[0].Size})");
+
+            var minSide = Math.Min(availableSize.Width, availableSize.Height);
+
+            return base.MeasureOverride(new Size(minSide, minSide));
+        }
+
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            var minSide = Math.Min(finalSize.Width, finalSize.Height);
+            return base.ArrangeOverride(new Size(minSide, minSide));
+        }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
             //Debug.WriteLine($"RenderWidth:{RenderSize.Width}; RenderHeight:{RenderSize.Height}");
+            if (tileRects[topLeftIndex] == new Rect(0, 0, 0, 0))
+                CalculateTileRects();
+
             drawingContext.DrawImage(mapImageSource, new Rect(RenderSize));
 
             drawingContext.DrawDrawing(rectangleGroup);
@@ -374,8 +406,6 @@ namespace GameInterface.CustomControls
             //    new SolidColorBrush(Color.FromRgb(0, 40, 0)),
             //    new Pen(Brushes.Black, 4),
             //    randomTileRect);
-
-            PlayerMoved = false;
         }
     }
 }

@@ -74,7 +74,7 @@ namespace MonopolyPreUnity.Systems
             player.CurTileId = newTileId;
 
             //Debug.WriteLine("Changed render comms");
-            _context.RenderCommunications.PlayersMoved = true;
+            _context.RenderCommunications.PlayersMoved = !_context.RenderCommunications.PlayersMoved;
         }
 
         public void MoveBySteps(Player player, MoveSteps moveSteps) =>
