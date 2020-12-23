@@ -92,7 +92,7 @@ namespace GameInterface
             }, x => IsCheatCodeFormat(InputText));
 
             _backgroundWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
-            _backgroundWorker.DoWork += (x, y) => MonopolyEntry.RunSystemsContinuousAsync(SysBag);
+            _backgroundWorker.DoWork += (x, y) => MonopolyEntry.RunSystemsContinuousAsync(SysBag, Context.RenderCommunications);
             _backgroundWorker.RunWorkerAsync();
         }
         #endregion

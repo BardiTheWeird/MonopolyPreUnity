@@ -42,7 +42,9 @@
             </Grid.RowDefinitions>
 
             <customcontrols:Map x:Name="Map"
-                                Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3">
+                                Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3"
+                                Context="{Binding Context}"
+                                PlayerMoved="{Binding Context.RenderCommunications.PlayersMoved, Mode=TwoWay}">
             </customcontrols:Map>
 
             <customcontrols:ScrollingTextBox x:Name="GameLog" Margin="20"

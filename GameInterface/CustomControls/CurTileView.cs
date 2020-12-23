@@ -85,7 +85,7 @@ namespace GameInterface.CustomControls
         {
             if (index != -1)
             {
-                var image = new BitmapImage(new Uri(@"..\..\..\Images\tiles\" + index.ToString() + @".png", UriKind.Relative));
+                var image = new BitmapImage(new Uri(@"..\..\..\Images\tiles\detalizedIcons\" + index.ToString() + @".png", UriKind.Relative));
                 var drawing = new ImageDrawing(image, GetImageRectangle(image));
 
                 if (backingStore.Children.Count > 0)

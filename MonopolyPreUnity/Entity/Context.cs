@@ -19,6 +19,9 @@ namespace MonopolyPreUnity.Entity
         #region wpf connection
         public ObservableCollection<PlayerObservable> PlayerObservables { get; set; } 
             = new ObservableCollection<PlayerObservable>();
+
+        public RenderCommunications RenderCommunications { get; set; }
+            = new RenderCommunications();
         #endregion
 
         #region I/O strings
