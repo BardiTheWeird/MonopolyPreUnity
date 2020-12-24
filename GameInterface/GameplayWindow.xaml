@@ -70,7 +70,8 @@
                                     ClickedTileId="{Binding ElementName=Map, Path=ClickedTileId, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                     CurTileLocked="{Binding Context.RenderCommunications.CurTileViewLock}"
                                     TileLockedId="{Binding Context.RenderCommunications.TileToLockOnId}"
-                                    Context="{Binding Context}">
+                                    Context="{Binding Context}"
+                                    AuctionInfoChanged="{Binding Context.RenderCommunications.AuctionInfoChanged}">
         </customcontrols:CurTileView>
 
         <customcontrols:CurTileDescription x:Name="CurTileDescription" Margin="10"

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -18,6 +19,23 @@ namespace GameInterface.CustomControls
     class CurTileView : FrameworkElement, INotifyPropertyChanged
     {
         #region properties
+        public static readonly DependencyProperty AuctionInfoChangedProperty =
+            DependencyProperty.Register(
+            "AuctionInfoChanged",
+            typeof(bool),
+            typeof(CurTileView),
+            new PropertyMetadata(OnAuctionInfoChangedCallBack));
+
+        public bool AuctionInfoChanged
+        {
+            get => (bool)GetValue(AuctionInfoChangedProperty);
+            set
+            {
+                SetValue(AuctionInfoChangedProperty, value);
+                RaisePropertyChanged(nameof(AuctionInfoChanged));
+            }
+        }
+
         public static readonly DependencyProperty ContextProperty =
             DependencyProperty.Register(
             "Context",
@@ -181,6 +199,17 @@ namespace GameInterface.CustomControls
         {
             formatOutput = new FormatOutput(Context);
         }
+
+        private static void OnAuctionInfoChangedCallBack(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            CurTileView c = sender as CurTileView;
+            if (c != null)
+                c.OnAuctionInfoChanged();
+        }
+        protected virtual void OnAuctionInfoChanged()
+        {
+            SetTileDescription(TileLockedId - 1);
+        }
         #endregion
 
         #region cardMethods
@@ -212,11 +241,13 @@ namespace GameInterface.CustomControls
                 return;
             }
 
+            var str = formatOutput.GetPropertyString(index + 1);
+
             var auctionInfo = Context.AuctionInfo();
             if (auctionInfo != null)
-                return;
+                str += "\n\n" + formatOutput.GetAuctionInfo();
 
-            TileDescription = formatOutput.GetPropertyString(index + 1);
+            TileDescription =  str;
         }
 
         Rect GetImageRectangle(BitmapImage image)

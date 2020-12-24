@@ -13,6 +13,7 @@ namespace MonopolyPreUnity.Classes
         bool _curTileViewLock;
         string _curDescription;
         int _tileToLockOnId;
+        bool _auctionInfoChanged;
         #endregion
 
         #region properties
@@ -69,6 +70,17 @@ namespace MonopolyPreUnity.Classes
                     return;
                 _tileToLockOnId = value;
                 RaisePropertyChanged(nameof(TileToLockOnId));
+            }
+        }
+        public bool AuctionInfoChanged
+        {
+            get => _auctionInfoChanged;
+            set
+            {
+                if (value == _auctionInfoChanged)
+                    return;
+                _auctionInfoChanged = value;
+                RaisePropertyChanged(nameof(AuctionInfoChanged));
             }
         }
         #endregion

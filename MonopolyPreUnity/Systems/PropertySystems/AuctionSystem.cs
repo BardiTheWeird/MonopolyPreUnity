@@ -41,6 +41,7 @@ namespace MonopolyPreUnity.Systems.PropertySystems
                     $"Total amount bid: {info.AmountBid}$", OutputStream.GameLog));
 
                 info.CurBidder = (info.CurBidder + 1) % info.BiddersLeft;
+                _context.RenderCommunications.AuctionInfoChanged = !_context.RenderCommunications.AuctionInfoChanged;
             }
             else if (auctionAction is AuctionWithdraw withdraw)
             {
@@ -61,6 +62,7 @@ namespace MonopolyPreUnity.Systems.PropertySystems
                     _context.Remove(info);
                     _context.RenderCommunications.CurTileViewLock = false;
                 }
+                _context.RenderCommunications.AuctionInfoChanged = !_context.RenderCommunications.AuctionInfoChanged;
             }
 
             _context.Remove(auctionAction);

@@ -123,7 +123,7 @@ namespace MonopolyPreUnity.Initialization
             var actionList = MockContextMaker.GetActionBoxList(csvActionsPath);
             var mock = ParseDefaultMap(GameConfigMaker.DefaultGameConfig(), actionList);
 
-            mock.AddPlayer("John", cash: 1000);
+            mock.AddPlayer("Олєжа", cash: 1001);
             mock.AddPlayer("AIPlayer1 Chaos:4", cash: 1000);
             mock.AddPlayer("AIPlayer2 Chaos:7", cash: 1000);
             mock.AddPlayer("AIPlayer3 Chaos:1", cash: 1000);

@@ -361,6 +361,27 @@ namespace MonopolyPreUnity.UI
         }
         #endregion
 
+        #region auction
+        public string GetAuctionInfo()
+        {
+            var auction = _context.AuctionInfo();
+            if (auction == null)
+                return "";
+
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"Amount bid: {auction.AmountBid}");
+            sb.AppendLine("Bidders left:");
+            foreach (var player in auction.BidOrder)
+            {
+                var name = _context.GetPlayer(player).DisplayName;
+                sb.AppendLine($"  {name}");
+            }
+
+            return sb.ToString().Trim();
+        }
+        #endregion
+
         #region misc
         public string GetStringOfListOfItems<T>(List<T> list, Func<T, string> valToString, bool indexate)
         {

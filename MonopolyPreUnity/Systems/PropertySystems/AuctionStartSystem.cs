@@ -31,6 +31,8 @@ namespace MonopolyPreUnity.Systems.PropertySystems
             _context.Add(new PrintFormattedLine($"The auction for |tile:{startAuction.PropertyId}| has started!",
                 OutputStream.GameLog));
 
+            _context.RenderCommunications.AuctionInfoChanged = !_context.RenderCommunications.AuctionInfoChanged;
+
             _context.Remove<StartAuction>();
         }
 
