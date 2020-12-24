@@ -144,11 +144,13 @@ namespace GameInterface.CustomControls
         Size tile => new Size(tileImages[1].Height, tileImages[1].Width);
         Size bigTile => new Size(tileImages[0].Height, tileImages[0].Width);
         Size houseIcon => new Size(houseIcons[0][0].Height, houseIcons[0][0].Width);
+        Size playerIcon => new Size(playerImages[0].Width, playerImages[1].Height);
         Point houseIconRelativePosition = new Point(600, 875);
 
         Size actualTileSize => new Size(timeToActualRatio * tile.Height, timeToActualRatio * tile.Width );
         Size actualBigTileSize => new Size(timeToActualRatio * bigTile.Height, timeToActualRatio * bigTile.Width);
         Size actualHouseIconSize => new Size(timeToActualRatio * houseIcon.Width, timeToActualRatio * houseIcon.Height);
+        Size actualPlayerIconSize => new Size(actualTileSize.Width * 0.45d, actualTileSize.Width * 0.45d);
         Point actualHouseIconRelativePosition => new Point(houseIconRelativePosition.X * timeToActualRatio, 
             houseIconRelativePosition.Y * timeToActualRatio);
         #endregion
@@ -167,7 +169,7 @@ namespace GameInterface.CustomControls
             // player icons
             for (int i = 1; i <= 4; i++)
             {
-                var uri = new Uri($@"..\..\..\..\GameInterface\Images\Players\{i}.png", UriKind.Relative);
+                var uri = new Uri($@"..\..\..\..\GameInterface\Images\Players\hatsBig\{i}.png", UriKind.Relative);
                 playerImages.Add(new BitmapImage(uri));
             }
 
@@ -372,6 +374,58 @@ namespace GameInterface.CustomControls
                 origin.Y -= sizeReg.Width;
             }
         }
+
+        bool IsCornerTile(int index) =>
+            index % 10 == 0;
+
+        bool IsColumnTile(int index) =>
+            (botLeftIndex < index && index < botRightIndex) || (topRightIndex < index);
+
+        List<Point> playerOffsetPointsTileReg()
+        {
+            var tileSize = actualTileSize;
+            var width = tileSize.Width;
+            var height = tileSize.Height;
+
+            var list = new List<Point>(4);
+
+            list.Add(new Point(width * 0.25d, height * 0.25d));
+            list.Add(new Point(width * 0.75d, height * 0.25d));
+            list.Add(new Point(width * 0.25d, height * 0.75d));
+            list.Add(new Point(width * 0.75d, height * 0.755d));
+
+            return list;
+        }
+        List<Point> playerOffsetPointsTileBig()
+        {
+            var tileSize = actualBigTileSize;
+            var width = tileSize.Width;
+            var height = tileSize.Height;
+
+            var list = new List<Point>(4);
+
+            list.Add(new Point(width * 0.25d, height * 0.25d));
+            list.Add(new Point(width * 0.75d, height * 0.25d));
+            list.Add(new Point(width * 0.25d, height * 0.75d));
+            list.Add(new Point(width * 0.75d, height * 0.755d));
+
+            return list;
+        }
+        List<Point> playerOffsetPointsColumnTile()
+        {
+            var tileSize = actualTileSize;
+            var width = tileSize.Width;
+            var height = tileSize.Height;
+
+            var list = new List<Point>(4);
+
+            list.Add(new Point(height * 0.25d, width * 0.25d));
+            list.Add(new Point(height * 0.25d, width * 0.75d));
+            list.Add(new Point(height * 0.75d, width * 0.25d));
+            list.Add(new Point(height * 0.75d, width * 0.75d));
+
+            return list;
+        }
         #endregion
 
         #region map render methods
@@ -412,6 +466,8 @@ namespace GameInterface.CustomControls
         }
         void RenderPlayers()
         {
+            var playerSize = actualPlayerIconSize;
+
             var tileGroups = Context.PlayerObservables
                 .Select(x => x.Player)
                 .GroupBy(x => x.CurTileId);
@@ -421,11 +477,25 @@ namespace GameInterface.CustomControls
             foreach (var tileGroup in tileGroups)
             {
                 // implement dynamic tile layout for multiple players
+                List<Point> layout;
+                if (IsCornerTile(tileGroup.Key - 1))
+                    layout = playerOffsetPointsTileBig();
+                else if (IsColumnTile(tileGroup.Key - 1))
+                    layout = playerOffsetPointsColumnTile();
+                else
+                    layout = playerOffsetPointsTileReg();
+
+                var index = 0;
                 foreach (var player in tileGroup)
                 {
                     var tileRect = tileRects[player.CurTileId - 1];
-                    var imageDrawing = new ImageDrawing(playerImages[player.Id - 1], tileRect);
+                    var origin = tileRect.TopLeft;
+                    var playerRect = new Rect(playerSize)
+                        .Center(new Point(layout[index].X + origin.X, layout[index].Y + origin.Y));
+
+                    var imageDrawing = new ImageDrawing(playerImages[player.Id - 1], playerRect);
                     drawings.Add(imageDrawing);
+                    index++;
                 }
             }
 
@@ -505,6 +575,7 @@ namespace GameInterface.CustomControls
             Debug.WriteLine($"The size of rect on [0]: ({tileRects[0].Size})");
 
             var minSide = Math.Min(finalSize.Width, finalSize.Height);
+            
             return base.ArrangeOverride(new Size(minSide, minSide));
         }
 

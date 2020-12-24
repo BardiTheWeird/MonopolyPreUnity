@@ -124,7 +124,9 @@ namespace MonopolyPreUnity.Initialization
             var mock = ParseDefaultMap(GameConfigMaker.DefaultGameConfig(), actionList);
 
             mock.AddPlayer("John", cash: 1000);
-            mock.AddPlayer("AIPlayer2 Chaos:4", cash: 1000);
+            mock.AddPlayer("AIPlayer1 Chaos:4", cash: 1000);
+            mock.AddPlayer("AIPlayer2 Chaos:7", cash: 1000);
+            mock.AddPlayer("AIPlayer3 Chaos:1", cash: 1000);
 
             return mock.GetContext();
         }
