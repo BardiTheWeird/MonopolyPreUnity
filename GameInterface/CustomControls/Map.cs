@@ -593,7 +593,7 @@ namespace GameInterface.CustomControls
             RenderPlayers();
 
             drawingContext.DrawDrawing(mapGroup);
-            drawingContext.DrawDrawing(rectangleGroup);
+            //drawingContext.DrawDrawing(rectangleGroup);
             drawingContext.DrawDrawing(housesGroup);
             drawingContext.DrawDrawing(playersGroup);
 

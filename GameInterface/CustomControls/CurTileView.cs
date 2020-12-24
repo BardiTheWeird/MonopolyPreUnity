@@ -207,9 +207,12 @@ namespace GameInterface.CustomControls
             var prop = Context.GetTileComponent<Property>(index + 1);
             if (prop == null)
             {
-                var actionBox = Context.GetTileComponent<ActionBox>(index + 1);
-                if (actionBox == null)
-                    TileDescription = "";
+                if (!CurTileLocked)
+                {
+                    var actionBox = Context.GetTileComponent<ActionBox>(index + 1);
+                    if (actionBox != null)
+                        TileDescription = "";
+                }
                 return;
             }
 
