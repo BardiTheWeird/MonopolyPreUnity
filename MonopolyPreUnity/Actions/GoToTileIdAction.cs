@@ -9,6 +9,8 @@ namespace MonopolyPreUnity.Actions
         public int TileId { get; set; }
         public string Descsription { get; set; }
 
+        public GoToTileIdAction(int tileId) => TileId = tileId;
+
         public GoToTileIdAction(int tileId, string description)
         {
             TileId = tileId;

@@ -8,6 +8,8 @@ namespace MonopolyPreUnity.Actions
     {
         public string Descsription { get; set; }
 
+        public JailCardAction() { }
+
         public JailCardAction(string description)
         {
             Descsription = description;

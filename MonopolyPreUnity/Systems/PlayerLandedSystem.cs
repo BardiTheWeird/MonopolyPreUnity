@@ -25,6 +25,7 @@ namespace MonopolyPreUnity.Systems
 
                 _context.Add(new PrintFormattedLine($"|player:{player.Id}| landed on a tile:", OutputStream.GameLog));
                 _context.Add(new PrintTile(player.CurTileId, OutputStream.GameLog));
+                _context.RenderCommunications.TileToLockOnId = player.CurTileId;
 
                 foreach (var component in _context.GetTileComponents(player.CurTileId))
                 {

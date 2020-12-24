@@ -6,6 +6,7 @@ using MonopolyPreUnity.Entity;
 using MonopolyPreUnity.Entity.ContextExtensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonopolyPreUnity.Systems
@@ -71,6 +72,9 @@ namespace MonopolyPreUnity.Systems
 
             // actual move
             player.CurTileId = newTileId;
+
+            //Debug.WriteLine("Changed render comms");
+            _context.RenderCommunications.PlayersMoved = !_context.RenderCommunications.PlayersMoved;
         }
 
         public void MoveBySteps(Player player, MoveSteps moveSteps) =>

@@ -188,6 +188,8 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             context.Add(new PrintFormattedLine($"|player:{player.Id}| built a house on |tile:{propId}|. Number of houses: {dev.HousesBuilt}",
                 OutputStream.GameLog));
             context.Add(new ChargeCash(dev.HouseBuyPrice, player.Id, message: "building a house"));
+
+            context.RenderCommunications.HouseChanged = !context.RenderCommunications.HouseChanged;
         }
 
         public static void SellHouse(this Context context, Player player, int propId)
@@ -198,6 +200,8 @@ namespace MonopolyPreUnity.Entity.ContextExtensions
             context.Add(new PrintFormattedLine($"|player:{player.Id}| sold a house on |tile:{propId}|. Number of houses: {dev.HousesBuilt}",
                 OutputStream.GameLog));
             context.Add(new GiveCash(dev.HouseSellPrice, player.Id, message: "selling a house"));
+
+            context.RenderCommunications.HouseChanged = !context.RenderCommunications.HouseChanged;
         }
         #endregion
 

@@ -23,7 +23,7 @@ namespace GameInterface
     class MainWindowViewModel : INotifyPropertyChanged
     {
         #region static fields
-        static string CheatCodeFormat = @"(\w+)\s+" + "\"" + @"([A-z0-9\s]+)" + "\"" + @"\s+" + "\"" + @"([A-z0-9\s]+)" + "\"";
+        static string CheatCodeFormat = @"(\w+)\s+" + "\"" + @"([A-z0-9\s\p{L}]+)" + "\"" + @"\s+" + "\"" + @"([A-z0-9\s]+)" + "\"";
         #endregion
 
         #region Properties
@@ -75,7 +75,8 @@ namespace GameInterface
         public MainWindowViewModel()
         {
             // initialize
-            Context = MockContext.CreateMockDataSmallTest();
+            //Context = MockContext.CreateMockDataSmallTest();
+            Context = MockContext.CreateDefaultMapContext();
             SysBag = new SystemsBag(Context.CreateDiContainer().GetAllSystems());
 
             SendInputCommand = new RelayCommand(x =>

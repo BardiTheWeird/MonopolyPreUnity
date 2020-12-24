@@ -19,7 +19,7 @@ namespace MonopolyPreUnity.Behaviors.Action
         public void Execute(int playerId, IMonopolyAction action)
         {
             var componentType = (action as GoToTileComponentAction).ComponentType;
-            _context.Add(new MoveType(playerId, componentType, true));
+            _context.Add(new MoveType(playerId, componentType, false));
         }
 
         public GoToTileComponentActionBehavior(Context context) =>

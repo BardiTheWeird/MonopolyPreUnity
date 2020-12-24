@@ -15,7 +15,8 @@ namespace MonopolyPreUnity.Initialization
 
     static class MockContext
     {
-        private static readonly string csvFilePath = "MonTable.csv";
+        private static readonly string csvFilePath = @"..\..\..\..\MonopolyPreUnity\Resources\MonTable.csv";
+        private static readonly string csvActionsPath = @"..\..\..\..\MonopolyPreUnity\Resources\actions.csv";
         #region MockData
          
        
@@ -42,11 +43,11 @@ namespace MonopolyPreUnity.Initialization
         }
 
 
-        public static MockContextMaker ParseDefaultMap(GameConfig gameConfig,List<IMonopolyAction> actions)
+        public static MockContextMaker ParseDefaultMap(GameConfig gameConfig, List<IMonopolyAction> actions)
         {
             var commandTable = new DataTable();
             var mock = new MockContextMaker(gameConfig);
-            using (var csvReader = new CsvReader(new StreamReader(System.IO.File.OpenRead(csvFilePath)), true))
+            using (var csvReader = new CsvReader(new StreamReader(File.OpenRead(csvFilePath)), true))
             {
                 commandTable.Load(csvReader);
             }
@@ -93,7 +94,7 @@ namespace MonopolyPreUnity.Initialization
                         mock.AddTile(name, new ActionTile(new ChangeBalanceAction(price)));
                         break;
                     case "NoDev":
-                        mock.AddTile(name, new Property(set,price),new UtilityProperty());
+                        mock.AddTile(name, new Property(11,price),new UtilityProperty());
                         break;
                     case "ToJail":
                         mock.AddTile(name, new ActionTile(new GoToJailAction()));
@@ -105,7 +106,7 @@ namespace MonopolyPreUnity.Initialization
                         mock.AddTile(name, new Jail());
                         break;
                     case "Station":
-                        mock.AddTile(name, new TrainStation(price/4),new Property(set,price));
+                        mock.AddTile(name, new TrainStation(price/4),new Property(10,price));
                         break;
                     case "Chest":
                         mock.AddTile(name, new ActionBox(actions));
@@ -117,7 +118,18 @@ namespace MonopolyPreUnity.Initialization
             return mock;
         }
 
+        public static Context CreateDefaultMapContext()
+        {
+            var actionList = MockContextMaker.GetActionBoxList(csvActionsPath);
+            var mock = ParseDefaultMap(GameConfigMaker.DefaultGameConfig(), actionList);
 
+            mock.AddPlayer("John", cash: 1000);
+            mock.AddPlayer("AIPlayer1 Chaos:4", cash: 1000);
+            mock.AddPlayer("AIPlayer2 Chaos:7", cash: 1000);
+            mock.AddPlayer("AIPlayer3 Chaos:1", cash: 1000);
+
+            return mock.GetContext();
+        }
 
         public static Context CreateMockDataSmallTest() =>
             CreateMockDataSmallTest(GameConfigMaker.DefaultGameConfig());
