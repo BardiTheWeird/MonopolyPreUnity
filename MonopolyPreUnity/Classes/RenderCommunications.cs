@@ -10,6 +10,9 @@ namespace MonopolyPreUnity.Classes
         #region fields
         bool _playersMoved;
         bool _houseChanged;
+        bool _curTileViewLock;
+        string _curDescription;
+        int _tileToLockOnId;
         #endregion
 
         #region properties
@@ -24,7 +27,6 @@ namespace MonopolyPreUnity.Classes
                 RaisePropertyChanged(nameof(PlayersMoved));
             }
         }
-
         public bool HouseChanged
         {
             get => _houseChanged;
@@ -34,6 +36,39 @@ namespace MonopolyPreUnity.Classes
                     return;
                 _houseChanged = value;
                 RaisePropertyChanged(nameof(HouseChanged));
+            }
+        }
+        public bool CurTileViewLock
+        {
+            get => _curTileViewLock;
+            set
+            {
+                if (value == _curTileViewLock)
+                    return;
+                _curTileViewLock = value;
+                RaisePropertyChanged(nameof(CurTileViewLock));
+            }
+        }
+        public string CurDescription
+        {
+            get => _curDescription;
+            set
+            {
+                if (value == _curDescription)
+                    return;
+                _curDescription = value;
+                RaisePropertyChanged(nameof(CurDescription));
+            }
+        }
+        public int TileToLockOnId
+        {
+            get => _tileToLockOnId;
+            set
+            {
+                if (value == _tileToLockOnId)
+                    return;
+                _tileToLockOnId = value;
+                RaisePropertyChanged(nameof(TileToLockOnId));
             }
         }
         #endregion

@@ -1,4 +1,8 @@
-﻿using System;
+﻿using MonopolyPreUnity.Components;
+using MonopolyPreUnity.Entity;
+using MonopolyPreUnity.Entity.ContextExtensions;
+using MonopolyPreUnity.UI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,6 +18,76 @@ namespace GameInterface.CustomControls
     class CurTileView : FrameworkElement, INotifyPropertyChanged
     {
         #region properties
+        public static readonly DependencyProperty ContextProperty =
+            DependencyProperty.Register(
+            "Context",
+            typeof(Context),
+            typeof(CurTileView),
+            new PropertyMetadata(OnContextChangedCallBack));
+
+        public Context Context
+        {
+            get => (Context)GetValue(ContextProperty);
+            set
+            {
+                SetValue(ContextProperty, value);
+                RaisePropertyChanged(nameof(Context));
+            }
+        }
+
+        public static readonly DependencyProperty TileDescriptionProperty =
+            DependencyProperty.Register(
+            "TileDescription",
+            typeof(string),
+            typeof(CurTileView));
+
+        public string TileDescription
+        {
+            get => (string)GetValue(TileDescriptionProperty);
+            set
+            {
+                SetValue(TileDescriptionProperty, value);
+                RaisePropertyChanged(nameof(TileDescription));
+            }
+        }
+
+        public static readonly DependencyProperty TileLockedIdProperty =
+            DependencyProperty.Register(
+            "TileLockedId",
+            typeof(int),
+            typeof(CurTileView),
+            new PropertyMetadata(OnTileLockChangedCallBack));
+
+        public int TileLockedId
+        {
+            get => (int)GetValue(TileLockedIdProperty);
+            set
+            {
+                Debug.WriteLine("Time to invalidate visual");
+                SetValue(TileLockedIdProperty, value);
+                RaisePropertyChanged(nameof(TileLockedId));
+                InvalidateVisual();
+            }
+        }
+
+        public static readonly DependencyProperty CurTileLockedProperty =
+            DependencyProperty.Register(
+            "CurTileLocked",
+            typeof(bool),
+            typeof(CurTileView));
+
+        public bool CurTileLocked
+        {
+            get => (bool)GetValue(CurTileLockedProperty);
+            set
+            {
+                Debug.WriteLine("Time to invalidate visual");
+                SetValue(CurTileLockedProperty, value);
+                RaisePropertyChanged(nameof(CurTileLocked));
+                InvalidateVisual();
+            }
+        }
+
         public static readonly DependencyProperty ClickedTileIdProperty =
             DependencyProperty.Register(
             "ClickedTileId",
@@ -52,9 +126,13 @@ namespace GameInterface.CustomControls
         }
         #endregion
 
+        #region fields
         DrawingGroup backingStore = new DrawingGroup();
         double aspectRatio => ActualWidth / ActualHeight;
         double minActualSide => Math.Min(ActualWidth, ActualHeight);
+
+        FormatOutput formatOutput;
+        #endregion
 
         #region propertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -68,19 +146,44 @@ namespace GameInterface.CustomControls
             if (c != null)
                 c.OnPointClickedChanged();
         }
-
         protected virtual void OnPointClickedChanged()
         {
             //Debug.WriteLine("CurTileView OnPointClickedChanged");
             RaisePropertyChanged(nameof(PointClicked));
             RaisePropertyChanged(nameof(ClickedTileId));
 
-            
-            SetNewCardImage(ClickedTileId);
+            if (!CurTileLocked)
+            {
+                SetNewCardImage(ClickedTileId);
+                InvalidateVisual();
+            }
+        }
+
+        private static void OnTileLockChangedCallBack(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            CurTileView c = sender as CurTileView;
+            if (c != null)
+                c.OnTileLockChanged();
+        }
+        protected virtual void OnTileLockChanged()
+        {
+            SetNewCardImage(TileLockedId - 1);
             InvalidateVisual();
+        }
+
+        private static void OnContextChangedCallBack(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            CurTileView c = sender as CurTileView;
+            if (c != null)
+                c.OnContextChanged();
+        }
+        protected virtual void OnContextChanged()
+        {
+            formatOutput = new FormatOutput(Context);
         }
         #endregion
 
+        #region cardMethods
         void SetNewCardImage(int index)
         {
             if (index != -1)
@@ -92,9 +195,29 @@ namespace GameInterface.CustomControls
                     backingStore.Children[0] = drawing;
                 else
                     backingStore.Children.Add(drawing);
+
+                SetTileDescription(index);
             }
             else if (backingStore.Children.Count > 0)
                 backingStore.Children.RemoveAt(0);
+        }
+
+        void SetTileDescription(int index)
+        {
+            var prop = Context.GetTileComponent<Property>(index + 1);
+            if (prop == null)
+            {
+                var actionBox = Context.GetTileComponent<ActionBox>(index + 1);
+                if (actionBox == null)
+                    TileDescription = "";
+                return;
+            }
+
+            var auctionInfo = Context.AuctionInfo();
+            if (auctionInfo != null)
+                return;
+
+            TileDescription = formatOutput.GetPropertyString(index + 1);
         }
 
         Rect GetImageRectangle(BitmapImage image)
@@ -111,33 +234,18 @@ namespace GameInterface.CustomControls
 
             return new Rect(new Point(0, 0), size);
         }
+        #endregion
 
+        #region ctor
         public CurTileView()
         {
-            //MouseLeftButtonUp += CurTileView_MouseLeftButtonUp;
             ClickedTileId = -1;
         }
-
-        //private void CurTileView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        //{
-        //    ClickedPoint = e.GetPosition((UIElement)sender);
-        //    Debug.WriteLine($"Well duh, I tried, {ClickedPoint}");
-        //}
+        #endregion
 
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-
-            //var text = new FormattedText(
-            //    ClickedTileId.ToString(),
-            //    CultureInfo.InvariantCulture,
-            //    FlowDirection.LeftToRight,
-            //    new Typeface("Verdana"),
-            //    12,
-            //    Brushes.Black,
-            //    VisualTreeHelper.GetDpi(this).PixelsPerDip);
-
-            //drawingContext.DrawText(text, new Point(0, 0));
 
             drawingContext.DrawDrawing(backingStore);
         }

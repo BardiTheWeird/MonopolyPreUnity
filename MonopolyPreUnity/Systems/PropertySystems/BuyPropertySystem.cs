@@ -27,6 +27,7 @@ namespace MonopolyPreUnity.Systems.PropertySystems
             _context.Add(new PropertyTransferRequest(buyProperty.PropertyId, player.Id));
 
             _context.Remove<BuyProperty>();
+            _context.RenderCommunications.CurTileViewLock = false;
         }
 
         public BuyPropertySystem(Context context)

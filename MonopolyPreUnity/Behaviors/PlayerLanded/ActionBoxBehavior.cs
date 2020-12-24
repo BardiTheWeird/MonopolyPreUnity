@@ -19,7 +19,12 @@ namespace MonopolyPreUnity.Behaviors.PlayerLanded
             actionList[new Random().Next(0, actionList.Count)];
 
         public void PlayerLanded(Player player, IEntityComponent component)
-            => _context.Add(new ExecuteAction(ChooseAction((ActionBox)component), player.Id));
+        {
+            var chosenAction = ChooseAction((ActionBox)component);
+            _context.Add(new ExecuteAction(chosenAction, player.Id));
+
+            _context.RenderCommunications.CurDescription = chosenAction.Descsription;
+        }
 
         public ActionBoxBehavior(Context context) =>
             _context = context;

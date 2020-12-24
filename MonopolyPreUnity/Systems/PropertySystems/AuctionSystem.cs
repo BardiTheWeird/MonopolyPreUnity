@@ -51,6 +51,7 @@ namespace MonopolyPreUnity.Systems.PropertySystems
                 if (info.CurBidder >= info.BidOrder.Count)
                     info.CurBidder = 0;
 
+                // the winning scenario 
                 if (info.BiddersLeft == 1)
                 {
                     _context.Add(new PrintFormattedLine($"|player:{info.CurBidderId}| won the auction!",
@@ -58,6 +59,7 @@ namespace MonopolyPreUnity.Systems.PropertySystems
 
                     _context.Add(new PropertyTransferRequest(info.PropertyOnAuctionId, info.CurBidderId));
                     _context.Remove(info);
+                    _context.RenderCommunications.CurTileViewLock = false;
                 }
             }
 
