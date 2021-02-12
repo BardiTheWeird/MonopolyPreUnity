@@ -27,9 +27,6 @@ namespace MonopolyPreUnity.Behaviors
             if (property.OwnerId == null)
             {
                 _context.Add(new PlayerInputRequest(player.Id, new BuyAuctionRequest(player.CurTileId)));
-                //_context.RenderCommunications.TileToLockOnId = player.CurTileId;
-                _context.RenderCommunications.CurTileViewLock = true;
-                //_context.RenderCommunications.CurDescription = $"Description test. Landed on tileId:{player.CurTileId}";
             }
             else if (property.OwnerId != player.Id && property.IsMortgaged == false)
             {
